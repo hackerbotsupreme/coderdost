@@ -1,0 +1,120 @@
+use is a React Hook that lets you read the value of a resource like a Promise or context.
+
+import { use } from 'react';
+
+function MessageComponent({ messagePromise }) {
+  const message = use(messagePromise);
+  const theme = use(ThemeContext);
+  // ...
+
+
+
+use is preferred over useContext because it is more flexible.
+
+Like useContext, use(context) always looks for the closest context provider above the component that calls it. It searches upwards and does not consider context providers in the component from which you’re calling use(context).
+
+
+
+Streaming data from the server to the client 
+
+Data can be streamed from the server to the client by passing a Promise as a prop from a Server Component to a Client Component.
+The Client Component then takes the Promise it received as a prop and passes it to the use Hook. This allows the Client Component to read the value from the Promise that was initially created by the Server Component.
+
+// message.js
+'use client';
+
+import { use } from 'react';
+
+export function Message({ messagePromise }) {
+  const messageContent = use(messagePromise);
+  return <p>Here is the message: {messageContent}</p>;
+}
+
+Because Message is wrapped in Suspense, the fallback will be displayed until the Promise is resolved. When the Promise is resolved, the value will be read by the use Hook and the Message component will replace the Suspense fallback.
+
+
+"use client";
+
+import { use, Suspense } from "react";
+
+function Message({ messagePromise }) {
+  const messageContent = use(messagePromise);
+  return <p>Here is the message: {messageContent}</p>;
+}
+
+export function MessageContainer({ messagePromise }) {
+  return (
+    <Suspense fallback={<p>⌛Downloading message...</p>}>
+      <Message messagePromise={messagePromise} />
+    </Suspense>
+  );
+}
+
+so  we can conclude what use Hook is used to do  and when exactly would we need to read the context or a promise .
+
+
+Should I resolve a Promise in a Server or Client Component? 
+A Promise can be passed from a Server Component to a Client Component and resolved in the Client Component with the use Hook. You can also resolve the Promise in a Server Component with await and pass the required data to the Client Component as a prop.
+
+export default function App() {
+  const messageContent = await fetchMessage();
+  return <Message messageContent={messageContent} />
+}
+But using await in a Server Component will block its rendering until the await statement is finished. Passing a Promise from a Server Component to a Client Component prevents the Promise from blocking the rendering of the Server Component.
+
+
+Dealing with rejected Promises 
+In some cases a Promise passed to use could be rejected. You can handle rejected Promises by either:
+
+1.Displaying an error to users with error boundary.
+2.Providing an alternative value with Promise.catch
+
+use cannot be called in a try-catch block. Instead of a try-catch block wrap your component in an Error Boundary, or provide an alternative value to use with the Promise’s .catch method.
+
+Displaying an error to users with a error boundary 
+If you’d like to display an error to your users when a Promise is rejected, you can use an error boundary. To use an error boundary, wrap the component where you are calling the use Hook in an error boundary. If the Promise passed to use is rejected the fallback for the error boundary will be displayed.
+
+"use client";
+
+import { use, Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+
+export function MessageContainer({ messagePromise }) {
+  return (
+    <ErrorBoundary fallback={<p>⚠️Something went wrong</p>}>
+      <Suspense fallback={<p>⌛Downloading message...</p>}>
+        <Message messagePromise={messagePromise} />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function Message({ messagePromise }) {
+  const content = use(messagePromise);
+  return <p>Here is the message: {content}</p>;
+}
+
+Providing an alternative value with Promise.catch 
+If you’d like to provide an alternative value when the Promise passed to use is rejected you can use the Promise’s catch method.
+
+
+import { Message } from './message.js';
+
+export default function App() {
+  const messagePromise = new Promise((resolve, reject) => {
+    reject();
+  }).catch(() => {
+    return "no new message found.";
+  });
+
+  return (
+    <Suspense fallback={<p>waiting for message...</p>}>
+      <Message messagePromise={messagePromise} />
+    </Suspense>
+  );
+}
+
+To use the Promise’s catch method, call catch on the Promise object. catch takes a single argument: a function that takes an error message as an argument. Whatever is returned by the function passed to catch will be used as the resolved value of the Promise.
+
+
+

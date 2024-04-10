@@ -1,0 +1,383 @@
+useEffect is a React Hook that lets you synchronize a component with an external system.
+
+useEffect(setup, dependencies?)
+
+Parameters 
+setup: The function with your Effect’s logic. Your setup function may also optionally return a cleanup function. When your component is added to the DOM, React will run your setup function. After every re-render with changed dependencies, React will first run the cleanup function (if you provided it) with the old values, and then run your setup function with the new values. After your component is removed from the DOM, React will run your cleanup function.
+
+optional dependencies: The list of all reactive values referenced inside of the setup code. Reactive values include props, state, and all the variables and functions declared directly inside your component body. If your linter is configured for React, it will verify that every reactive value is correctly specified as a dependency. The list of dependencies must have a constant number of items and be written inline like [dep1, dep2, dep3]. React will compare each dependency with its previous value using the Object.is comparison. If you omit this argument, your Effect will re-run after every re-render of the component. See the difference between passing an array of dependencies, an empty array, and no dependencies at all.
+
+
+
+Caveats 
+useEffect is a Hook, so you can only call it at the top level of your component or your own Hooks. You can’t call it inside loops or conditions. If you need that, extract a new component and move the state into it.
+
+If you’re not trying to synchronize with some external system, you probably don’t need an Effect.
+
+When Strict Mode is on, React will run one extra development-only setup+cleanup cycle before the first real setup. This is a stress-test that ensures that your cleanup logic “mirrors” your setup logic and that it stops or undoes whatever the setup is doing. If this causes a problem, implement the cleanup function.
+
+If some of your dependencies are objects or functions defined inside the component, there is a risk that they will cause the Effect to re-run more often than needed. To fix this, remove unnecessary object and function dependencies. You can also extract state updates and non-reactive logic outside of your Effect.
+
+If your Effect wasn’t caused by an interaction (like a click), React will generally let the browser paint the updated screen first before running your Effect. If your Effect is doing something visual (for example, positioning a tooltip), and the delay is noticeable (for example, it flickers), replace useEffect with useLayoutEffect.
+
+Even if your Effect was caused by an interaction (like a click), the browser may repaint the screen before processing the state updates inside your Effect. Usually, that’s what you want. However, if you must block the browser from repainting the screen, you need to replace useEffect with useLayoutEffect.
+
+Effects only run on the client. They don’t run during server rendering.
+
+Usage 
+Connecting to an external system 
+Some components need to stay connected to the network, some browser API, or a third-party library, while they are displayed on the page. These systems aren’t controlled by React, so they are called external.
+
+To connect your component to some external system, call useEffect at the top level of your component:
+
+import { useEffect } from 'react';
+import { createConnection } from './chat.js';
+
+function ChatRoom({ roomId }) {
+  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+
+  useEffect(() => {
+  	const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+  	return () => {
+      connection.disconnect();
+  	};
+  }, [serverUrl, roomId]);
+  // ...
+}
+You need to pass two arguments to useEffect:
+
+A setup function with setup code that connects to that system.
+It should return a cleanup function with cleanup code that disconnects from that system.
+A list of dependencies including every value from your component used inside of those functions.
+React calls your setup and cleanup functions whenever it’s necessary, which may happen multiple times:
+
+Your setup code runs when your component is added to the page (mounts).
+After every re-render of your component where the dependencies have changed:
+First, your cleanup code runs with the old props and state.
+Then, your setup code runs with the new props and state.
+Your cleanup code runs one final time after your component is removed from the page (unmounts).
+Let’s illustrate this sequence for the example above.
+
+When the ChatRoom component above gets added to the page, it will connect to the chat room with the initial serverUrl and roomId. If either serverUrl or roomId change as a result of a re-render (say, if the user picks a different chat room in a dropdown), your Effect will disconnect from the previous room, and connect to the next one. When the ChatRoom component is removed from the page, your Effect will disconnect one last time.
+
+To help you find bugs, in development React runs setup and cleanup one extra time before the setup. This is a stress-test that verifies your Effect’s logic is implemented correctly. If this causes visible issues, your cleanup function is missing some logic. The cleanup function should stop or undo whatever the setup function was doing. The rule of thumb is that the user shouldn’t be able to distinguish between the setup being called once (as in production) and a setup → cleanup → setup sequence (as in development). See common solutions.
+
+Try to write every Effect as an independent process and think about a single setup/cleanup cycle at a time. It shouldn’t matter whether your component is mounting, updating, or unmounting. When your cleanup logic correctly “mirrors” the setup logic, your Effect is resilient to running setup and cleanup as often as needed.
+
+Note
+An Effect lets you keep your component synchronized with some external system (like a chat service). Here, external system means any piece of code that’s not controlled by React, such as:
+
+A timer managed with setInterval() and clearInterval().
+An event subscription using window.addEventListener() and window.removeEventListener().
+A third-party animation library with an API like animation.start() and animation.reset().
+If you’re not connecting to any external system, you probably don’t need an Effect.
+
+Examples of connecting to an external system
+
+Connecting to a chat server 
+In this example, the ChatRoom component uses an Effect to stay connected to an external system defined in chat.js. Press “Open chat” to make the ChatRoom component appear. This sandbox runs in development mode, so there is an extra connect-and-disconnect cycle, as explained here. Try changing the roomId and serverUrl using the dropdown and the input, and see how the Effect re-connects to the chat. Press “Close chat” to see the Effect disconnect one last time.
+
+Example 2 of 5:
+Listening to a global browser event 
+In this example, the external system is the browser DOM itself. Normally, you’d specify event listeners with JSX, but you can’t listen to the global window object this way. An Effect lets you connect to the window object and listen to its events. Listening to the pointermove event lets you track the cursor (or finger) position and update the red dot to move with it.
+
+Example 3 of 5:
+Triggering an animation 
+In this example, the external system is the animation library in animation.js. It provides a JavaScript class called FadeInAnimation that takes a DOM node as an argument and exposes start() and stop() methods to control the animation. This component uses a ref to access the underlying DOM node. The Effect reads the DOM node from the ref and automatically starts the animation for that node when the component appears.
+
+Example 4 of 5:
+Controlling a modal dialog 
+In this example, the external system is the browser DOM. The ModalDialog component renders a <dialog> element. It uses an Effect to synchronize the isOpen prop to the showModal() and close() method calls.
+
+
+Example 5 of 5:
+Tracking element visibility 
+In this example, the external system is again the browser DOM. The App component displays a long list, then a Box component, and then another long list. Scroll the list down. Notice that when all of the Box component is fully visible in the viewport, the background color changes to black. To implement this, the Box component uses an Effect to manage an IntersectionObserver. This browser API notifies you when the DOM element is visible in the viewport.
+
+
+Wrapping Effects in custom Hooks 
+Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. If you find yourself often needing to manually write Effects, it’s usually a sign that you need to extract some custom Hooks for common behaviors your components rely on.
+
+For example, this useChatRoom custom Hook “hides” the logic of your Effect behind a more declarative API.
+
+
+function useChatRoom({ serverUrl, roomId }) {
+  useEffect(() => {
+    const options = {
+      serverUrl: serverUrl,
+      roomId: roomId
+    };
+    const connection = createConnection(options);
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId, serverUrl]);
+}
+Then you can use it from any component like this:
+
+function ChatRoom({ roomId }) {
+  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+
+  useChatRoom({
+    roomId: roomId,
+    serverUrl: serverUrl
+  });
+  // ...
+There are also many excellent custom Hooks for every purpose available in the React ecosystem.
+
+Learn more about wrapping Effects in custom Hooks.
+
+Examples of wrapping Effects in custom Hooks
+
+Example 1 of 3:
+Custom useChatRoom Hook 
+This example is identical to one of the earlier examples, but the logic is extracted to a custom Hook.
+
+
+Example 2 of 3:
+Custom useWindowListener Hook 
+This example is identical to one of the earlier examples, but the logic is extracted to a custom Hook.
+
+Example 3 of 3:
+Custom useIntersectionObserver Hook 
+This example is identical to one of the earlier examples, but the logic is partially extracted to a custom Hook.
+
+
+Controlling a non-React widget 
+Sometimes, you want to keep an external system synchronized to some prop or state of your component.
+
+For example, if you have a third-party map widget or a video player component written without React, you can use an Effect to call methods on it that make its state match the current state of your React component. This Effect creates an instance of a MapWidget class defined in map-widget.js. When you change the zoomLevel prop of the Map component, the Effect calls the setZoom() on the class instance to keep it synchronized:
+
+App.js
+Map.js
+map-widget.js
+.....
+......
+.....
+
+
+In this example, a cleanup function is not needed because the MapWidget class manages only the DOM node that was passed to it. After the Map React component is removed from the tree, both the DOM node and the MapWidget class instance will be automatically garbage-collected by the browser JavaScript engine.
+
+Fetching data with Effects 
+You can use an Effect to fetch data for your component. Note that if you use a framework, using your framework’s data fetching mechanism will be a lot more efficient than writing Effects manually.
+
+If you want to fetch data from an Effect manually, your code might look like this:
+
+import { useState, useEffect } from 'react';
+import { fetchBio } from './api.js';
+
+export default function Page() {
+  const [person, setPerson] = useState('Alice');
+  const [bio, setBio] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setBio(null);
+    fetchBio(person).then(result => {
+      if (!ignore) {
+        setBio(result);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
+  }, [person]);
+
+  // ...
+Note the ignore variable which is initialized to false, and is set to true during cleanup. This ensures your code doesn’t suffer from “race conditions”: network responses may arrive in a different order than you sent them.
+
+
+App.js
+import { useState, useEffect } from 'react';
+import { fetchBio } from './api.js';
+
+export default function Page() {
+  const [person, setPerson] = useState('Alice');
+  const [bio, setBio] = useState(null);
+  useEffect(() => {
+    let ignore = false;
+    setBio(null);
+    fetchBio(person).then(result => {
+      if (!ignore) {
+        setBio(result);
+      }
+    });
+    return () => {
+      ignore = true;
+    }
+  }, [person]);
+
+  return (
+    <>
+      <select value={person} onChange={e => {
+        setPerson(e.target.value);
+      }}>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Taylor">Taylor</option>
+      </select>
+      <hr />
+      <p><i>{bio ?? 'Loading...'}</i></p>
+    </>
+  );
+}
+
+You can also rewrite using the async / await syntax, but you still need to provide a cleanup function:
+
+
+App.js
+import { useState, useEffect } from 'react';
+import { fetchBio } from './api.js';
+
+export default function Page() {
+  const [person, setPerson] = useState('Alice');
+  const [bio, setBio] = useState(null);
+  useEffect(() => {
+    async function startFetching() {
+      setBio(null);
+      const result = await fetchBio(person);
+      if (!ignore) {
+        setBio(result);
+      }
+    }
+
+    let ignore = false;
+    startFetching();
+    return () => {
+      ignore = true;
+    }
+  }, [person]);
+
+  return (
+    <>
+      <select value={person} onChange={e => {
+        setPerson(e.target.value);
+      }}>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Taylor">Taylor</option>
+      </select>
+      <hr />
+      <p><i>{bio ?? 'Loading...'}</i></p>
+    </>
+  );
+}
+
+Writing data fetching directly in Effects gets repetitive and makes it difficult to add optimizations like caching and server rendering later. It’s easier to use a custom Hook—either your own or maintained by the community.
+
+What are good alternatives to data fetching in Effects? 
+
+Writing fetch calls inside Effects is a popular way to fetch data, especially in fully client-side apps. This is, however, a very manual approach and it has significant downsides:
+
+Effects don’t run on the server. This means that the initial server-rendered HTML will only include a loading state with no data. The client computer will have to download all JavaScript and render your app only to discover that now it needs to load the data. This is not very efficient.
+Fetching directly in Effects makes it easy to create “network waterfalls”. You render the parent component, it fetches some data, renders the child components, and then they start fetching their data. If the network is not very fast, this is significantly slower than fetching all data in parallel.
+Fetching directly in Effects usually means you don’t preload or cache data. For example, if the component unmounts and then mounts again, it would have to fetch the data again.
+It’s not very ergonomic. There’s quite a bit of boilerplate code involved when writing fetch calls in a way that doesn’t suffer from bugs like race conditions.
+This list of downsides is not specific to React. It applies to fetching data on mount with any library. Like with routing, data fetching is not trivial to do well, so we recommend the following approaches:
+
+If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
+Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+. You can build your own solution too, in which case you would use Effects under the hood but also add logic for deduplicating requests, caching responses, and avoiding network waterfalls (by preloading data or hoisting data requirements to routes).
+You can continue fetching data directly in Effects if neither of these approaches suit you.
+
+Specifying reactive dependencies 
+Notice that you can’t “choose” the dependencies of your Effect. Every reactive value used by your Effect’s code must be declared as a dependency. Your Effect’s dependency list is determined by the surrounding code
+
+function ChatRoom({ roomId }) { // This is a reactive value
+  const [serverUrl, setServerUrl] = useState('https://localhost:1234'); // This is a reactive value too
+
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId); // This Effect reads these reactive values
+    connection.connect();
+    return () => connection.disconnect();
+  }, [serverUrl, roomId]); // ✅ So you must specify them as dependencies of your Effect
+  // ...
+}
+
+
+If either serverUrl or roomId change, your Effect will reconnect to the chat using the new values.
+
+Reactive values include props and all variables and functions declared directly inside of your component. Since roomId and serverUrl are reactive values, you can’t remove them from the dependencies. If you try to omit them and your linter is correctly configured for React, the linter will flag this as a mistake you need to fix:
+
+
+function ChatRoom({ roomId }) {
+  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+  
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+    return () => connection.disconnect();
+  }, []); // 🔴 React Hook useEffect has missing dependencies: 'roomId' and 'serverUrl'
+  // ...
+}
+
+To remove a dependency, you need to “prove” to the linter that it doesn’t need to be a dependency. For example, you can move serverUrl out of your component to prove that it’s not reactive and won’t change on re-renders:
+
+const serverUrl = 'https://localhost:1234'; // Not a reactive value anymore
+
+function ChatRoom({ roomId }) {
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId]); // ✅ All dependencies declared
+  // ...
+}
+Now that serverUrl is not a reactive value (and can’t change on a re-render), it doesn’t need to be a dependency. If your Effect’s code doesn’t use any reactive values, its dependency list should be empty ([]):
+
+const serverUrl = 'https://localhost:1234'; // Not a reactive value anymore
+const roomId = 'music'; // Not a reactive value anymore
+
+function ChatRoom() {
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+    return () => connection.disconnect();
+  }, []); // ✅ All dependencies declared
+  // ...
+}
+An Effect with empty dependencies doesn’t re-run when any of your component’s props or state change.
+
+Pitfall
+If you have an existing codebase, you might have some Effects that suppress the linter like this:
+
+useEffect(() => {
+  // ...
+  // 🔴 Avoid suppressing the linter like this:
+  // eslint-ignore-next-line react-hooks/exhaustive-deps
+}, []);
+When dependencies don’t match the code, there is a high risk of introducing bugs. By suppressing the linter, you “lie” to React about the values your Effect depends on. Instead, prove they’re unnecessary.
+
+
+Example 1 of 3:
+Passing a dependency array 
+If you specify the dependencies, your Effect runs after the initial render and after re-renders with changed dependencies.
+
+useEffect(() => {
+  // ...
+}, [a, b]); // Runs again if a or b are different
+In the below example, serverUrl and roomId are reactive values, so they both must be specified as dependencies. As a result, selecting a different room in the dropdown or editing the server URL input causes the chat to re-connect. However, since message isn’t used in the Effect (and so it isn’t a dependency), editing the message doesn’t re-connect to the chat.
+
+Example 2 of 3:
+Passing an empty dependency array 
+If your Effect truly doesn’t use any reactive values, it will only run after the initial render.
+
+useEffect(() => {
+  // ...
+}, []); // Does not run again (except once in development)
+Even with empty dependencies, setup and cleanup will run one extra time in development to help you find bugs.
+
+In this example, both serverUrl and roomId are hardcoded. Since they’re declared outside the component, they are not reactive values, and so they aren’t dependencies. The dependency list is empty, so the Effect doesn’t re-run on re-renders.
+
+
+Example 3 of 3:
+Passing no dependency array at all 
+If you pass no dependency array at all, your Effect runs after every single render (and re-render) of your component.
+
+useEffect(() => {
+  // ...
+}); // Always runs again
+In this example, the Effect re-runs when you change serverUrl and roomId, which is sensible. However, it also re-runs when you change the message, which is probably undesirable. This is why usually you’ll specify the dependency array.
+
+
+Updating state based on previous state from an Effect 
+

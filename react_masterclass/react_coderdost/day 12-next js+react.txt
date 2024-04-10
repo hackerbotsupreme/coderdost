@@ -1,0 +1,389 @@
+next js docs - 
+
+        Getting Started
+                Automatic Installation
+                Manual Installation
+                Creating directories
+                The app directory
+                The pages directory (optional)
+                The public folder (optional)
+                Run the Development Server
+                Next Steps
+        Project Structure
+                Top-level folders
+                Top-level files
+                app Routing Conventions
+                Routing Files
+                Nested Routes
+                Dynamic Routes
+                Route Groups and Private Folders
+                Parallel and Intercepted Routes
+                Metadata File Conventions
+                App Icons
+                Open Graph and Twitter Images
+                SEO
+                pages Routing Conventions
+                Special Files
+                Routes
+                Dynamic Routes
+
+
+
+        Routing
+                Defining Routes
+                Pages and Layouts
+                Linking and Navigating
+                Route Groups
+                Dynamic Routes
+                Loading UI and Streaming
+                Error Handling
+                Parallel Routes
+                Intercepting Routes
+                Route Handlers
+                Middleware
+                Project Organization
+
+        Data Fetching
+                Fetching, Caching, and Revalidating
+                Data Fetching Patterns
+                Forms and Mutations
+
+        Rendering
+                Server Components
+                Client Components
+                Composition Patterns
+                Edge and Node.js Runtimes
+
+        Caching
+
+
+        Styling
+                CSS Modules
+                Tailwind CSS
+                CSS-in-JS
+                Sass
+
+        Optimizing
+                Images
+                Fonts
+                Scripts
+                Metadata
+                Static Assets
+                Lazy Loading
+                Analytics
+                OpenTelemetry
+                Instrumentation
+                Third Party Libraries
+
+
+        Configuring
+                TypeScript
+                ESLint
+                Environment Variables
+                Absolute Imports and Module Path Aliases
+                MDX
+                src Directory
+                Draft Mode
+                Content Security Policy
+
+
+        Deploying
+                Static Exports
+
+        Upgrading
+                Codemods
+                App Router Migration
+                Migrating from Vite
+
+        API Reference
+
+
+        Components
+                Font
+                <Image>
+                <Link>
+                <Script>
+
+        File Conventions
+                default.js
+                error.js
+                layout.js
+                loading.js
+                not-found.js
+                page.js
+                route.js
+                Route Segment Config
+                template.js
+                Metadata Files
+                        favicon, icon, and apple-icon
+                        manifest.json
+                        opengraph-image and twitter-image
+                        robots.txt
+                        sitemap.xml
+
+        Functions
+                cookies
+                draftMode
+                fetch
+                generateImageMetadata
+                generateMetadata
+                generateStaticParams
+                generateViewport
+                headers
+                ImageResponse
+                NextRequest
+                NextResponse
+                notFound
+                permanentRedirect
+                redirect
+                revalidatePath
+                revalidateTag
+                Server Actions
+                unstable_cache
+                unstable_noStore
+                useParams
+                usePathname
+                useReportWebVitals
+                useRouter
+                useSearchParams
+                useSelectedLayoutSegment
+                useSelectedLayoutSegments
+
+
+        next.config.js Options
+                appDir
+                assetPrefix
+                basePath
+                compress
+                devIndicators
+                distDir
+                env
+                eslint
+                exportPathMap
+                generateBuildId
+                generateEtags
+                headers
+                httpAgentOptions
+                images
+                incrementalCacheHandlerPath
+                logging
+                mdxRs
+                onDemandEntries
+                optimizePackageImports
+                output
+                pageExtensions
+                Partial Prerendering (experimental)
+                poweredByHeader
+                productionBrowserSourceMaps
+                reactStrictMode
+                redirects
+                rewrites
+                serverComponentsExternalPackages
+                trailingSlash
+                transpilePackages
+                turbo
+                typedRoutes
+                typescript
+                urlImports
+                webpack
+                webVitalsAttribution
+
+
+        create-next-app
+        Edge Runtime
+        Next.js CLI
+
+
+        Architecture
+        Accessibility
+        Fast Refresh
+        Next.js Compiler
+        Supported Browsers
+        Turbopack
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+react  Starts (coder dost )
+
+why react ? 
+react is mostly used to create single page applications(spa) now what are these single page application 
+single page applications like gmail (which do contains heavy js),yt but still it interacts smoothly whithout reloading 
+which acts like a single page in front end .  
+with that we can aslo use it to create mpa multiple page apps 
+
+what is react then ? 
+react is a ui library based on Components. 
+
+now why we would like to take component based approach ?
+now whenever you examine / try to make a big beutiful scalble website , it will gurenteed will take very big code , 
+so manage it we would need a structure where every thing can be done convenently , which is divide it in parts , which 
+are called components  , and coding in this way is called component based approach , 
+and react is  a framework which particularly provides all the  Environment   to do so , that's why we use react .
+
+When developing a large, scalable website, managing the codebase can become complex due to its size. To handle this complexity, we use a **component-based approach**. This approach involves dividing the application into smaller, reusable pieces called components. Each component has its own logic and controls a part of the user interface. 
+React is a popular library that supports this approach. It provides an environment that makes it easy to define and manage these components. By using React, developers can create complex user interfaces from simple, reusable components, making the code easier to understand and maintain. This is why we often use React for web development.
+Remember, while React is widely used, it's not the only option. Other libraries and frameworks like Vue.js and Angular also support a component-based approach. The choice between them depends on the specific needs of the project. 
+I hope this helps! Let me know if you have any other questions. 😊
+
+now what is the advantages of component-based approach ?
+
+as i said , the dom tree of the site like that is gonna be very vast , so managing this and program  this is gonna be pretty difficult ,
+so component based approach provides us with easy structure  , like app divided into search sidebar content  then content divided into 
+cover , into , videos and videos divided into playlist ,playlist,playlist and playlist divided into video , video , video etc.. 
+so with this approach we can easily see what is where and we can edit , add anything easily in this structure ,
+
+second is , there are repeatable things , which means we can reuse things and reprogram easily . 
+so we only need to write 1 time , and if we need to change we only need to change it once . 
+
+
+setup 
+
+node js 
+chrome 
+vs code 
+
+
+after you download npx cra thenwhen you start you will see your site is running on server . 
+so if you accidently close the site then you can enter the give url and oen it again . 
+
+unneccesary files on setup ->  
+node_modules contains helper libraries so dont touch it  also dont mess it packaage.lock , package.josn , .gitignore 
+what ever you want to do do it in src and public .
+index.html , your  react app is attached to this . and we can remove others . 
+and in src , setuptest , ReportWebVitals , logo , App.test.js  - we dont need all this . 
+App.test.js  - it is related to testing of app but currently we are doing development so we dont need this .
+then clean the index.html 
+then clean the errrors 
+and after all this cleaning go to index - clear the comments 
+then goto app.js -> clean everything inside of App div 
+and you can change css in App.css ,
+so for App.js we have App.css 
+so for index.js we have index.css 
+index.js is the entry point . 
+
+
+what does index.css defines in cra ?
+In a Create React App (CRA) project, the `index.css` file is used to define global CSS styles⁴. You can write your CSS in this file and import it in your `index.js` file. This ensures that the CSS is loaded on all pages of your React app⁴.
+The `index.css` file is a good place to put all your CSS if you are concerned about using webpack-specific semantics¹. It would still be imported from `src/index.js`, but you could always remove that import if you later migrate to a different build tool¹.
+In production, all CSS files will be concatenated into a single minified `.css` file in the build output¹.
+Please note that this is not the only way to handle CSS in a CRA project. You can also express that a JavaScript file depends on a CSS file by importing the CSS from the JavaScript file¹. This allows your styles to be reloaded on the fly as you edit them¹. However, you should be aware that this makes your code less portable to other build tools and environments than webpack¹.
+
+
+or can i i say that we define browser css  in index.css to avoid inconsistencies around different browsers ?
+Yes, you can say that. The `index.css` file in a Create React App (CRA) project is typically used to define global CSS styles, which includes browser-specific styles. These styles are applied across all pages of your React app.
+However, it's important to note that while you can include browser-specific styles in `index.css`, it's not solely dedicated to that purpose. You can define any global styles in this file.
+Also, keep in mind that CRA supports CSS modules out of the box. If you want to scope your CSS to specific components (rather than defining global styles), you can use CSS modules. This can help prevent styles from leaking across components.
+
+
+interview , question where in the react app we use reactdom .
+the most common place in any react app where you are sure to find react dom is in index.js .
+in , const root = ReactDOM.createRoot(document.getElementById('root'));
+this line , where you connect the html with the entrypoint index.js . 
+and only here you will see a react app directly contacting with dom and 
+by the way , use of reactdom is very rare other than this one place .
+and also the only div ,  <div id="root"></div> we can see in react app is index.html . is  <div id="root"></div>
+whichis actually root of the dom and react dom tree .
+
+Yes, you are correct. In a typical React application, `ReactDOM` is used in the `index.js` file to render the root React component into the DOM. The line of code you mentioned, `const root = ReactDOM.createRoot(document.getElementById('root'));`, is where this happens. This line of code is telling React to take the rendered output of the React application (which is a virtual DOM element) and add it to the actual DOM of the page inside the element with the id of 'root'.
+The `<div id="root"></div>` in the `index.html` file is indeed the root of the DOM tree where the React application will be attached. This is the only place in the application where the React virtual DOM is directly connected with the actual browser's DOM.
+While `ReactDOM` is primarily used in this context, it also provides other methods like `ReactDOM.render()`, `ReactDOM.hydrate()`, `ReactDOM.unmountComponentAtNode()`, and `ReactDOM.findDOMNode()`, but these are less commonly used.
+So, your understanding is correct. The use of `ReactDOM` is indeed rare other than in this one place, and the `<div id="root"></div>` is the root of the DOM and React DOM tree. Good job! 👍
+
+
+root.render - does this says take the main component App  then render it and attach to the index.html and from virtual dom to og-dom ?
+Yes, you're correct. The `root.render()` function in React takes the main component (usually `App`), renders it, and attaches it to the `index.html` file. This is where the virtual DOM created by React gets translated into actual DOM elements in the browser.
+Here's a typical example of how it's used:
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+In this code, `ReactDOM.createRoot(document.getElementById('root'))` creates a root node on the DOM element with the id 'root', and `root.render(<App />)` renders the `App` component into that root node. This is indeed the bridge between the React's virtual DOM and the actual DOM in the browser. Good job on your understanding! 👍
+
+
+
+so in other words , get this element id named root then render the app and create  main - dom from the virtual dom  and the whole website gets displayed or we can say this is the point/root  from where the whole tree is gonna be born which will be exacly same to this template called virtual -dom ? right ?
+Yes, you've got it! The `root.render(<App />)` line in your React application is indeed the point at which the whole React component tree is "born". This line tells React to render your `App` component and all its child components into a virtual DOM tree. 
+This virtual DOM tree is a lightweight copy of the actual DOM. It allows React to perform calculations and operations efficiently, without directly manipulating the browser's DOM, which can be slow. 
+Once the virtual DOM tree is ready, React compares it with the actual DOM (a process known as "diffing") and updates the actual DOM to match the virtual DOM. This process is known as "reconciliation".
+The `root.render(<App />)` line is where this reconciliation process starts. React takes the virtual DOM tree, compares it with the actual DOM, and makes the necessary updates. This is how your React application gets displayed in the browser.
+So, in essence, the `root.render(<App />)` line is where your React application springs to life and gets rendered in the browser. Great job on your understanding! 👍
+
+
+and in the react application App.js is the first react file .
+
+
+now what we can see in app.js , 
+first thing we see a function ,
+
+
+after you started the site in the server , first turn on the 
+react developer tools then go to inspect  to components 
+where it will show the react dom or we can say virtual dom .
+the componet structure of react  and additional details which are very useful and will come handy future .
+
+
+in react u write expressions using curly braces 
+like , let Name = "react app"
+inside the function App , 
+{Name} , and we can also use expressions in attributes 
+also as components like - 
+
+function App() {
+  let Name = "react app"
+  let className = "App-header"
+  return (
+    <div className="App">
+      <div className={className}>
+        <Demo></Demo>
+        {Name}
+      </div>
+    </div>
+  );
+}
+we declared name and classNames as Variables and we used them 
+as expressions in attribute we used <div className={className}>
+and for components we used expressions with tags so that they behave as 
+elements . 
+
+
+and one important thing to note here , there is not any html ,
+whatever code we are seeing is inside the return statement of the function app .
+and we are writing code in .js / app.js file . in js we programming everything . 
+
+ok , and one more important thing to note here is , if we add console.log inthe App.js like 
+and it is proved that we can use console here whenever we need to check anything . 
+
+function App() {
+  console.log("App")
+  let Name = "react app"
+  let className = "App-header"
+  return (
+    <div className="App">
+      <div className={className}>
+        <Demo></Demo>
+        {Name}
+      </div>
+    </div>
+  );
+}
+function Demo() {
+  console.log("Demo")
+  return (
+    <div className="App">
+      <div className="App-header">
+        Demo
+      </div>
+    </div>
+  );
+}
+it is getting printed two times , why 
+App 
+App 
+Demo 
+Demo

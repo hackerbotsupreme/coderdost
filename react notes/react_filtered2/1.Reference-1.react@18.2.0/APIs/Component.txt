@@ -1,0 +1,877 @@
+We recommend defining components as functions instead of classes. See how to migrate.
+
+Component is the base class for the React components defined as JavaScript classes. Class components are still supported by React, but we don’t recommend using them in new code.
+
+class Greeting extends Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+
+Reference
+        Component
+        context
+        props
+        refs
+        state
+        constructor(props)
+        componentDidCatch(error, info)
+        componentDidMount()
+        componentDidUpdate(prevProps, prevState, snapshot?)
+        componentWillMount()
+        componentWillReceiveProps(nextProps)
+        componentWillUpdate(nextProps, nextState)
+        componentWillUnmount()
+        forceUpdate(callback?)
+        getChildContext()
+        getSnapshotBeforeUpdate(prevProps, prevState)
+        render()
+        setState(nextState, callback?)
+        shouldComponentUpdate(nextProps, nextState, nextContext)
+        UNSAFE_componentWillMount()
+        UNSAFE_componentWillReceiveProps(nextProps, nextContext)
+        UNSAFE_componentWillUpdate(nextProps, nextState)
+        static childContextTypes
+        static contextTypes
+        static contextType
+        static defaultProps
+        static propTypes
+        static getDerivedStateFromError(error)
+        static getDerivedStateFromProps(props, state)
+Usage
+        Defining a class component
+        Adding state to a class component
+        Adding lifecycle methods to a class component
+        Catching rendering errors with an error boundary
+Alternatives
+        Migrating a simple component from a class to a function
+        Migrating a component with state from a class to a function
+        Migrating a component with lifecycle methods from a class to a function
+        Migrating a component with context from a class to a function
+
+
+
+Reference 
+Component 
+To define a React component as a class, extend the built-in Component class and define a render method.
+
+import { Component } from 'react';
+
+class Greeting extends Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+
+Only the render method is required, other methods are optional.
+
+context 
+The context of a class component is available as this.context. It is only available if you specify which context you want to receive using static contextType (modern) or static contextTypes (deprecated).
+
+A class component can only read one context at a time.
+
+...
+...
+...
+Note
+Reading this.context in class components is equivalent to useContext in function components.
+
+props 
+The props passed to a class component are available as this.props.
+
+class Greeting extends Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+
+<Greeting name="Taylor" />
+
+Note
+Reading this.props in class components is equivalent to declaring props in function components.
+
+refs 
+Deprecated
+This API will be removed in a future major version of React. Use createRef instead.
+
+state 
+The state of a class component is available as this.state. The state field must be an object. Do not mutate the state directly. If you wish to change the state, call setState with the new state.
+
+...
+...
+...
+
+Note
+Defining state in class components is equivalent to calling useState in function components.
+
+constructor(props) 
+The constructor runs before your class component mounts (gets added to the screen). Typically, a constructor is only used for two purposes in React. It lets you declare state and bind your class methods to the class instance:
+
+...
+...
+...
+
+If you use modern JavaScript syntax, constructors are rarely needed. Instead, you can rewrite this code above using the public class field syntax which is supported both by modern browsers and tools like Babel:
+
+....
+...
+...
+
+A constructor should not contain any side effects or subscriptions.
+
+Parameters 
+props: The component’s initial props.
+Returns 
+constructor should not return anything.
+
+Caveats 
+Do not run any side effects or subscriptions in the constructor. Instead, use componentDidMount for that.
+
+Inside a constructor, you need to call super(props) before any other statement. If you don’t do that, this.props will be undefined while the constructor runs, which can be confusing and cause bugs.
+
+Constructor is the only place where you can assign this.state directly. In all other methods, you need to use this.setState() instead. Do not call setState in the constructor.
+
+When you use server rendering, the constructor will run on the server too, followed by the render method. However, lifecycle methods like componentDidMount or componentWillUnmount will not run on the server.
+
+When Strict Mode is on, React will call constructor twice in development and then throw away one of the instances. This helps you notice the accidental side effects that need to be moved out of the constructor.
+
+Note
+There is no exact equivalent for constructor in function components. To declare state in a function component, call useState. To avoid recalculating the initial state, pass a function to useState.
+
+componentDidCatch(error, info) 
+If you define componentDidCatch, React will call it when some child component (including distant children) throws an error during rendering. This lets you log that error to an error reporting service in production.
+
+Typically, it is used together with static getDerivedStateFromError which lets you update state in response to an error and display an error message to the user. A component with these methods is called an error boundary.
+
+See an example.
+
+Parameters 
+error: The error that was thrown. In practice, it will usually be an instance of Error but this is not guaranteed because JavaScript allows to throw any value, including strings or even null.
+
+info: An object containing additional information about the error. Its componentStack field contains a stack trace with the component that threw, as well as the names and source locations of all its parent components. In production, the component names will be minified. If you set up production error reporting, you can decode the component stack using sourcemaps the same way as you would do for regular JavaScript error stacks.
+
+Returns 
+componentDidCatch should not return anything.
+
+Caveats 
+In the past, it was common to call setState inside componentDidCatch in order to update the UI and display the fallback error message. This is deprecated in favor of defining static getDerivedStateFromError.
+
+Production and development builds of React slightly differ in the way componentDidCatch handles errors. In development, the errors will bubble up to window, which means that any window.onerror or window.addEventListener('error', callback) will intercept the errors that have been caught by componentDidCatch. In production, instead, the errors will not bubble up, which means any ancestor error handler will only receive errors not explicitly caught by componentDidCatch.
+
+Note
+There is no direct equivalent for componentDidCatch in function components yet. If you’d like to avoid creating class components, write a single ErrorBoundary component like above and use it throughout your app. Alternatively, you can use the react-error-boundary package which does that for you.
+
+componentDidMount() 
+If you define the componentDidMount method, React will call it when your component is added (mounted) to the screen. This is a common place to start data fetching, set up subscriptions, or manipulate the DOM nodes.
+
+If you implement componentDidMount, you usually need to implement other lifecycle methods to avoid bugs. For example, if componentDidMount reads some state or props, you also have to implement componentDidUpdate to handle their changes, and componentWillUnmount to clean up whatever componentDidMount was doing.
+
+....
+....
+...
+
+Parameters 
+componentDidMount does not take any parameters.
+
+Returns 
+componentDidMount should not return anything.
+
+Caveats 
+When Strict Mode is on, in development React will call componentDidMount, then immediately call componentWillUnmount, and then call componentDidMount again. This helps you notice if you forgot to implement componentWillUnmount or if its logic doesn’t fully “mirror” what componentDidMount does.
+
+Although you may call setState immediately in componentDidMount, it’s best to avoid that when you can. It will trigger an extra rendering, but it will happen before the browser updates the screen. This guarantees that even though the render will be called twice in this case, the user won’t see the intermediate state. Use this pattern with caution because it often causes performance issues. In most cases, you should be able to assign the initial state in the constructor instead. It can, however, be necessary for cases like modals and tooltips when you need to measure a DOM node before rendering something that depends on its size or position.
+
+Note
+For many use cases, defining componentDidMount, componentDidUpdate, and componentWillUnmount together in class components is equivalent to calling useEffect in function components. In the rare cases where it’s important for the code to run before browser paint, useLayoutEffect is a closer match.
+
+See how to migrate.
+
+componentDidUpdate(prevProps, prevState, snapshot?) 
+If you define the componentDidUpdate method, React will call it immediately after your component has been re-rendered with updated props or state.  This method is not called for the initial render.
+
+You can use it to manipulate the DOM after an update. This is also a common place to do network requests as long as you compare the current props to previous props (e.g. a network request may not be necessary if the props have not changed). Typically, you’d use it together with componentDidMount and componentWillUnmount. 
+
+...
+....
+...
+
+Parameters 
+prevProps: Props before the update. Compare prevProps to this.props to determine what changed.
+
+prevState: State before the update. Compare prevState to this.state to determine what changed.
+
+snapshot: If you implemented getSnapshotBeforeUpdate, snapshot will contain the value you returned from that method. Otherwise, it will be undefined.
+
+Returns 
+componentDidUpdate should not return anything.
+
+Caveats 
+componentDidUpdate will not get called if shouldComponentUpdate is defined and returns false.
+
+The logic inside componentDidUpdate should usually be wrapped in conditions comparing this.props with prevProps, and this.state with prevState. Otherwise, there’s a risk of creating infinite loops.
+
+Although you may call setState immediately in componentDidUpdate, it’s best to avoid that when you can. It will trigger an extra rendering, but it will happen before the browser updates the screen. This guarantees that even though the render will be called twice in this case, the user won’t see the intermediate state. This pattern often causes performance issues, but it may be necessary for rare cases like modals and tooltips when you need to measure a DOM node before rendering something that depends on its size or position.
+
+Note
+For many use cases, defining componentDidMount, componentDidUpdate, and componentWillUnmount together in class components is equivalent to calling useEffect in function components. In the rare cases where it’s important for the code to run before browser paint, useLayoutEffect is a closer match.
+
+See how to migrate.
+
+componentWillMount() 
+Deprecated
+This API has been renamed from componentWillMount to UNSAFE_componentWillMount. The old name has been deprecated. In a future major version of React, only the new name will work.
+
+Run the rename-unsafe-lifecycles codemod to automatically update your components.
+
+componentWillReceiveProps(nextProps) 
+Deprecated
+This API has been renamed from componentWillReceiveProps to UNSAFE_componentWillReceiveProps. The old name has been deprecated. In a future major version of React, only the new name will work.
+
+Run the rename-unsafe-lifecycles codemod to automatically update your components.
+
+
+componentWillUpdate(nextProps, nextState) 
+Deprecated
+This API has been renamed from componentWillUpdate to UNSAFE_componentWillUpdate. The old name has been deprecated. In a future major version of React, only the new name will work.
+
+Run the rename-unsafe-lifecycles codemod to automatically update your components.
+
+componentWillUnmount() 
+If you define the componentWillUnmount method, React will call it before your component is removed (unmounted) from the screen. This is a common place to cancel data fetching or remove subscriptions.
+
+The logic inside componentWillUnmount should “mirror” the logic inside componentDidMount. For example, if componentDidMount sets up a subscription, componentWillUnmount should clean up that subscription. If the cleanup logic in your componentWillUnmount reads some props or state, you will usually also need to implement componentDidUpdate to clean up resources (such as subscriptions) corresponding to the old props and state.
+
+...
+...
+...
+Parameters 
+componentWillUnmount does not take any parameters.
+
+Returns 
+componentWillUnmount should not return anything.
+
+Caveats 
+When Strict Mode is on, in development React will call componentDidMount, then immediately call componentWillUnmount, and then call componentDidMount again. This helps you notice if you forgot to implement componentWillUnmount or if its logic doesn’t fully “mirror” what componentDidMount does.
+Note
+For many use cases, defining componentDidMount, componentDidUpdate, and componentWillUnmount together in class components is equivalent to calling useEffect in function components. In the rare cases where it’s important for the code to run before browser paint, useLayoutEffect is a closer match.
+
+See how to migrate.
+
+forceUpdate(callback?) 
+Forces a component to re-render.
+
+Usually, this is not necessary. If your component’s render method only reads from this.props, this.state, or this.context, it will re-render automatically when you call setState inside your component or one of its parents. However, if your component’s render method reads directly from an external data source, you have to tell React to update the user interface when that data source changes. That’s what forceUpdate lets you do.
+
+Try to avoid all uses of forceUpdate and only read from this.props and this.state in render.
+
+Parameters 
+optional callback If specified, React will call the callback you’ve provided after the update is committed.
+Returns 
+forceUpdate does not return anything.
+
+Caveats 
+If you call forceUpdate, React will re-render without calling shouldComponentUpdate.
+Note
+Reading an external data source and forcing class components to re-render in response to its changes with forceUpdate has been superseded by useSyncExternalStore in function components.
+
+getChildContext() 
+Deprecated
+This API will be removed in a future major version of React. Use Context.Provider instead.
+
+Lets you specify the values for the legacy context is provided by this component.
+
+getSnapshotBeforeUpdate(prevProps, prevState) 
+If you implement getSnapshotBeforeUpdate, React will call it immediately before React updates the DOM. It enables your component to capture some information from the DOM (e.g. scroll position) before it is potentially changed. Any value returned by this lifecycle method will be passed as a parameter to componentDidUpdate.
+
+For example, you can use it in a UI like a chat thread that needs to preserve its scroll position during updates:
+
+...
+...
+...
+
+In the above example, it is important to read the scrollHeight property directly in getSnapshotBeforeUpdate. It is not safe to read it in render, UNSAFE_componentWillReceiveProps, or UNSAFE_componentWillUpdate because there is a potential time gap between these methods getting called and React updating the DOM.
+
+Parameters 
+prevProps: Props before the update. Compare prevProps to this.props to determine what changed.
+
+prevState: State before the update. Compare prevState to this.state to determine what changed.
+
+Returns 
+You should return a snapshot value of any type that you’d like, or null. The value you returned will be passed as the third argument to componentDidUpdate.
+
+Caveats 
+getSnapshotBeforeUpdate will not get called if shouldComponentUpdate is defined and returns false.
+Note
+At the moment, there is no equivalent to getSnapshotBeforeUpdate for function components. This use case is very uncommon, but if you have the need for it, for now you’ll have to write a class component.
+
+render() 
+The render method is the only required method in a class component.
+
+The render method should specify what you want to appear on the screen, for example:
+
+import { Component } from 'react';
+
+class Greeting extends Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+React may call render at any moment, so you shouldn’t assume that it runs at a particular time. Usually, the render method should return a piece of JSX, but a few other return types (like strings) are supported. To calculate the returned JSX, the render method can read this.props, this.state, and this.context.
+
+You should write the render method as a pure function, meaning that it should return the same result if props, state, and context are the same. It also shouldn’t contain side effects (like setting up subscriptions) or interact with the browser APIs. Side effects should happen either in event handlers or methods like componentDidMount.
+
+Parameters 
+render does not take any parameters.
+
+Returns 
+render can return any valid React node. This includes React elements such as <div />, strings, numbers, portals, empty nodes (null, undefined, true, and false), and arrays of React nodes.
+
+Caveats 
+render should be written as a pure function of props, state, and context. It should not have side effects.
+
+render will not get called if shouldComponentUpdate is defined and returns false.
+
+When Strict Mode is on, React will call render twice in development and then throw away one of the results. This helps you notice the accidental side effects that need to be moved out of the render method.
+
+There is no one-to-one correspondence between the render call and the subsequent componentDidMount or componentDidUpdate call. Some of the render call results may be discarded by React when it’s beneficial.
+
+setState(nextState, callback?) 
+Call setState to update the state of your React component.
+
+...
+...
+...
+
+setState enqueues changes to the component state. It tells React that this component and its children need to re-render with the new state. This is the main way you’ll update the user interface in response to interactions.
+
+Pitfall
+Calling setState does not change the current state in the already executing code:
+
+function handleClick() {
+  console.log(this.state.name); // "Taylor"
+  this.setState({
+    name: 'Robin'
+  });
+  console.log(this.state.name); // Still "Taylor"!
+}
+It only affects what this.state will return starting from the next render.
+
+You can also pass a function to setState. It lets you update state based on the previous state:
+
+  handleIncreaseAge = () => {
+    this.setState(prevState => {
+      return {
+        age: prevState.age + 1
+      };
+    });
+  }
+You don’t have to do this, but it’s handy if you want to update state multiple times during the same event.
+
+Parameters 
+nextState: Either an object or a function.
+
+If you pass an object as nextState, it will be shallowly merged into this.state.
+If you pass a function as nextState, it will be treated as an updater function. It must be pure, should take the pending state and props as arguments, and should return the object to be shallowly merged into this.state. React will put your updater function in a queue and re-render your component. During the next render, React will calculate the next state by applying all of the queued updaters to the previous state.
+optional callback: If specified, React will call the callback you’ve provided after the update is committed.
+
+Returns 
+setState does not return anything.
+
+Caveats 
+Think of setState as a request rather than an immediate command to update the component. When multiple components update their state in response to an event, React will batch their updates and re-render them together in a single pass at the end of the event. In the rare case that you need to force a particular state update to be applied synchronously, you may wrap it in flushSync, but this may hurt performance.
+
+setState does not update this.state immediately. This makes reading this.state right after calling setState a potential pitfall. Instead, use componentDidUpdate or the setState callback argument, either of which are guaranteed to fire after the update has been applied. If you need to set the state based on the previous state, you can pass a function to nextState as described above.
+
+Note
+Calling setState in class components is similar to calling a set function in function components.
+
+See how to migrate.
+
+shouldComponentUpdate(nextProps, nextState, nextContext) 
+If you define shouldComponentUpdate, React will call it to determine whether a re-render can be skipped.
+
+If you are confident you want to write it by hand, you may compare this.props with nextProps and this.state with nextState and return false to tell React the update can be skipped.
+
+class Rectangle extends Component {
+  state = {
+    isHovered: false
+  };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      nextProps.position.x === this.props.position.x &&
+      nextProps.position.y === this.props.position.y &&
+      nextProps.size.width === this.props.size.width &&
+      nextProps.size.height === this.props.size.height &&
+      nextState.isHovered === this.state.isHovered
+    ) {
+      // Nothing has changed, so a re-render is unnecessary
+      return false;
+    }
+    return true;
+  }
+
+  // ...
+}
+React calls shouldComponentUpdate before rendering when new props or state are being received. Defaults to true. This method is not called for the initial render or when forceUpdate is used.
+
+Parameters 
+nextProps: The next props that the component is about to render with. Compare nextProps to this.props to determine what changed.
+nextState: The next state that the component is about to render with. Compare nextState to this.state to determine what changed.
+nextContext: The next context that the component is about to render with. Compare nextContext to this.context to determine what changed. Only available if you specify static contextType (modern) or static contextTypes (legacy).
+Returns 
+Return true if you want the component to re-render. That’s the default behavior.
+
+Return false to tell React that re-rendering can be skipped.
+
+Caveats 
+This method only exists as a performance optimization. If your component breaks without it, fix that first.
+
+Consider using PureComponent instead of writing shouldComponentUpdate by hand. PureComponent shallowly compares props and state, and reduces the chance that you’ll skip a necessary update.
+
+We do not recommend doing deep equality checks or using JSON.stringify in shouldComponentUpdate. It makes performance unpredictable and dependent on the data structure of every prop and state. In the best case, you risk introducing multi-second stalls to your application, and in the worst case you risk crashing it.
+
+Returning false does not prevent child components from re-rendering when their state changes.
+
+Returning false does not guarantee that the component will not re-render. React will use the return value as a hint but it may still choose to re-render your component if it makes sense to do for other reasons.
+
+Note
+Optimizing class components with shouldComponentUpdate is similar to optimizing function components with memo. Function components also offer more granular optimization with useMemo.
+
+UNSAFE_componentWillMount() 
+If you define UNSAFE_componentWillMount, React will call it immediately after the constructor. It only exists for historical reasons and should not be used in any new code. Instead, use one of the alternatives:
+
+To initialize state, declare state as a class field or set this.state inside the constructor.
+If you need to run a side effect or set up a subscription, move that logic to componentDidMount instead.
+See examples of migrating away from unsafe lifecycles.
+
+Parameters 
+UNSAFE_componentWillMount does not take any parameters.
+
+Returns 
+UNSAFE_componentWillMount should not return anything.
+
+Caveats 
+UNSAFE_componentWillMount will not get called if the component implements static getDerivedStateFromProps or getSnapshotBeforeUpdate.
+
+Despite its naming, UNSAFE_componentWillMount does not guarantee that the component will get mounted if your app uses modern React features like Suspense. If a render attempt is suspended (for example, because the code for some child component has not loaded yet), React will throw the in-progress tree away and attempt to construct the component from scratch during the next attempt. This is why this method is “unsafe”. Code that relies on mounting (like adding a subscription) should go into componentDidMount.
+
+UNSAFE_componentWillMount is the only lifecycle method that runs during server rendering. For all practical purposes, it is identical to constructor, so you should use the constructor for this type of logic instead.
+
+Note
+Calling setState inside UNSAFE_componentWillMount in a class component to initialize state is equivalent to passing that state as the initial state to useState in a function component.
+
+UNSAFE_componentWillReceiveProps(nextProps, nextContext) 
+If you define UNSAFE_componentWillReceiveProps, React will call it when the component receives new props. It only exists for historical reasons and should not be used in any new code. Instead, use one of the alternatives:
+
+If you need to run a side effect (for example, fetch data, run an animation, or reinitialize a subscription) in response to prop changes, move that logic to componentDidUpdate instead.
+If you need to avoid re-computing some data only when a prop changes, use a memoization helper instead.
+If you need to “reset” some state when a prop changes, consider either making a component fully controlled or fully uncontrolled with a key instead.
+If you need to “adjust” some state when a prop changes, check whether you can compute all the necessary information from props alone during rendering. If you can’t, use static getDerivedStateFromProps instead.
+See examples of migrating away from unsafe lifecycles.
+
+Parameters 
+nextProps: The next props that the component is about to receive from its parent component. Compare nextProps to this.props to determine what changed.
+nextContext: The next context that the component is about to receive from the closest provider. Compare nextContext to this.context to determine what changed. Only available if you specify static contextType (modern) or static contextTypes (legacy).
+Returns 
+UNSAFE_componentWillReceiveProps should not return anything.
+
+Caveats 
+UNSAFE_componentWillReceiveProps will not get called if the component implements static getDerivedStateFromProps or getSnapshotBeforeUpdate.
+
+Despite its naming, UNSAFE_componentWillReceiveProps does not guarantee that the component will receive those props if your app uses modern React features like Suspense. If a render attempt is suspended (for example, because the code for some child component has not loaded yet), React will throw the in-progress tree away and attempt to construct the component from scratch during the next attempt. By the time of the next render attempt, the props might be different. This is why this method is “unsafe”. Code that should run only for committed updates (like resetting a subscription) should go into componentDidUpdate.
+
+UNSAFE_componentWillReceiveProps does not mean that the component has received different props than the last time. You need to compare nextProps and this.props yourself to check if something changed.
+
+React doesn’t call UNSAFE_componentWillReceiveProps with initial props during mounting. It only calls this method if some of component’s props are going to be updated. For example, calling setState doesn’t generally trigger UNSAFE_componentWillReceiveProps inside the same component.
+
+Note
+Calling setState inside UNSAFE_componentWillReceiveProps in a class component to “adjust” state is equivalent to calling the set function from useState during rendering in a function component.
+
+UNSAFE_componentWillUpdate(nextProps, nextState) 
+If you define UNSAFE_componentWillUpdate, React will call it before rendering with the new props or state. It only exists for historical reasons and should not be used in any new code. Instead, use one of the alternatives:
+
+If you need to run a side effect (for example, fetch data, run an animation, or reinitialize a subscription) in response to prop or state changes, move that logic to componentDidUpdate instead.
+If you need to read some information from the DOM (for example, to save the current scroll position) so that you can use it in componentDidUpdate later, read it inside getSnapshotBeforeUpdate instead.
+See examples of migrating away from unsafe lifecycles.
+
+Parameters 
+nextProps: The next props that the component is about to render with. Compare nextProps to this.props to determine what changed.
+nextState: The next state that the component is about to render with. Compare nextState to this.state to determine what changed.
+Returns 
+UNSAFE_componentWillUpdate should not return anything.
+
+Caveats 
+UNSAFE_componentWillUpdate will not get called if shouldComponentUpdate is defined and returns false.
+
+UNSAFE_componentWillUpdate will not get called if the component implements static getDerivedStateFromProps or getSnapshotBeforeUpdate.
+
+It’s not supported to call setState (or any method that leads to setState being called, like dispatching a Redux action) during componentWillUpdate.
+
+Despite its naming, UNSAFE_componentWillUpdate does not guarantee that the component will update if your app uses modern React features like Suspense. If a render attempt is suspended (for example, because the code for some child component has not loaded yet), React will throw the in-progress tree away and attempt to construct the component from scratch during the next attempt. By the time of the next render attempt, the props and state might be different. This is why this method is “unsafe”. Code that should run only for committed updates (like resetting a subscription) should go into componentDidUpdate.
+
+UNSAFE_componentWillUpdate does not mean that the component has received different props or state than the last time. You need to compare nextProps with this.props and nextState with this.state yourself to check if something changed.
+
+React doesn’t call UNSAFE_componentWillUpdate with initial props and state during mounting.
+
+Note
+There is no direct equivalent to UNSAFE_componentWillUpdate in function components.
+
+static childContextTypes 
+Deprecated
+This API will be removed in a future major version of React. Use static contextType instead.
+
+Lets you specify which legacy context is provided by this component.
+
+static contextTypes 
+Deprecated
+This API will be removed in a future major version of React. Use static contextType instead.
+
+Lets you specify which legacy context is consumed by this component.
+
+static contextType 
+If you want to read this.context from your class component, you must specify which context it needs to read. The context you specify as the static contextType must be a value previously created by createContext.
+
+class Button extends Component {
+  static contextType = ThemeContext;
+
+  render() {
+    const theme = this.context;
+    const className = 'button-' + theme;
+    return (
+      <button className={className}>
+        {this.props.children}
+      </button>
+    );
+  }
+}
+Note
+Reading this.context in class components is equivalent to useContext in function components.
+
+See how to migrate.
+
+static defaultProps 
+You can define static defaultProps to set the default props for the class. They will be used for undefined and missing props, but not for null props.
+
+For example, here is how you define that the color prop should default to 'blue':
+
+class Button extends Component {
+  static defaultProps = {
+    color: 'blue'
+  };
+
+  render() {
+    return <button className={this.props.color}>click me</button>;
+  }
+}
+If the color prop is not provided or is undefined, it will be set by default to 'blue':
+
+<>
+  {/* this.props.color is "blue" */}
+  <Button />
+
+  {/* this.props.color is "blue" */}
+  <Button color={undefined} />
+
+  {/* this.props.color is null */}
+  <Button color={null} />
+
+  {/* this.props.color is "red" */}
+  <Button color="red" />
+</>
+Note
+Defining defaultProps in class components is similar to using default values in function components.
+
+static propTypes 
+You can define static propTypes together with the prop-types library to declare the types of the props accepted by your component. These types will be checked during rendering and in development only.
+
+import PropTypes from 'prop-types';
+
+class Greeting extends React.Component {
+  static propTypes = {
+    name: PropTypes.string
+  };
+
+  render() {
+    return (
+      <h1>Hello, {this.props.name}</h1>
+    );
+  }
+}
+Note
+We recommend using TypeScript instead of checking prop types at runtime.
+
+static getDerivedStateFromError(error) 
+If you define static getDerivedStateFromError, React will call it when a child component (including distant children) throws an error during rendering. This lets you display an error message instead of clearing the UI.
+
+Typically, it is used together with componentDidCatch which lets you send the error report to some analytics service. A component with these methods is called an error boundary.
+
+See an example.
+
+Parameters 
+error: The error that was thrown. In practice, it will usually be an instance of Error but this is not guaranteed because JavaScript allows to throw any value, including strings or even null.
+Returns 
+static getDerivedStateFromError should return the state telling the component to display the error message.
+
+Caveats 
+static getDerivedStateFromError should be a pure function. If you want to perform a side effect (for example, to call an analytics service), you need to also implement componentDidCatch.
+Note
+There is no direct equivalent for static getDerivedStateFromError in function components yet. If you’d like to avoid creating class components, write a single ErrorBoundary component like above and use it throughout your app. Alternatively, use the react-error-boundary package which does that.
+
+static getDerivedStateFromProps(props, state) 
+If you define static getDerivedStateFromProps, React will call it right before calling render, both on the initial mount and on subsequent updates. It should return an object to update the state, or null to update nothing.
+
+This method exists for rare use cases where the state depends on changes in props over time. For example, this Form component resets the email state when the userID prop changes:
+
+class Form extends Component {
+  state = {
+    email: this.props.defaultEmail,
+    prevUserID: this.props.userID
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    // Any time the current user changes,
+    // Reset any parts of state that are tied to that user.
+    // In this simple example, that's just the email.
+    if (props.userID !== state.prevUserID) {
+      return {
+        prevUserID: props.userID,
+        email: props.defaultEmail
+      };
+    }
+    return null;
+  }
+
+  // ...
+}
+Note that this pattern requires you to keep a previous value of the prop (like userID) in state (like prevUserID).
+
+Pitfall
+Deriving state leads to verbose code and makes your components difficult to think about. Make sure you’re familiar with simpler alternatives:
+
+If you need to perform a side effect (for example, data fetching or an animation) in response to a change in props, use componentDidUpdate method instead.
+If you want to re-compute some data only when a prop changes, use a memoization helper instead.
+If you want to “reset” some state when a prop changes, consider either making a component fully controlled or fully uncontrolled with a key instead.
+Parameters 
+props: The next props that the component is about to render with.
+state: The next state that the component is about to render with.
+Returns 
+static getDerivedStateFromProps return an object to update the state, or null to update nothing.
+
+Caveats 
+This method is fired on every render, regardless of the cause. This is different from UNSAFE_componentWillReceiveProps, which only fires when the parent causes a re-render and not as a result of a local setState.
+
+This method doesn’t have access to the component instance. If you’d like, you can reuse some code between static getDerivedStateFromProps and the other class methods by extracting pure functions of the component props and state outside the class definition.
+
+Note
+Implementing static getDerivedStateFromProps in a class component is equivalent to calling the set function from useState during rendering in a function component.
+
+Usage 
+Defining a class component 
+To define a React component as a class, extend the built-in Component class and define a render method:
+
+import { Component } from 'react';
+
+class Greeting extends Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+React will call your render method whenever it needs to figure out what to display on the screen. Usually, you will return some JSX from it. Your render method should be a pure function: it should only calculate the JSX.
+
+Similarly to function components, a class component can receive information by props from its parent component. However, the syntax for reading props is different. For example, if the parent component renders <Greeting name="Taylor" />, then you can read the name prop from this.props, like this.props.name.
+
+...
+....
+...
+
+Note that Hooks (functions starting with use, like useState) are not supported inside class components.
+
+Pitfall
+We recommend defining components as functions instead of classes. See how to migrate.
+
+Adding state to a class component 
+To add state to a class, assign an object to a property called state. To update state, call this.setState.
+
+...
+.....
+...
+
+Pitfall
+We recommend defining components as functions instead of classes. See how to migrate.
+
+Adding lifecycle methods to a class component 
+There are a few special methods you can define on your class.
+
+If you define the componentDidMount method, React will call it when your component is added (mounted) to the screen. React will call componentDidUpdate after your component re-renders due to changed props or state. React will call componentWillUnmount after your component has been removed (unmounted) from the screen.
+
+If you implement componentDidMount, you usually need to implement all three lifecycles to avoid bugs. For example, if componentDidMount reads some state or props, you also have to implement componentDidUpdate to handle their changes, and componentWillUnmount to clean up whatever componentDidMount was doing.
+
+For example, this ChatRoom component keeps a chat connection synchronized with props and state.
+
+...
+...
+...
+Note that in development when Strict Mode is on, React will call componentDidMount, immediately call componentWillUnmount, and then call componentDidMount again. This helps you notice if you forgot to implement componentWillUnmount or if its logic doesn’t fully “mirror” what componentDidMount does.
+
+Pitfall
+We recommend defining components as functions instead of classes. See how to migrate.
+
+Catching rendering errors with an error boundary 
+By default, if your application throws an error during rendering, React will remove its UI from the screen. To prevent this, you can wrap a part of your UI into an error boundary. An error boundary is a special component that lets you display some fallback UI instead of the part that crashed—for example, an error message.
+
+To implement an error boundary component, you need to provide static getDerivedStateFromError which lets you update state in response to an error and display an error message to the user. You can also optionally implement componentDidCatch to add some extra logic, for example, to log the error to an analytics service.
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    // Example "componentStack":
+    //   in ComponentThatThrows (created by App)
+    //   in ErrorBoundary (created by App)
+    //   in div (created by App)
+    //   in App
+    logErrorToMyService(error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return this.props.fallback;
+    }
+
+    return this.props.children;
+  }
+}
+Then you can wrap a part of your component tree with it:
+
+<ErrorBoundary fallback={<p>Something went wrong</p>}>
+  <Profile />
+</ErrorBoundary>
+If Profile or its child component throws an error, ErrorBoundary will “catch” that error, display a fallback UI with the error message you’ve provided, and send a production error report to your error reporting service.
+
+You don’t need to wrap every component into a separate error boundary. When you think about the granularity of error boundaries, consider where it makes sense to display an error message. For example, in a messaging app, it makes sense to place an error boundary around the list of conversations. It also makes sense to place one around every individual message. However, it wouldn’t make sense to place a boundary around every avatar.
+
+Note
+There is currently no way to write an error boundary as a function component. However, you don’t have to write the error boundary class yourself. For example, you can use react-error-boundary instead.
+
+Alternatives 
+Migrating a simple component from a class to a function 
+Typically, you will define components as functions instead.
+
+For example, suppose you’re converting this Greeting class component to a function:
+....
+...
+...
+
+Define a function called Greeting. This is where you will move the body of your render function.
+
+function Greeting() {
+  // ... move the code from the render method here ...
+}
+Instead of this.props.name, define the name prop using the destructuring syntax and read it directly:
+
+function Greeting({ name }) {
+  return <h1>Hello, {name}!</h1>;
+}
+Here is a complete example:
+...
+...
+...
+
+Migrating a component with state from a class to a function 
+Suppose you’re converting this Counter class component to a function:
+
+...
+...
+...
+
+Start by declaring a function with the necessary state variables:
+
+import { useState } from 'react';
+
+function Counter() {
+  const [name, setName] = useState('Taylor');
+  const [age, setAge] = useState(42);
+  // ...
+Next, convert the event handlers:
+
+function Counter() {
+  const [name, setName] = useState('Taylor');
+  const [age, setAge] = useState(42);
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleAgeChange() {
+    setAge(age + 1);
+  }
+  // ...
+Finally, replace all references starting with this with the variables and functions you defined in your component. For example, replace this.state.age with age, and replace this.handleNameChange with handleNameChange.
+
+Here is a fully converted component:
+...
+...
+...
+
+Migrating a component with lifecycle methods from a class to a function 
+Suppose you’re converting this ChatRoom class component with lifecycle methods to a function:
+
+...
+...
+..
+
+First, verify that your componentWillUnmount does the opposite of componentDidMount. In the above example, that’s true: it disconnects the connection that componentDidMount sets up. If such logic is missing, add it first.
+
+Next, verify that your componentDidUpdate method handles changes to any props and state you’re using in componentDidMount. In the above example, componentDidMount calls setupConnection which reads this.state.serverUrl and this.props.roomId. This is why componentDidUpdate checks whether this.state.serverUrl and this.props.roomId have changed, and resets the connection if they did. If your componentDidUpdate logic is missing or doesn’t handle changes to all relevant props and state, fix that first.
+
+In the above example, the logic inside the lifecycle methods connects the component to a system outside of React (a chat server). To connect a component to an external system, describe this logic as a single Effect:
+
+import { useState, useEffect } from 'react';
+
+function ChatRoom({ roomId }) {
+  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+    return () => {
+      connection.disconnect();
+    };
+  }, [serverUrl, roomId]);
+
+  // ...
+}
+This useEffect call is equivalent to the logic in the lifecycle methods above. If your lifecycle methods do multiple unrelated things, split them into multiple independent Effects. Here is a complete example you can play with:
+...
+...
+...
+
+Note
+If your component does not synchronize with any external systems, you might not need an Effect.
+
+Migrating a component with context from a class to a function 
+In this example, the Panel and Button class components read context from this.context.
+
+...
+...
+...
+
+When you convert them to function components, replace this.context with useContext calls:
+
+...
+...
+...
+
+
+
+

@@ -1,0 +1,28 @@
+React’s extensions to <form> are currently only available in React’s canary and experimental channels. In stable releases of React <form> works only as a built-in browser HTML component
+
+The built-in browser <form> component lets you create interactive controls for submitting information.
+
+<form action={search}>
+    <input name="query" />
+    <button type="submit">Search</button>
+</form>
+
+Usage 
+Handle form submission on the client 
+Pass a function to the action prop of form to run the function when the form is submitted
+
+export default function Search() {
+  function search(formData) {
+    const query = formData.get("query");
+    alert(`You searched for '${query}'`);
+  }
+  return (
+    <form action={search}>
+      <input name="query" />
+      <button type="submit">Search</button>
+    </form>
+  );
+}
+
+Handle form submission with a Server Action 
+

@@ -1,0 +1,81 @@
+Structuring state well can make a difference between a component that is pleasant to modify and debug, and one that is a constant source of bugs.The goal behind these principles is to make state easy to update without introducing mistakes.
+
+
+a few principles that can guide you to make better choices:
+
+Group related state. If you always update two or more state variables at the same time, consider merging them into a single state variable.
+
+Avoid contradictions in state. When the state is structured in a way that several pieces of state may contradict and “disagree” with each other, you leave room for mistakes. Try to avoid this.
+
+
+Avoid redundant state. If you can calculate some information from the component’s props or its existing state variables during rendering, you should not put that information into that component’s state.
+
+
+Avoid duplication in state. When the same data is duplicated between multiple state variables, or within nested objects, it is difficult to keep them in sync. Reduce duplication when you can.
+
+
+
+Avoid deeply nested state. Deeply hierarchical state is not very convenient to update. When possible, prefer to structure state in a flat way.
+
+
+Removing redundant and duplicate data from state helps ensure that all its pieces stay in sync.
+
+Pitfall
+If your state variable is an object, remember that you can’t update only one field in it without explicitly copying the other fields. For example, you can’t do setPosition({ x: 100 }) in the above example because it would not have the y property at all! Instead, if you wanted to set x alone, you would either do setPosition({ ...position, x: 100 })
+
+
+Don’t mirror props in state 
+
+A common example of redundant state is code like this:
+
+function Message({ messageColor }) {
+  const [color, setColor] = useState(messageColor);
+Here, a color state variable is initialized to the messageColor prop. The problem is that if the parent component passes a different value of messageColor later (for example, 'red' instead of 'blue'), the color state variable would not be updated! The state is only initialized during the first render.
+
+This is why “mirroring” some prop in a state variable can lead to confusion. Instead, use the messageColor prop directly in your code. If you want to give it a shorter name, use a constant:
+
+function Message({ messageColor }) {
+  const color = messageColor;
+This way it won’t get out of sync with the prop passed from the parent component.
+
+“Mirroring” props into state only makes sense when you want to ignore all updates for a specific prop. By convention, start the prop name with initial or default to clarify that its new values are ignored:
+
+function Message({ initialColor }) {
+  // The `color` state variable holds the *first* value of `initialColor`.
+  // Further changes to the `initialColor` prop are ignored.
+  const [color, setColor] = useState(initialColor);
+
+
+
+Avoid deeply nested state 
+
+Imagine a travel plan consisting of planets, continents, and countries. You might be tempted to structure its state using nested objects and arrays.
+
+Now let’s say you want to add a button to delete a place you’ve already visited. How would you go about it? Updating nested state involves making copies of objects all the way up from the part that changed. Deleting a deeply nested place would involve copying its entire parent place chain. Such code can be very verbose.
+
+If the state is too nested to update easily, consider making it “flat”. Here is one way you can restructure this data. Instead of a tree-like structure where each place has an array of its child places, you can have each place hold an array of its child place IDs. Then store a mapping from each place ID to the corresponding place.
+
+
+Now that the state is “flat” (also known as “normalized”), updating nested items becomes easier.
+
+In order to remove a place now, you only need to update two levels of state:
+
+The updated version of its parent place should exclude the removed ID from its childIds array.
+The updated version of the root “table” object should include the updated version of the parent place.
+
+
+You can nest state as much as you like, but making it “flat” can solve numerous problems. It makes state easier to update, and it helps ensure you don’t have duplication in different parts of a nested object.
+
+
+Improving memory usage 
+
+Ideally, you would also remove the deleted items (and their children!) from the “table” object to improve memory usage. This version does that. It also uses Immer to make the update logic more concise.
+
+Recap
+If two state variables always update together, consider merging them into one.
+Choose your state variables carefully to avoid creating “impossible” states.
+Structure your state in a way that reduces the chances that you’ll make a mistake updating it.
+Avoid redundant and duplicate state so that you don’t need to keep it in sync.
+Don’t put props into state unless you specifically want to prevent updates.
+For UI patterns like selection, keep ID or index in state instead of the object itself.
+If updating deeply nested state is complicated, try flattening it.

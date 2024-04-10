@@ -1,0 +1,64 @@
+Alternatives 
+Copying createFactory into your project 
+If your project has many createFactory calls, copy this createFactory.js implementation into your project:
+
+...
+...
+...
+This lets you keep all of your code unchanged except the imports.
+
+Replacing createFactory with createElement 
+If you have a few createFactory calls that you don’t mind porting manually, and you don’t want to use JSX, you can replace every call a factory function with a createElement call. For example, you can replace this code:
+
+import { createFactory } from 'react';
+
+const button = createFactory('button');
+
+export default function App() {
+  return button({
+    onClick: () => {
+      alert('Clicked!')
+    }
+  }, 'Click me');
+}
+with this code:
+
+import { createElement } from 'react';
+
+export default function App() {
+  return createElement('button', {
+    onClick: () => {
+      alert('Clicked!')
+    }
+  }, 'Click me');
+}
+Here is a complete example of using React without JSX:
+
+
+...
+...
+...
+
+Replacing createFactory with JSX 
+Finally, you can use JSX instead of createFactory. This is the most common way to use React:
+
+
+...
+...
+...
+
+Pitfall
+Sometimes, your existing code might pass some variable as a type instead of a constant like 'button':
+
+function Heading({ isSubheading, ...props }) {
+  const type = isSubheading ? 'h2' : 'h1';
+  const factory = createFactory(type);
+  return factory(props);
+}
+To do the same in JSX, you need to rename your variable to start with an uppercase letter like Type:
+
+function Heading({ isSubheading, ...props }) {
+  const Type = isSubheading ? 'h2' : 'h1';
+  return <Type {...props} />;
+}
+Otherwise React will interpret <type> as a built-in HTML tag because it is lowercase.

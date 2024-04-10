@@ -1,0 +1,43 @@
+top 5 react animation libraries -> 
+framer motion 
+react spring 
+remotion 
+react motion 
+
+dick react libraries -> 
+headless ui 
+
+best 6 react component libraries -> 
+react router 
+blueprint ui -> blueprintjs.com
+redux -> redux.js.org 
+react suite -> rsuitejs.com 
+ant design -> ant.design 
+fluent ui -> developer.microsoft.com
+
+
+i want to create design for my website for free for example use figma designs but figma charges money so i want free alternative
+
+Certainly! If you're looking for free alternatives to **Figma** for website design, I've got you covered. Here are some options you can explore:
+
+1. **Penpot**:
+   - **Key Highlights**:
+     - Self-hosting option.
+     - Uses **SVG** as the native format.
+     - Web-based and cross-platform.
+   - **Description**: Penpot is quickly gaining recognition as a solid **free and open-source Figma alternative**. Although it's still in beta, users seem to appreciate its impressive user experience. Penpot's unique feature is its use of SVG as the native format, which provides benefits to designers. Expect essential features similar to Figma, as the developers aim to provide a familiar user experience without unnecessary complexities. You can explore more on its [official website](https://penpot.app/) or [GitHub page](https://github.com/penpot/penpot)¹.
+
+2. **Quant UX**:
+   - **Key Highlights**:
+     - Prototyping and testing.
+     - Limited access without signing up.
+     - Regular addition of new beta features.
+     - Self-hosting option.
+   - **Description**: Quant UX is a prototyping tool where you can test your designs and gain insights. Create custom prototypes or choose from available screen sizes for Android phones, iPhones, or desktops. While some features are accessible without signing up, signing up for an account unlocks all features. Explore more on its [GitHub page](https://github.com/quant-ux/quant-ux)¹.
+
+3. **Plasmic**:
+   - **Key Highlights**:
+     - Free and open source.
+     - Drag-and-drop functionality.
+     - Supports importing designs from Figma.
+

@@ -1,0 +1,177 @@
+.App {
+  text-align: center;
+}
+.avatar{
+  border-radius: 50%;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+body{
+  background-color: #2B323C;
+  color: white ;
+}
+/* .container h1 {
+  font-size: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  font-weight: bold;
+} */
+.highlight{
+  background-color: aqua;
+}
+.flex{
+  display: flex;
+  
+}
+.counter {
+  /* width: 100px;
+  text-align: center;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 0 20px 20px 0;
+  float: left; */
+  width: 100px ;
+  height: 200px;
+  text-align: center;
+  border: 2px gray solid;
+  margin: 30px;
+  float : left;
+}
+
+.button{
+  padding: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+h4 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+h5 {
+  margin-top: 0;
+  font-size: 14px;
+}
+
+h6 {
+  margin-top: 0;
+  font-size: 12px;
+}
+
+code {
+  font-size: 1.2em;
+}
+
+ul {
+  padding-inline-start: 20px;
+}
+
+.section {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+.fancy {
+  border: 4px dashed pink;
+}
+
+.section{
+  margin: white 2px;
+}
+
+.panel{
+  padding: 10px;
+  border: 2px white solid ;
+}
+.counter{
+  height: 300px;
+  width: 200px;
+  background-color: #aaa;
+
+}
+.counter h2{
+  color: aliceblue;
+
+}
+.hover{
+  background-color: #2B323C;
+}
+.usefancy{
+  color: yellow;
+  border: 5px solid red;
+}
+.counter-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.counter {
+  height: 300px;
+  width: auto;
+  background-color: #aaa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter h2 {
+  color: aliceblue;
+  font-size : 40px;
+}
+
+.hover {
+  background-color: #2B323C;
+}
+.usefancy{
+  color: yellow;
+  border: 5px solid red;
+}
+.section {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+

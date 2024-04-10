@@ -1,0 +1,24 @@
+App Router
+...
+next.config.js Options
+mdxRs
+mdxRs
+For use with @next/mdx. Compile MDX files using the new Rust compiler.
+
+next.config.js
+
+const withMDX = require('@next/mdx')()
+ 
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  pageExtensions: ['ts', 'tsx', 'mdx'],
+  experimental: {
+    mdxRs: true,
+  },
+}
+ 
+module.exports = withMDX(nextConfig)
+Previous
+logging
+Next
+onDemandEntries

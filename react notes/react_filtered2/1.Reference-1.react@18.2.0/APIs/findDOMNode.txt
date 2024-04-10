@@ -1,0 +1,57 @@
+This API will be removed in a future major version of React. See the alternatives.
+
+Alternatives 
+Reading component’s own DOM node from a ref 
+Code using findDOMNode is fragile because the connection between the JSX node and the code manipulating the corresponding DOM node is not explicit. For example, try wrapping this <input /> into a <div>.
+
+...
+....
+...
+
+This will break the code because now, findDOMNode(this) finds the <div> DOM node, but the code expects an <input> DOM node. To avoid these kinds of problems, use createRef to manage a specific DOM node.
+
+In this example, findDOMNode is no longer used. Instead, inputRef = createRef(null) is defined as an instance field on the class. To read the DOM node from it, you can use this.inputRef.current. To attach it to the JSX, you render <input ref={this.inputRef} />. This connects the code using the DOM node to its JSX
+
+...
+...
+...
+In modern React without class components, the equivalent code would call useRef instead.
+...
+...
+...
+Reading a child component’s DOM node from a forwarded ref 
+In this example, findDOMNode(this) finds a DOM node that belongs to another component. The AutoselectingInput renders MyInput, which is your own component that renders a browser <input>.
+
+..
+...
+...
+
+Notice that calling findDOMNode(this) inside AutoselectingInput still gives you the DOM <input>—even though the JSX for this <input> is hidden inside the MyInput component. This seems convenient for the above example, but it leads to fragile code. Imagine that you wanted to edit MyInput later and add a wrapper <div> around it. This would break the code of AutoselectingInput (which expects to find an <input>).
+
+To replace findDOMNode in this example, the two components need to coordinate:
+
+AutoSelectingInput should declare a ref, like in the earlier example, and pass it to <MyInput>.
+MyInput should be declared with forwardRef to take that ref and forward it down to the <input> node.
+This version does that, so it no longer needs findDOMNode.
+
+...
+....
+
+Here is how this code would look like with function components instead of classes:
+
+
+....
+...
+Adding a wrapper <div> element 
+Sometimes a component needs to know the position and size of its children. This makes it tempting to find the children with findDOMNode(this), and then use DOM methods like getBoundingClientRect for measurements.
+
+There is currently no direct equivalent for this use case, which is why findDOMNode is deprecated but is not yet removed completely from React. In the meantime, you can try rendering a wrapper <div> node around the content as a workaround, and getting a ref to that node. However, extra wrappers can break styling.
+
+
+<div ref={someRef}>
+  {children}
+</div>
+
+
+
+This also applies to focusing and scrolling to arbitrary children.

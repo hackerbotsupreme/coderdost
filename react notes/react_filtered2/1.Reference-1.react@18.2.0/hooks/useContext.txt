@@ -1,0 +1,386 @@
+useContext is a React Hook that lets you read and subscribe to context from your component.
+
+const value = useContext(SomeContext)
+
+Reference
+Call useContext at the top level of your component to read and subscribe to context.
+
+Parameters 
+SomeContext: The context that you’ve previously created with createContext. The context itself does not hold the information, it only represents the kind of information you can provide or read from components.
+
+useContext returns the context value for the calling component. It is determined as the value passed to the closest SomeContext.Provider above the calling component in the tree. If there is no such provider, then the returned value will be the defaultValue you have passed to createContext for that context. The returned value is always up-to-date. React automatically re-renders components that read some context if it changes.
+
+
+
+Caveats 
+useContext() call in a component is not affected by providers returned from the same component. The corresponding <Context.Provider> needs to be above the component doing the useContext() call.
+
+React automatically re-renders all the children that use a particular context starting from the provider that receives a different value. The previous and the next values are compared with the Object.is comparison. Skipping re-renders with memo does not prevent the children receiving fresh context values.
+
+If your build system produces duplicates modules in the output (which can happen with symlinks), this can break context. Passing something via context only works if SomeContext that you use to provide context and SomeContext that you use to read it are exactly the same object, as determined by a === comparison.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+what is the use of useContext  in react ?
+
+
+`useContext` is a React Hook that allows you to read and subscribe to context from your component¹. Here's a brief explanation of its usage:
+
+1. **Creating Context**: First, you create context using the `createContext` method³.
+
+```jsx
+import { createContext } from "react";
+const UserContext = createContext();
+```
+
+2. **Providing Context**: You then wrap the context provider around your component tree and supply the state value².
+
+```jsx
+import { useState } from "react";
+function Component1() {
+  const [user, setUser] = useState("Jesse Hall");
+  return (
+    <UserContext.Provider value={user}>
+      <h1>{`Hello ${user}!`}</h1>
+      <Component2 />
+    </UserContext.Provider>
+  );
+}
+```
+
+3. **Consuming Context**: To use the context in a child component, you access it using the `useContext` Hook².
+
+```jsx
+import { useContext } from "react";
+function Component5() {
+  const user = useContext(UserContext);
+  return (
+    <>
+      <h1>Component 5</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+```
+
+In this example, `useContext` returns the context value for the context you passed. To determine the context value, React searches the component tree and finds the closest context provider above for that particular context¹.
+
+This approach helps to avoid "prop drilling", where you have to pass state as props through each nested component². It's an easy alternative to Redux if you just need to pass data to the children elements⁴.
+
+
+ok so with createcontext we create context then we provide the value/context value through provider then we are using usecontext to use that value ? - right ?
+
+Yes, you've got it right! Here's the process again for clarity:
+
+1. **Create Context**: Use `createContext` to create a new context.
+2. **Provide Context**: Use the `Provider` component from your created context to wrap around components that need access to the context. You pass the context value into the `value` prop of the `Provider`.
+3. **Consume Context**: Inside any component that needs to access the context value, you call `useContext` and pass in the context you created. This will return the current context value.
+
+This process allows you to share state across multiple components without having to pass props down manually at every level. It's a powerful tool for managing global state in your application. 👍
+
+
+but what does tis line means - . To determine the context value, React searches the component tree and finds the closest context provider above for that particular context?
+
+That's a great question! In React, components are organized in a tree-like structure. When you use the `useContext` hook in a component, React needs to determine what value to return.
+
+Here's how it works:
+
+1. React starts at the component where `useContext` is called.
+2. It then moves up the component tree, looking at each parent component in turn.
+3. If it finds a `Provider` for the context you're trying to access, it will use the value from that `Provider`.
+4. If there are multiple `Providers` for the same context in the component tree, React will use the value from the closest `Provider` up the tree from the component where `useContext` is called.
+
+This is what is meant by "React searches the component tree and finds the closest context provider above for that particular context". It's essentially describing how React determines which value to return when you call `useContext`. 👍
+
+but why usecontext need to search when we are already providing what value to return like - const user = useContext(UserContext);  ??
+
+That's a good point! When you call `useContext(UserContext)`, you're telling React that you want to access the value of `UserContext`. However, `UserContext` itself is just a reference to a context object, it doesn't contain the actual value. The value of the context is determined by the `Provider`.
+
+Here's an analogy: think of `UserContext` as a radio frequency, and `useContext(UserContext)` as a radio tuned to that frequency. The radio (your component) doesn't know what sounds (values) it will receive until it tunes in to the frequency (context). The sounds are determined by whoever is broadcasting on that frequency (the `Provider`).
+
+In a complex application, you might have multiple `Providers` for the same context, each with different values, nested at different levels in the component tree. When you call `useContext`, React needs to find the closest `Provider` up the tree from your component, because that's the `Provider` your component is "tuned in" to. That's why React needs to "search" the component tree.
+
+I hope this clarifies things! Let me know if you have any more questions. 👍
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Usage 
+Passing data deeply into the tree 
+Call useContext at the top level of your component to read and subscribe to context.
+
+import { useContext } from 'react';
+
+function Button() {
+  const theme = useContext(ThemeContext);
+  // ...
+useContext returns the context value for the context you passed. To determine the context value, React searches the component tree and finds the closest context provider above for that particular context.
+
+To pass context to a Button, wrap it or one of its parent components into the corresponding context provider:
+
+function MyPage() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Form />
+    </ThemeContext.Provider>
+  );
+}
+
+function Form() {
+  // ... renders buttons inside ...
+}
+It doesn’t matter how many layers of components there are between the provider and the Button. When a Button anywhere inside of Form calls useContext(ThemeContext), it will receive "dark" as the value.
+
+Pitfall
+useContext() always looks for the closest provider above the component that calls it. It searches upwards and does not consider providers in the component from which you’re calling useContext().
+
+
+import { createContext, useContext } from 'react';
+
+const ThemeContext = createContext(null);
+
+export default function MyApp() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Form />
+    </ThemeContext.Provider>
+  )
+}
+
+function Form() {
+  return (
+    <Panel title="Welcome">
+      <Button>Sign up</Button>
+      <Button>Log in</Button>
+    </Panel>
+  );
+}
+
+function Panel({ title, children }) {
+  const theme = useContext(ThemeContext);
+  const className = 'panel-' + theme;
+  return (
+    <section className={className}>
+      <h1>{title}</h1>
+      {children}
+    </section>
+  )
+}
+
+function Button({ children }) {
+  const theme = useContext(ThemeContext);
+  const className = 'button-' + theme;
+  return (
+    <button className={className}>
+      {children}
+    </button>
+  );
+}
+
+Updating data passed via context 
+Often, you’ll want the context to change over time. To update context, combine it with state. Declare a state variable in the parent component, and pass the current state down as the context value to the provider.
+
+function MyPage() {
+  const [theme, setTheme] = useState('dark');
+  return (
+    <ThemeContext.Provider value={theme}>
+      <Form />
+      <Button onClick={() => {
+        setTheme('light');
+      }}>
+        Switch to light theme
+      </Button>
+    </ThemeContext.Provider>
+  );
+}
+Now any Button inside of the provider will receive the current theme value. If you call setTheme to update the theme value that you pass to the provider, all Button components will re-render with the new 'light' value.
+
+
+Example 1 of 5:
+Updating a value via context 
+In this example, the MyApp component holds a state variable which is then passed to the ThemeContext provider. Checking the “Dark mode” checkbox updates the state. Changing the provided value re-renders all the components using that context.
+
+
+Updating an object via context 
+In this example, there is a currentUser state variable which holds an object. You combine { currentUser, setCurrentUser } into a single object and pass it down through the context inside the value={}. This lets any component below, such as LoginButton, read both currentUser and setCurrentUser, and then call setCurrentUser when needed.
+
+
+Example 3 of 5:
+Multiple contexts 
+In this example, there are two independent contexts. ThemeContext provides the current theme, which is a string, while CurrentUserContext holds the object representing the current user.
+
+
+Example 4 of 5:
+Extracting providers to a component 
+As your app grows, it is expected that you’ll have a “pyramid” of contexts closer to the root of your app. There is nothing wrong with that. However, if you dislike the nesting aesthetically, you can extract the providers into a single component. In this example, MyProviders hides the “plumbing” and renders the children passed to it inside the necessary providers. Note that the theme and setTheme state is needed in MyApp itself, so MyApp still owns that piece of the state.
+
+
+Example 5 of 5:
+Scaling up with context and a reducer 
+In larger apps, it is common to combine context with a reducer to extract the logic related to some state out of components. In this example, all the “wiring” is hidden in the TasksContext.js, which contains a reducer and two separate contexts.
+
+
+Specifying a fallback default value 
+If React can’t find any providers of that particular context in the parent tree, the context value returned by useContext() will be equal to the default value that you specified when you created that context:
+
+const ThemeContext = createContext(null);
+The default value never changes. If you want to update context, use it with state as described above.
+
+Often, instead of null, there is some more meaningful value you can use as a default, for example:
+
+const ThemeContext = createContext('light');
+
+This way, if you accidentally render some component without a corresponding provider, it won’t break. This also helps your components work well in a test environment without setting up a lot of providers in the tests.
+
+In the example below, the “Toggle theme” button is always light because it’s outside any theme context provider and the default context theme value is 'light'. Try editing the default theme to be 'dark'.
+
+import { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext('light');
+
+export default function MyApp() {
+  const [theme, setTheme] = useState('light');
+  return (
+    <>
+      <ThemeContext.Provider value={theme}>
+        <Form />
+      </ThemeContext.Provider>
+      <Button onClick={() => {
+        setTheme(theme === 'dark' ? 'light' : 'dark');
+      }}>
+        Toggle theme
+      </Button>
+    </>
+  )
+}
+
+function Form({ children }) {
+  return (
+    <Panel title="Welcome">
+      <Button>Sign up</Button>
+      <Button>Log in</Button>
+    </Panel>
+  );
+}
+
+function Panel({ title, children }) {
+  const theme = useContext(ThemeContext);
+  const className = 'panel-' + theme;
+  return (
+    <section className={className}>
+      <h1>{title}</h1>
+      {children}
+    </section>
+  )
+}
+
+function Button({ children, onClick }) {
+  const theme = useContext(ThemeContext);
+  const className = 'button-' + theme;
+  return (
+    <button className={className} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
+
+Overriding context for a part of the tree 
+You can override the context for a part of the tree by wrapping that part in a provider with a different value.
+
+<ThemeContext.Provider value="dark">
+  ...
+  <ThemeContext.Provider value="light">
+    <Footer />
+  </ThemeContext.Provider>
+  ...
+</ThemeContext.Provider>
+You can nest and override providers as many times as you need.
+
+
+Example 1 of 2:
+Overriding a theme 
+Here, the button inside the Footer receives a different context value ("light") than the buttons outside ("dark").
+
+Example 2 of 2:
+Automatically nested headings 
+You can “accumulate” information when you nest context providers. In this example, the Section component keeps track of the LevelContext which specifies the depth of the section nesting. It reads the LevelContext from the parent section, and provides the LevelContext number increased by one to its children. As a result, the Heading component can automatically decide which of the <h1>, <h2>, <h3>, …, tags to use based on how many Section components it is nested inside of.
+
+
+
+Optimizing re-renders when passing objects and functions 
+You can pass any values via context, including objects and functions.
+
+function MyApp() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  function login(response) {
+    storeCredentials(response.credentials);
+    setCurrentUser(response.user);
+  }
+
+  return (
+    <AuthContext.Provider value={{ currentUser, login }}>
+      <Page />
+    </AuthContext.Provider>
+  );
+}
+Here, the context value is a JavaScript object with two properties, one of which is a function. Whenever MyApp re-renders (for example, on a route update), this will be a different object pointing at a different function, so React will also have to re-render all components deep in the tree that call useContext(AuthContext).
+
+In smaller apps, this is not a problem. However, there is no need to re-render them if the underlying data, like currentUser, has not changed. To help React take advantage of that fact, you may wrap the login function with useCallback and wrap the object creation into useMemo. This is a performance optimization:
+
+import { useCallback, useMemo } from 'react';
+
+function MyApp() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const login = useCallback((response) => {
+    storeCredentials(response.credentials);
+    setCurrentUser(response.user);
+  }, []);
+
+  const contextValue = useMemo(() => ({
+    currentUser,
+    login
+  }), [currentUser, login]);
+
+  return (
+    <AuthContext.Provider value={contextValue}>
+      <Page />
+    </AuthContext.Provider>
+  );
+}
+As a result of this change, even if MyApp needs to re-render, the components calling useContext(AuthContext) won’t need to re-render unless currentUser has changed.
+
+Read more about useMemo and useCallback.
+
+Troubleshooting 
+My component doesn’t see the value from my provider 
+There are a few common ways that this can happen:
+
+You’re rendering <SomeContext.Provider> in the same component (or below) as where you’re calling useContext(). Move <SomeContext.Provider> above and outside the component calling useContext().
+You may have forgotten to wrap your component with <SomeContext.Provider>, or you might have put it in a different part of the tree than you thought. Check whether the hierarchy is right using React DevTools.
+You might be running into some build issue with your tooling that causes SomeContext as seen from the providing component and SomeContext as seen by the reading component to be two different objects. This can happen if you use symlinks, for example. You can verify this by assigning them to globals like window.SomeContext1 and window.SomeContext2 and then checking whether window.SomeContext1 === window.SomeContext2 in the console. If they’re not the same, fix that issue on the build tool level.
+I am always getting undefined from my context although the default value is different 
+You might have a provider without a value in the tree:
+
+// 🚩 Doesn't work: no value prop
+<ThemeContext.Provider>
+   <Button />
+</ThemeContext.Provider>
+If you forget to specify value, it’s like passing value={undefined}.
+
+You may have also mistakingly used a different prop name by mistake:
+
+// 🚩 Doesn't work: prop should be called "value"
+<ThemeContext.Provider theme={theme}>
+   <Button />
+</ThemeContext.Provider>
+In both of these cases you should see a warning from React in the console. To fix them, call the prop value:
+
+// ✅ Passing the value prop
+<ThemeContext.Provider value={theme}>
+   <Button />
+</ThemeContext.Provider>
+Note that the default value from your createContext(defaultValue) call is only used if there is no matching provider above at all. If there is a <SomeContext.Provider value={undefined}> component somewhere in the parent tree, the component calling useContext(SomeContext) will receive undefined as the context value.

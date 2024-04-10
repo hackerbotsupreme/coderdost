@@ -1,0 +1,215 @@
+in chapter 2 we have seen 
+
+function returns ui . 
+
+in this chapter we will see how we o conditional rendering(render different component in different way,put(display/dont display/play/hide) elements) , means how we make components intractive , means 
+how we ad interactiveness in elements that are created from the same function . 
+
+and one more thing , how we deal with/cover  list/collections - means when we go to the web we see collection of posts,
+comments in format of list which is basically a repition of a single componet with different content . 
+
+so first option that comes in mind is if-else - 
+it will be like 
+        function Video({title,id,channel="Coder Dost",views,time,verified}) {
+            let verified = true/false ;
+            // as jsx is basically js undder the hood , so we can also do things that are valid in js 
+            let channelJSX ; 
+            if (verified){
+                channelJSX=<div className="channel"> {channel} "tick emoji" </div>
+            }else{
+                        channelJSX=<div className="channel"> {channel} </div>
+            }
+
+        return (
+            <>
+            </>
+        );
+        }
+        and for props in app.js ,
+        we will pass it in default value like , 
+        function App(){
+            let obj = {
+                title="react js"
+                views="999k"
+                time="1 year ago"
+                channel="Coder dost"
+            }
+            return(
+                {channelJSX}
+                <Video {...obj}/>
+            )
+        } 
+
+now , one thing that will definately come in mind is ,
+why cant i write directly like 
+            {if (verified){
+                channelJSX=<div className="channel"> {channel} "tick emoji" </div>
+            }else{
+                        channelJSX=<div className="channel"> {channel} </div>
+            }}
+instead of ,
+        let verified = true/false ;
+            // as jsx is basically js undder the hood , so we can also do things that are valid in js 
+            let channelJSX ; 
+            if (verified){
+                channelJSX=<div className="channel"> {channel} "tick emoji" </div>
+            }else{
+                        channelJSX=<div className="channel"> {channel} </div>
+            }
+            function App(){
+            return(
+                {channelJSX}
+                <Video {...obj}/>
+            )
+            
+            }
+this inside return , its because if-else is a statement and 
+it does not returns any value by itself so 
+it cant be translated as an  object 
+for which it will be creating error 
+that's why .
+
+
+so , instead of if-else use ternary operator (the short form of if-else when there is only one condition )
+so the code will be like , 
+inside return , 
+like , 
+{verified ?:channelJSX=<div className="channel"> {channel} "tick emoji" </div> : channelJSX=<div className="channel"> {channel}</div>}
+also , here is one interesting case , think you return nothing when condition is not met then 
+in that case we will use null which also used in case if you dont know wht to do now you will decide eventually
+so 
+{verified ?:channelJSX=<div className="channel"> {channel} "tick emoji" </div> : null }
+
+
+now if you observe closely you will notice that there is same element 
+copied , which is dengerous when if you needd to cahnge anything then you have change 
+it at all the places where it has used and the possibility of forgetting is very high
+so how we will make it more easier ?
+so we will add ternary only to the tick emoji not on the whole element.
+so it will be like , 
+{verified?tick emoji:null}
+but an emoji is not a valid charecter right so convert that into the string like 
+{verified?"tick emoji":null}
+
+
+but we can make it more safer with short-circuiting , 
+means it it finds false then it will not proceed furter . 
+which aviods error gurenteed. 
+so it will be like , 
+{verified && "tick emoji"}
+note - verified should return boolean value true-1/false-0
+otherwise that number will get printed 
+
+
+the next thing is  you have seen we are dealing with only 3-4
+copies of element but let suppose we are making a site where 
+we have 100+ element so will we copy the element 100 times ? 
+no . 
+
+so what are our options ? 
+loops just like if-else , but we have to break the jsx and all the same problems 
+comes along . 
+so we will make an array of props which will have the props . like 
+let videos  = [{
+          title="react js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+},{
+              title="node js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+},{
+              title="framer js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+},{
+              title="anime js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+},{
+              title="light  js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+},{
+              title="saprk js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+},{
+              title="demo js tutorial'
+          views="434k"
+          time="1 year ago"
+          channel="Coder Dost"
+          verified=true
+}]
+so our data is ready . 
+and we will put one element in loop using  map(hof) ,
+like , 
+{
+    videos.map(video => the  element with props(for data change))
+}
+videos - collection 
+video - iterator 
+full-stack-dev-2023-react-3
+and note that the first line after => is return by default 
+
+so finally it will look like , 
+
+      {
+        videos.map(video=><Video
+          key={video.id}
+          title={video.title}
+          views={video.views}
+          time={video.time}
+          channel={video.channel}
+          verified={video.verified}
+          id={video.id}
+        ></Video>)
+      }
+and for why there is a key ? 
+its because map function demands key for virual dom  , 
+react demands this because react says if you dont want this 
+element to render twice then provide a id so i can identify specifically . 
+it helps specially in collections , suppose you have a list of 
+100 comments and 1 new comment gets added so why render all 100 
+for that 1 comment and thats why it wants id . its common in facebook , instagram ,
+where we need to render data multiple times in one component.
+in big projects browser generates and adds id by itself to elements.
+
+you can see what data is getting rendered , 
+go to component tab of react developer tools by clicking on the element in the hierarchy. 
+
+there are some libraries that are used for unique id generation are 
+crypto.random(interanl - browser includeed) , uuid(externel - from npm ) 
+
+so lastly , we will refactor our code , 
+what is refactor , when ypu see the code is getting larger 
+we finds the catches in the code to make it smaller and efficient 
+this thing is called refacoring . 
+
+Your statement is mostly correct, but it could be refined for clarity. Here's a revised version:
+
+"Refactoring is the process of restructuring existing computer code without changing its external behavior. 
+It's often necessary when the codebase becomes larger or more complex. The goal of refactoring is to improve
+the design, structure, and/or implementation of the software, while preserving its functionality. 
+This can involve tasks such as removing redundant or dead code, simplifying conditional expressions,
+renaming variables for better understanding, or breaking down complex functions into smaller, more manageable ones.
+By doing so, the code becomes more efficient, readable, and maintainable. So, when we identify areas 
+in the code that can be improved and proceed to make those improvements without altering the software's behavior,
+we are refactoring."
+
+and here we learened the most  used techniques in front-end development, which is 
+creating  programable ui(creting condition to manipulate things like show this )
+an secondly redering multiple things .
+

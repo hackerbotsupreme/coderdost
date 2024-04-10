@@ -1,0 +1,97 @@
+state and hooks 
+
+hooking menas hooks into / bringing a functionality that is 
+defied exteranlly , in another function .
+
+in react , we can only change the variables locally , we can 
+not change the content / ui through the change of the variable .
+
+a perfect example of why we needed hooks , 
+function Counter(){
+    const [number , setNumber] = useState(0)
+
+    function handleClick(e){
+        // stopping the event propagation / event bubling 
+        e.stopPropagation()
+        number++
+        console.log(number)
+    }
+    return(
+        <>
+        <h1 style={{color:"white"}}>{number}</h1>
+        <button onClick={handleClick}>Add</button>
+        </>
+    )
+}
+
+now the main problem here is ,
+normal function returns value and react function returns ui ,
+so if it returns one ui and after some time  it gives another ui and that is only possible when 
+we are running/executing function repeatedly . 
+so how will be run function repeatedly ? 
+that is internel but if i give 0 here when it run again then it will be 0 again 
+so the values are not getting saved , suppose we are creating a counter then we need 
+to save next values , 
+firstly the value is not getting displayed , i am saying that it will be displayed when 
+it runs again but then why it would show increaed value it is initialised with 0 . 
+and that's why we need state and hooks . 
+
+this syntax - this is destructuring assignment of array ,
+so useState is returning an array with two variables , 
+const [number, setNumber] = useState(0)
+convention - use set as prfix on the second variable so the developer can easily interpret 
+that setNumber is the setter function means whenever we need to set/update the number we will call
+setNumber.
+full-stack-dev-2023-react-5
+and now , we will write like 
+setNumber(number++)
+menas we can not change the state directly like , 
+number++
+we need to wrap the action inside setNumber/the setter function 
+
+
+and after the state change , react re-renders the function . 
+
+
+now how to chack tht the element/component is re-rendering on the click in real time ? 
+
+go to component , select the function from the hierarchy the click on show relative html 
+then  click on the button or perform action .
+and this is called re-rendering . 
+
+
+what will be the output ? 
+
+function Counter(){
+    console.log('render Counter')
+    const [number,setNumber] = useState(0)
+    function handleClick(e){
+        e.stopPropagation();
+        setNumber(number+1)
+        setNumber(number+1)
+        setNumber(number+1)
+        setNumber(number+1)
+        setNumber(number+1)
+        setNumber(number+1)
+    }
+}
+
+so when the button is clicked will the output be 1 or 6 ? 
+ans 1 . because number is 0 on every setNumber . 
+bcz its like a snapshot .
+
+
+updator function 
+
+    function handleClick(e){
+        e.stopPropagation();
+        setTimeout(()=>{
+            serNumber(number => number+1)
+        },2000)
+        console.log(number)
+    }
+number => number+1 - this is updator function in react . 
+it is used when react changing states and it sets in a queue 
+which means number + 1 is equal to 1 so its 1 then +1 again so now 2 like this . 
+and it reners after that which is updating in a batch . 
+

@@ -1,0 +1,32 @@
+In a small example like this, this works well, but if you have tens or hundreds of components in the middle, passing down all state and functions can be quite frustrating!
+
+Moving all wiring into a single file 
+
+You don’t have to do this, but you could further declutter the components by moving both reducer and context into a single file. 
+
+This file is about to get crowded! You’ll move the reducer into that same file. Then you’ll declare a new TasksProvider component in the same file. This component will tie all the pieces together:
+It will manage the state with a reducer.
+It will provide both contexts to components below.
+It will take children as a prop so you can pass JSX to it.
+
+
+
+Recap
+
+You can combine reducer with context to let any component read and update state above it.
+
+To provide state and the dispatch function to components below:
+
+Create two contexts (for state and for dispatch functions).
+
+Provide both contexts from the component that uses the reducer.
+
+Use either context from components that need to read them.
+
+You can further declutter the components by moving all wiring into one file.
+
+You can export a component like TasksProvider that provides context.
+
+You can also export custom Hooks like useTasks and useTasksDispatch to read it.
+
+You can have many context-reducer pairs like this in your app.

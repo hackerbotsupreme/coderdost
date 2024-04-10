@@ -1,0 +1,716 @@
+1. how will yu create routes in  next js ? 
+Next.js uses a file-system based router where folders are used to define routes.
+Each folder represents a route segment that maps to a URL segment. To create a nested route, you can nest folders inside each other.
+A special page.js file is used to make route segments publicly accessible.
+
+2. how to create ui in next js ? 
+Special file conventions are used to create UI for each route segment. The most common are pages to show UI unique to a route, and layouts to show UI that is shared across multiple routes.
+
+3.what is a page in next ? 
+A page is UI that is unique to a route. You can define a page by default exporting a component from a page.js file.
+The special files layout.js, page.js, and template.js allow you to create UI for a route.For example, to create your index page, add the page.js file inside the app directory
+A page is always the leaf of the route subtree.A page.js file is required to make a route segment publicly accessible.
+Pages are Server Components by default, but can be set to a Client Component.
+
+4. what is layout in next ? 
+A layout is UI that is shared between multiple routes. On navigation, layouts preserve state, remain interactive, and do not re-render. Layouts can also be nested.You can define a layout by default exporting a React component from a layout.js file. The component should accept a children prop that will be populated with a child layout (if it exists) or a page during rendering.
+
+5.what is Root Layout  ? 
+The root layout is defined at the top level of the app directory and applies to all routes. This layout is required and must contain html and body tags, allowing you to modify the initial HTML returned from the server.
+
+6. how layouts are nested ? 
+By default, layouts in the folder hierarchy are nested, which means they wrap child layouts via their children prop. You can nest layouts by adding layout.js inside specific route segments (folders).
+For example, to create a layout for the /dashboard route, add a new layout.js file inside the dashboard folder
+Only the root layout can contain <html> and <body> tags.When a layout.js and page.js file are defined in the same folder, the layout will wrap the page.Layouts are Server Components by default but can be set to a Client Component.Passing data between a parent layout and its children is not possible. However, you can fetch the same data in a route more than once, and React will automatically dedupe the requests without affecting performance.
+Layouts do not have access to the route segments below itself. To access all route segments, you can use useSelectedLayoutSegment or useSelectedLayoutSegments in a Client Component.
+You can use Route Groups to opt specific route segments in and out of shared layouts.
+You can use Route Groups to create multiple root layouts
+
+
+7.tell me ways to Linking and Navigating in next js ? 
+There are four ways to navigate between routes in Next.js:
+Using the <Link> Component
+Using the useRouter hook (Client Components)
+Using the redirect function (Server Components)
+Using the native History API
+
+8. what is used for  prefetching and client-side navigation between routes. ? 
+<Link> Component
+<Link> is a built-in component that extends the HTML <a> tag to provide prefetching and client-side navigation between routes. It is the primary and recommended way to navigate between routes in Next.js.
+
+9. what is predething in next js ? 
+Prefetching is a way to preload a route in the background before the user visits it.
+Routes are automatically prefetched as they become visible in the user's viewport. Prefetching happens when the page first loads or when it comes into view through scrolling.The<Link>'s prefetching behavior is different for static and dynamic routes:
+
+Static Routes: prefetch defaults to true. The entire route is prefetched and cached.
+Dynamic Routes: prefetch default to automatic. Only the shared layout, down the rendered "tree" of components until the first loading.js file, is prefetched and cached for 30s. This reduces the cost of fetching an entire dynamic route, and it means you can show an instant loading state for better visual feedback to users.
+You can disable prefetching by setting the prefetch prop to false.
+
+10.how are you gonna Linking to Dynamic Segments ? 
+When linking to dynamic segments, you can use template literals and interpolation to generate a list of links. For example, to generate a list of blog posts:
+import Link from 'next/link'
+....
+<Link href={`/blog/${post.slug}`}>{post.title}</Link>
+
+11. how will yu check active links ? 
+You can use usePathname() to determine if a link is active. For example, to add a class to the active link, you can check if the current pathname matches the href of the link:
+          <Link className={`link ${pathname === '/' ? 'active' : ''}`} href="/">
+            Home
+          </Link>
+          ....
+                    <Link
+            className={`link ${pathname === '/about' ? 'active' : ''}`}
+            href="/about"
+          >
+            About
+          </Link>
+
+12.how will yu Scrolling to an id ? 
+The default behavior of the Next.js App Router is to scroll to the top of a new route or to maintain the scroll position for backwards and forwards navigation.
+If you'd like to scroll to a specific id on navigation, you can append your URL with a # hash link or just pass a hash link to the href prop. This is possible since <Link> renders to an <a> element.
+<Link href="/dashboard#settings">Settings</Link>
+// Output
+<a href="/dashboard#settings">Settings</a>
+
+Disabling scroll restoration
+// next/link
+<Link href="/dashboard" scroll={false}>
+  Dashboard
+</Link>
+
+// useRouter
+import { useRouter } from 'next/navigation'
+ 
+const router = useRouter()
+ 
+router.push('/dashboard', { scroll: false })
+
+
+13. how to  to programmatically change routes from Client Components ? - >useRouter() hook
+    <button type="button" onClick={() => router.push('/dashboard')}>
+      Dashboard
+    </button>
+
+Use the <Link> component to navigate between routes unless you have a specific requirement for using useRouter.
+redirect function - For Server Components, use the redirect function instead.     redirect('/login')
+redirect returns a 307 (Temporary Redirect) status code by default. When used in a Server Action, it returns a 303 (See Other), which is commonly used for redirecting to a success page as a result of a POST request.
+redirect internally throws an error so it should be called outside of try/catch blocks.
+redirect can be called in Client Components during the rendering process but not in event handlers. You can use the useRouter hook instead.
+redirect also accepts absolute URLs and can be used to redirect to external links.
+If you'd like to redirect before the render process, use next.config.js or Middleware.
+
+14.how will yu  to update the browser's history stack without reloading the page. ? 
+Using the native History API
+Next.js allows you to use the native window.history.pushState and window.history.replaceState methods to update the browser's history stack without reloading the page.
+pushState and replaceState calls integrate into the Next.js Router, allowing you to sync with usePathname and useSearchParams.
+
+15. discuss step by step how How Routing and Navigation Works ? 
+The App Router uses a hybrid approach for routing and navigation. On the server, your application code is automatically code-split by route segments. And on the client, Next.js prefetches and caches the route segments. This means, when a user navigates to a new route, the browser doesn't reload the page, and only the route segments that change re-render - improving the navigation experience and performance.
+
+Server Components allow your application code to be automatically code-split by route segments. This means only the code needed for the current route is loaded on navigation.
+
+2. Prefetching
+Prefetching is a way to preload a route in the background before the user visits it.
+
+There are two ways routes are prefetched in Next.js:
+
+<Link> component: Routes are automatically prefetched as they become visible in the user's viewport. Prefetching happens when the page first loads or when it comes into view through scrolling.
+router.prefetch(): The useRouter hook can be used to prefetch routes programmatically.
+The<Link>'s prefetching behavior is different for static and dynamic routes:
+
+Static Routes: prefetch defaults to true. The entire route is prefetched and cached.
+Dynamic Routes: prefetch default to automatic. Only the shared layout, down the rendered "tree" of components until the first loading.js file, is prefetched and cached for 30s. This reduces the cost of fetching an entire dynamic route, and it means you can show an instant loading state for better visual feedback to users.
+You can disable prefetching by setting the prefetch prop to false.
+
+See the <Link> API reference for more information.
+
+Good to know:
+
+Prefetching is not enabled in development, only in production.
+3. Caching
+Next.js has an in-memory client-side cache called the Router Cache. As users navigate around the app, the React Server Component Payload of prefetched route segments and visited routes are stored in the cache.
+
+This means on navigation, the cache is reused as much as possible, instead of making a new request to the server - improving performance by reducing the number of requests and data transferred.
+
+Learn more about how the Router Cache works and how to configure it.
+
+4. Partial Rendering
+Partial rendering means only the route segments that change on navigation re-render on the client, and any shared segments are preserved.
+
+For example, when navigating between two sibling routes, /dashboard/settings and /dashboard/analytics, the settings and analytics pages will be rendered, and the shared dashboard layout will be preserved.
+Without partial rendering, each navigation would cause the full page to re-render on the client. Rendering only the segment that changes reduces the amount of data transferred and execution time, leading to improved performance.
+
+5. Soft Navigation
+Browsers perform a "hard navigation" when navigating between pages. The Next.js App Router enables "soft navigation" between pages, ensuring only the route segments that have changed are re-rendered (partial rendering). This enables client React state to be preserved during navigation.
+
+6. Back and Forward Navigation
+By default, Next.js will maintain the scroll position for backwards and forwards navigation, and re-use route segments in the Router Cache.
+
+7. Routing between pages/ and app/
+When incrementally migrating from pages/ to app/, the Next.js router will automatically handle hard navigation between the two. To detect transitions from pages/ to app/, there is a client router filter that leverages probabilistic checking of app routes, which can occasionally result in false positives. By default, such occurrences should be very rare, as we configure the false positive likelihood to be 0.01%. This likelihood can be customized via the experimental.clientRouterFilterAllowedRate option in next.config.js. It's important to note that lowering the false positive rate will increase the size of the generated filter in the client bundle.
+
+Alternatively, if you prefer to disable this handling completely and manage the routing between pages/ and app/ manually, you can set experimental.clientRouterFilter to false in next.config.js. When this feature is disabled, any dynamic routes in pages that overlap with app routes won't be navigated to properly by default.
+
+16. how to implement Loading UI  in next js ? 
+The special file loading.js helps you create meaningful Loading UI with React Suspense.  you can show an instant loading state from the server while the content of a route segment loads. The new content is automatically swapped in once rendering is complete.
+
+17. what is instant loading states ? 
+An instant loading state is fallback UI that is shown immediately upon navigation. You can pre-render loading indicators such as skeletons and spinners, or a small but meaningful part of future screens such as a cover photo, title, etc. This helps users understand the app is responding and provides a better user experience.
+Create a loading state by adding a loading.js file inside a folder.
+In the same folder, loading.js will be nested inside layout.js. It will automatically wrap the page.js file and any children below in a <Suspense> boundary.Navigation is immediate, even with server-centric routing.
+Navigation is interruptible, meaning changing routes does not need to wait for the content of the route to fully load before navigating to another route.
+Shared layouts remain interactive while new route segments load.
+Use the loading.js convention for route segments (layouts and pages) as Next.js optimizes this functionality.
+
+18. how will yu  Suspense Boundaries for your own UI components. ? 
+In addition to loading.js, you can also manually create Suspense Boundaries for your own UI components. The App Router supports streaming with Suspense for both Node.js and Edge runtimes.
+
+18. what is streaming ? 
+With SSR, there's a series of steps that need to be completed before a user can see and interact with a page:
+First, all data for a given page is fetched on the server.
+The server then renders the HTML for the page.
+The HTML, CSS, and JavaScript for the page are sent to the client.
+A non-interactive user interface is shown using the generated HTML, and CSS.
+Finally, React hydrates the user interface to make it interactive.
+These steps are sequential and blocking, meaning the server can only render the HTML for a page once all the data has been fetched. And, on the client, React can only hydrate the UI once the code for all components in the page has been downloaded.
+SSR with React and Next.js helps improve the perceived loading performance by showing a non-interactive page to the user as soon as possible.
+However, it can still be slow as all data fetching on server needs to be completed before the page can be shown to the user.
+Streaming allows you to break down the page's HTML into smaller chunks and progressively send those chunks from the server to the client.
+
+This enables parts of the page to be displayed sooner, without waiting for all the data to load before any UI can be rendered.
+Streaming works well with React's component model because each component can be considered a chunk. Components that have higher priority (e.g. product information) or that don't rely on data can be sent first (e.g. layout), and React can start hydration earlier. Components that have lower priority (e.g. reviews, related products) can be sent in the same server request after their data has been fetched.
+
+Streaming is particularly beneficial when you want to prevent long data requests from blocking the page from rendering as it can reduce the Time To First Byte (TTFB) and First Contentful Paint (FCP). It also helps improve Time to Interactive (TTI), especially on slower devices.
+
+19. how does  suspense works ? 
+<Suspense> works by wrapping a component that performs an asynchronous action (e.g. fetch data), showing fallback UI (e.g. skeleton, spinner) while it's happening, and then swapping in your component once the action completes.
+    <section>
+      <Suspense fallback={<p>Loading feed...</p>}>
+        <PostFeed />
+      </Suspense>
+      <Suspense fallback={<p>Loading weather...</p>}>
+        <Weather />
+      </Suspense>
+    </section>
+By using Suspense, you get the benefits of:
+Streaming Server Rendering - Progressively rendering HTML from the server to the client.
+Selective Hydration - React prioritizes what components to make interactive first based on user interaction.
+
+
+
+20. how will seo fit in this above matters ? 
+Next.js will wait for data fetching inside generateMetadata to complete before streaming UI to the client. This guarantees the first part of a streamed response includes <head> tags.
+Since streaming is server-rendered, it does not impact SEO. You can use the Rich Results Test tool from Google to see how your page appears to Google's web crawlers and view the serialized HTML (source).
+
+21. how next js will handle errors ? 
+The error.js file convention allows you to gracefully handle unexpected runtime errors in nested routes.
+Automatically wrap a route segment and its nested children in a React Error Boundary.
+Create error UI tailored to specific segments using the file-system hierarchy to adjust granularity.
+Isolate errors to affected segments while keeping the rest of the application functional.
+Add functionality to attempt to recover from an error without a full page reload.
+
+22. tell me step by step how How error.js Works ? 
+error.js automatically creates a React Error Boundary that wraps a nested child segment or page.js component.
+The React component exported from the error.js file is used as the fallback component.
+If an error is thrown within the error boundary, the error is contained, and the fallback component is rendered.
+When the fallback error component is active, layouts above the error boundary maintain their state and remain interactive, and the error component can display functionality to recover from the error.
+
+23. now how will yu recover from error  ? 
+The cause of an error can sometimes be temporary. In these cases, simply trying again might resolve the issue.
+An error component can use the reset() function to prompt the user to attempt to recover from the error. When executed, the function will try to re-render the Error boundary's contents. If successful, the fallback error component is replaced with the result of the re-render.
+  <button onClick={() => reset()}>Try again</button>
+
+
+24. how will yu create nested route in next  ? 
+React components created through special files are rendered in a specific nested hierarchy.
+Component Hierarchy
+The React components defined in special files of a route segment are rendered in a specific hierarchy:
+layout.js
+template.js
+error.js (React error boundary)
+loading.js (React suspense boundary)
+not-found.js (React error boundary)
+page.js or nested layout.js
+
+so ,  a nested route with two segments that both include layout.js and error.js files are rendered in the following simplified component hierarchy:
+The nested component hierarchy has implications for the behavior of error.js files across a nested route:
+Errors bubble up to the nearest parent error boundary. This means an error.js file will handle errors for all its nested child segments. More or less granular error UI can be achieved by placing error.js files at different levels in the nested folders of a route.
+An error.js boundary will not handle errors thrown in a layout.js component in the same segment because the error boundary is nested inside that layout's component.
+
+25. now Handling Errors in Layouts ? 
+error.js boundaries do not catch errors thrown in layout.js or template.js components of the same segment. This intentional hierarchy keeps important UI that is shared between sibling routes (such as navigation) visible and functional when an error occurs.
+To handle errors within a specific layout or template, place an error.js file in the layout's parent segment.
+To handle errors within the root layout or template, use a variation of error.js called global-error.js.
+
+25. now the error in the Root Layouts ? 
+The root app/error.js boundary does not catch errors thrown in the root app/layout.js or app/template.js component.
+
+To specifically handle errors in these root components, use a variation of error.js called app/global-error.js located in the root app directory.
+Unlike the root error.js, the global-error.js error boundary wraps the entire application, and its fallback component replaces the root layout when active. Because of this, it is important to note that global-error.js must define its own <html> and <body> tags.
+global-error.js is the least granular error UI and can be considered "catch-all" error handling for the whole application. It is unlikely to be triggered often as root components are typically less dynamic, and other error.js boundaries will catch most errors.
+Even if a global-error.js is defined, it is still recommended to define a root error.js whose fallback component will be rendered within the root layout, which includes globally shared UI and branding.
+
+26.lastly for server errors , how will yu handle them ? 
+If an error is thrown inside a Server Component, Next.js will forward an Error object (stripped of sensitive error information in production) to the nearest error.js file as the error prop.
+Securing Sensitive Error Information
+During production, the Error object forwarded to the client only includes a generic message and digest property.
+This is a security precaution to avoid leaking potentially sensitive details included in the error to the client.
+The message property contains a generic message about the error and the digest property contains an automatically generated hash of the error that can be used to match the corresponding error in server-side logs.
+During development, the Error object forwarded to the client will be serialized and include the message of the original error for easier debugging.
+
+
+27.how will yu redirect in next js ? 
+There are a few ways you can handle redirects in Next.js
+
+The redirect API is used to redirect the user after a mutation or event occurs. It can be used in Server Components, Server Actions, and Route Handlers. When using the redirect API, it can return one of two HTTP status codes:
+307 (Temporary): This status code indicates that the redirection is temporary, and the client should continue to use the original URL for future requests.
+303 (Server Action): This specific status code is returned when using the redirect API within a Server Action in Next.js 13. Server Actions are a way to handle form submissions or mutations on the server-side.
+The redirect function allows you to redirect the user to another URL. You can call redirect in Server Components, Route Handlers, and Server Actions.
+redirect is often used after a mutation or event. For example, creating a post
+  revalidatePath('/posts') // Update cached posts
+  redirect(`/post/${id}`) // Navigate to the new post page
+redirect returns a 307 (Temporary Redirect) status code by default. When used in a Server Action, it returns a 303 (See Other), which is commonly used for redirecting to a success page as a result of a POST request.
+redirect internally throws an error so it should be called outside of try/catch blocks.
+redirect can be called in Client Components during the rendering process but not in event handlers. You can use the useRouter hook instead.
+redirect also accepts absolute URLs and can be used to redirect to external links.
+If you'd like to redirect before the render process, use next.config.js or Middleware.
+
+permanentRedirect
+The permanentRedirect API is used to redirect the user after a mutation or event occurs, similar to the redirect API. However, it is designed for permanent redirections. It can be used in Server Components, Server Actions, and Route Handlers. When using the permanentRedirect API, it returns the following HTTP status code:
+308 (Permanent): This status code indicates that the redirection is permanent, and the client should use the new URL for future requests.
+The permanentRedirect function allows you to permanently redirect the user to another URL. You can call permanentRedirect in Server Components, Route Handlers, and Server Actions.
+permanentRedirect is often used after a mutation or event that changes an entity's canonical URL, such as updating a user's profile URL after they change their username
+  revalidateTag('username') // Update all references to the username
+  permanentRedirect(`/profile/${username}`) // Navigate to the new user profile
+permanentRedirect returns a 308 (permanent redirect) status code by default.
+permanentRedirect also accepts absolute URLs and can be used to redirect to external links.
+If you'd like to redirect before the render process, use next.config.js or Middleware.
+
+useRouter
+The useRouter hook is used to perform client-side navigation within a Next.js application. It is primarily used in Event Handlers of Client Components. When using useRouter, it does not return an HTTP status code, as it is a client-side operation.
+redirects in next.config.js
+The redirects option in the next.config.js file is used to redirect incoming requests based on the requested path. It is configured at the application level and applies to all incoming requests. When using redirects, it can return one of the following HTTP status codes:
+307 (Temporary): This status code indicates that the redirection is temporary, and the client should continue to use the original URL for future requests.
+308 (Permanent): This status code indicates that the redirection is permanent, and the client should use the new URL for future requests.
+If you need to redirect inside an event handler in a Client Component, you can use the push method from the useRouter hook. 
+ const router = useRouter()
+ <button type="button" onClick={() => router.push('/dashboard')}>
+ If you don't need to programatically navigate a user, you should use a <Link> component.
+
+
+NextResponse.redirect
+The NextResponse.redirect method is used within a Next.js middleware to redirect an incoming request based on specific conditions. It can be used in middleware functions and allows for advanced request handling and redirection logic. When using NextResponse.redirect, it can return any valid HTTP status code for redirection, depending on the specific use case and requirements.
+Middleware allows you to run code before a request is completed. Then, based on the incoming request, redirect to a different URL using NextResponse.redirect. This is useful if you want to redirect users based on a condition (e.g. authentication, session management, etc) or have a large number of redirects.
+For example, to redirect the user to a /login page if they are not authenticated:
+
+// If the user is authenticated, continue as normal
+  if (isAuthenticated) {
+    return NextResponse.next()
+  }
+ 
+  // Redirect to login page if not authenticated
+  return NextResponse.redirect(new URL('/login', request.url))
+Middleware runs after redirects in next.config.js and before rendering.
+
+
+28.what will yu do when yu  change the URL structure of pages to redirect an incoming request path to a different destination path ? 
+use redirects in next.config.js .
+The redirects option in the next.config.js file allows you to redirect an incoming request path to a different destination path. This is useful when you change the URL structure of pages or have a list of redirects that are known ahead of time.
+redirects supports path, header, cookie, and query matching, giving you the flexibility to redirect users based on an incoming request.
+redirects can return a 307 (Temporary Redirect) or 308 (Permanent Redirect) status code with the permanent option.
+redirects may have a limit on platforms. For example, on Vercel, there's a limit of 1,024 redirects. To manage a large number of redirects (1000+), consider creating a custom solution using Middleware. See managing redirects at scale for more.
+redirects runs before Middleware.
+
+29.how will yu manage redirects at scale ? 
+To manage a large number of redirects (1000+), you may consider creating a custom solution using Middleware. This allows you to handle redirects programmatically without having to redeploy your application.
+To do this, you'll need to consider:
+Creating and storing a redirect map.
+Optimizing data lookup performance.
+Next.js Example: See our Middleware with Bloom filter example for an implementation of the recommendations below.
+see code in site 
+
+30.how  to prevent the folder from being included in the route's URL path. ? 
+In the app directory, nested folders are normally mapped to URL paths. However, you can mark a folder as a Route Group to prevent the folder from being included in the route's URL path.
+This allows you to organize your route segments and project files into logical groups without affecting the URL path structure.
+
+31.importance of route groups ? 
+Route groups are useful for:
+Organizing routes into groups e.g. by site section, intent, or team.
+To organize routes without affecting the URL, create a group to keep related routes together. The folders in parenthesis will be omitted from the URL (e.g. (marketing) or (shop)).
+Even though routes inside (marketing) and (shop) share the same URL hierarchy, you can create a different layout for each group by adding a layout.js file inside their folders.
+
+
+Enabling nested layouts in the same route segment level/Opting specific segments into a layout:
+To opt specific routes into a layout, create a new route group (e.g. (shop)) and move the routes that share the same layout into the group (e.g. account and cart). The routes outside of the group will not share the layout (e.g. checkout).
+
+
+Creating multiple nested layouts in the same segment, including multiple root layouts
+To create multiple root layouts, remove the top-level layout.js file, and add a layout.js file inside each route groups. This is useful for partitioning an application into sections that have a completely different UI or experience. The <html> and <body> tags need to be added to each root layout.
+
+
+Adding a layout to a subset of routes in a common segment
+Convention
+A route group can be created by wrapping a folder's name in parenthesis: (folderName)
+
+The naming of route groups has no special significance other than for organization. They do not affect the URL path.
+Routes that include a route group should not resolve to the same URL path as other routes. For example, since route groups don't affect URL structure, (marketing)/about/page.js and (shop)/about/page.js would both resolve to /about and cause an error.
+If you use multiple root layouts without a top-level layout.js file, your home page.js file should be defined in one of the route groups, For example: app/(marketing)/page.js.
+Navigating across multiple root layouts will cause a full page load (as opposed to a client-side navigation). For example, navigating from /cart that uses app/(shop)/layout.js to /blog that uses app/(marketing)/layout.js will cause a full page load. This only applies to multiple root layouts.
+
+32.what do yu understand by organize your project.?
+33.what do yu understand by colocation of  your project.?
+34.what do yu understand by route segment  of  your project.?
+Each folder represents a route segment that is mapped to a corresponding segment in a URL path.
+
+35.explain what is safe colocation by default ? 
+In the app directory, nested folder hierarchy defines route structure.
+Each folder represents a route segment that is mapped to a corresponding segment in a URL path.
+However, even though route structure is defined through folders, a route is not publicly accessible until a page.js or route.js file is added to a route segment.
+And, even when a route is made publicly accessible, only the content returned by page.js or route.js is sent to the client.
+This means that project files can be safely colocated inside route segments in the app directory without accidentally being routable.
+
+36.what are Project organization features that next js provides ? 
+Private Folders
+Route Groups
+Module Path Aliases
+Project organization strategies
+Store project files in top-level folders inside of app
+Split project files by feature or route
+
+
+37.what are dynamic routes ? 
+When you don't know the exact segment names ahead of time and want to create routes from dynamic data, you can use Dynamic Segments that are filled in at request time or prerendered at build time.
+Convention
+A Dynamic Segment can be created by wrapping a folder's name in square brackets: [folderName]. For example, [id] or [slug].
+Dynamic Segments are passed as the params prop to layout, page, route, and generateMetadata functions.
+
+38.tell me the corresponding url for app/blog/[slug]/page.js route ? 
+[slug] is the Dynamic Segment for blog posts.
+app/blog/[slug]/page.js	
+	Example URL
+  /blog/a
+  params
+{ slug: 'a' }
+
+38.how to  statically generate routes  ? 
+The generateStaticParams function can be used in combination with dynamic route segments to statically generate routes at build time instead of on-demand at request time.
+export async function generateStaticParams() {
+  const posts = await fetch('https://.../posts').then((res) => res.json())
+ 
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
+}
+The primary benefit of the generateStaticParams function is its smart retrieval of data. If content is fetched within the generateStaticParams function using a fetch request, the requests are automatically memoized. This means a fetch request with the same arguments across multiple generateStaticParams, Layouts, and Pages will only be made once, which decreases build times.
+
+39. how to implement Catch-all Segments ? 
+Dynamic Segments can be extended to catch-all subsequent segments by adding an ellipsis inside the brackets [...folderName].
+
+For example, app/shop/[...slug]/page.js will match /shop/clothes, but also /shop/clothes/tops, /shop/clothes/tops/t-shirts, and so on.
+
+Route	                         Example               URL	params
+app/shop/[...slug]/page.js 	  /shop/a	              { slug: ['a'] }
+app/shop/[...slug]/page.js	  /shop/a/b	            { slug: ['a', 'b'] }
+app/shop/[...slug]/page.js	  /shop/a/b/c	          { slug: ['a', 'b', 'c'] }
+
+40.how ti implement Optional Catch-all Segments ? 
+Catch-all Segments can be made optional by including the parameter in double square brackets: [[...folderName]].
+For example, app/shop/[[...slug]]/page.js will also match /shop, in addition to /shop/clothes, /shop/clothes/tops, /shop/clothes/tops/t-shirts.
+
+41. what is the diff between catch all and optional catch all segments ? 
+The difference between catch-all and optional catch-all segments is that with optional, the route without the parameter is also matched (/shop in the example above).
+
+Route	                        Example             URL	params
+app/shop/[[...slug]]/page.js	/shop	                {}
+app/shop/[[...slug]]/page.js	/shop/a	            { slug: ['a'] }
+app/shop/[[...slug]]/page.js	/shop/a/b	          { slug: ['a', 'b'] }
+app/shop/[[...slug]]/page.js	/shop/a/b/c	        { slug: ['a', 'b', 'c'] }
+
+
+42.what is Parallel Routes in next ? 
+Parallel Routes allows you to simultaneously or conditionally render one or more pages within the same layout. They are useful for highly dynamic sections of an app, such as dashboards and feeds on social sites.
+For example, considering a dashboard, you can use parallel routes to simultaneously render the team and analytics pages
+Parallel routes are created using named slots. Slots are defined with the @folder convention. For example, the following file structure defines two slots: @analytics and @team , Slots are passed as props to the shared parent layout. For the example above, the component in app/layout.js now accepts the @analytics and @team slots props, and can render them in parallel alongside the children prop . 
+However, slots are not route segments and do not affect the URL structure. For example, for /dashboard/@analytics/views, the URL will be /dashboard/views since @analytics is a slot.
+The children prop is an implicit slot that does not need to be mapped to a folder. This means app/page.js is equivalent to app/@children/page.js.
+
+43. what is Active state in next ? 
+ Next.js keeps track of the active state (or subpage) for each slot. However, the content rendered within a slot will depend on the type of navigation:
+43. what is soft navigation  in next ? 
+During client-side navigation, Next.js will perform a partial render, changing the subpage within the slot, while maintaining the other slot's active subpages, even if they don't match the current URL.
+43. what is hard navigation  in next ? 
+ After a full-page load (browser refresh), Next.js cannot determine the active state for the slots that don't match the current URL. Instead, it will render a default.js file for the unmatched slots, or 404 if default.js doesn't exist.
+The 404 for unmatched routes helps ensure that you don't accidentally render a parallel route on a page that it was not intended for.
+
+
+44.how will yu handle unmatched slots for initial loading or full-page loading ? 
+You can define a default.js file to render as a fallback for unmatched slots during the initial load or full-page reload.
+
+Consider the following folder structure. The @team slot has a /settings page, but @analytics does not.
+When navigating to /dashboard/settings, the @team slot will render the /settings page while maintaining the currently active page for the @analytics slot.
+On refresh, Next.js will render a default.js for @analytics. If default.js doesn't exist, a 404 is rendered instead.
+Additionally, since children is an implicit slot, you also need to create a default.js file to render a fallback for children when Next.js cannot recover the active state of the parent page.
+
+45. what functions to use apply parallelroute within the slot  ? 
+Both useSelectedLayoutSegment and useSelectedLayoutSegments accept a parallelRoutesKey parameter, which allows you to read the active route segment within a slot.
+When a user navigates to app/@auth/login (or /login in the URL bar), loginSegments will be equal to the string "login".
+
+46. what is conditional routes  ? give a example ?
+You can use Parallel Routes to conditionally render routes based on certain conditions, such as user role. For example, to render a different dashboard page for the /admin or /user roles. {role === 'admin' ? admin : user}
+
+
+46. what is tab groups ? 
+share a tab(page) between two pages of a slot . 
+
+47. what is modals ? whay they are so important ? 
+Parallel Routes can be used together with Intercepting Routes to create modals. This allows you to solve common challenges when building modals, such as:
+Making the modal content shareable through a URL.
+Preserving context when the page is refreshed, instead of closing the modal.
+Closing the modal on backwards navigation rather than going to the previous route.
+Reopening the modal on forwards navigation.
+
+48. tell me a scenario where modal needs to be used ? 
+see on site . https://nextjs.org/docs/app/building-your-application/routing/parallel-routes
+
+49.Parallel Routes can be streamed independently - true or false ? 
+allowing you to define independent error and loading states for each route
+
+50. what is Intercepting Routes ? 
+Intercepting routes allows you to load a route from another part of your application within the current layout. This routing paradigm can be useful when you want to display the content of a route without the user switching to a different context.
+
+For example, when clicking on a photo in a feed, you can display the photo in a modal, overlaying the feed. In this case, Next.js intercepts the /photo/123 route, masks the URL, and overlays it over /feed.However, when navigating to the photo by clicking a shareable URL or by refreshing the page, the entire photo page should render instead of the modal. No route interception should occur.
+
+51. tell me working of modals in intercepting routes ? 
+Intercepting Routes can be used together with Parallel Routes to create modals. This allows you to solve common challenges when building modals, such as:
+Making the modal content shareable through a URL.
+Preserving context when the page is refreshed, instead of closing the modal.
+Closing the modal on backwards navigation rather than going to the previous route.
+Reopening the modal on forwards navigation.
+
+when you click on a photo in the feed, it opens the photo in a modal. The URL changes to /photo/:id, making the modal content shareable through a URL.
+
+If the page is refreshed, the context is preserved because the photo ID is in the URL. The correct photo will be loaded in the modal.
+
+When you navigate backwards, the modal closes and you go back to the photo feed because the / route is rendered.
+
+If you navigate forwards after closing the modal, the modal will reopen with the same photo because the /photo/:id route is rendered.
+
+This approach solves the common challenges of building modals with React Router. It makes the modal part of the routing architecture, which gives you a lot of flexibility and control.
+
+making the modal content shareable through a URL- 
+ that each photo that can be opened in a modal has a unique URL. This URL is based on the photo’s ID and is structured like /photo/:id.
+
+When you open a photo in a modal, the URL in the browser’s address bar changes to match this structure, replacing :id with the actual ID of the photo. For example, if you open a photo with an ID of 123, the URL becomes /photo/123.
+
+This unique URL for each photo allows for the sharing of specific content. If you copy this URL and send it to someone else, they can paste it into their browser and they will see the same photo in a modal, just like you do. This is what is meant by the modal content (in this case, the photo) being shareable through a URL.
+
+This approach also helps in preserving the state of the application. If you refresh the page while a photo modal is open, the page will reload with the photo modal still open, because the URL (which includes the photo ID) remains the same. This is what is meant by “the context is preserved because the photo ID is in the URL”.
+
+closing the modal on backwards navigation rather than going to the previous route-  means that when you use the browser’s back button (or any other form of backwards navigation), the modal will close and you’ll be taken back to the photo feed (the / route), rather than being taken back to the previous route you were on before you opened the modal.
+
+
+52. tell me when to use Middleware in next ? 
+Middleware allows you to run code before a request is completed. Then, based on the incoming request, you can modify the response by rewriting, redirecting, modifying the request or response headers, or responding directly.
+Middleware runs before cached content and routes are matched.
+
+53. how will yu define which paths Middleware will run on? 
+There are two ways to define which paths Middleware will run on:
+Custom matcher config
+Conditional statements
+
+see code on  sire 
+
+54. what is matcher in middleware ? 
+matcher allows you to filter Middleware to run on specific paths.
+
+54. what is nextresponse is used to do ? 
+The NextResponse API allows you to:
+redirect the incoming request to a different URL
+rewrite the response by displaying a given URL
+Set request headers for API Routes, getServerSideProps, and rewrite destinations
+Set response cookies
+Set response headers
+
+55 . using cookies with middleware , 
+setting headers  in middleware , 
+setting cors header in middleware , 
+producing middleware reesponse ...
+see on site .
+
+56. what is locale is used to do in node js ? 
+Locale: An identifier for a set of language and formatting preferences. This usually includes the preferred language of the user and possibly their geographic region.
+en-US: English as spoken in the United States
+nl-NL: Dutch as spoken in the Netherlands
+nl: Dutch, no specific region
+
+It’s recommended to use the user’s language preferences in the browser to select which locale to use. Changing your preferred language will modify the incoming Accept-Language header to your application.
+For example, using the following libraries, you can look at an incoming Request to determine which locale to select, based on the Headers, locales you plan to support, and the default locale.
+
+import { match } from '@formatjs/intl-localematcher'
+import Negotiator from 'negotiator'
+ 
+let headers = { 'accept-language': 'en-US,en;q=0.5' }
+let languages = new Negotiator({ headers }).languages()
+let locales = ['en-US', 'nl-NL', 'nl']
+let defaultLocale = 'en-US'
+ 
+match(languages, locales, defaultLocale) // -> 'en-US'
+
+57. how data is cached in case of fetch ? 
+Caching stores data so it doesn't need to be re-fetched from your data source on every request.
+By default, Next.js automatically caches the returned values of fetch in the Data Cache on the server. This means that the data can be fetched at build time or request time, cached, and reused on each data request.
+Next.js provides helpful functions you may need when fetching data in Server Components such as cookies and headers. These will cause the route to be dynamically rendered as they rely on request time information.
+In Route handlers, fetch requests are not memoized as Route Handlers are not part of the React component tree.
+In Server Actions, fetch requests are not cached (defaults cache: no-store).
+
+58. how do yu revalidate data in next ? 
+Revalidation is the process of purging the Data Cache and re-fetching the latest data. This is useful when your data changes and you want to ensure you show the latest information.
+
+Cached data can be revalidated in two ways:
+Time-based revalidation: Automatically revalidate data after a certain amount of time has passed. This is useful for data that changes infrequently and freshness is not as critical.
+On-demand revalidation: Manually revalidate data based on an event (e.g. form submission). On-demand revalidation can use a tag-based or path-based approach to revalidate groups of data at once. This is useful when you want to ensure the latest data is shown as soon as possible (e.g. when content from your headless CMS is updated).
+
+see on isite . 
+
+59 . opting data caching - describe the ways ? 
+fetch requests are not cached if:
+The cache: 'no-store' is added to fetch requests.
+The revalidate: 0 option is added to individual fetch requests.
+The fetch request is inside a Router Handler that uses the POST method.
+The fetch request comes after the usage of headers or cookies.
+The const dynamic = 'force-dynamic' route segment option is used.
+The fetchCache route segment option is configured to skip cache by default.
+The fetch request uses Authorization or Cookie headers and there's an uncached request above it in the component tree.
+
+60.waht is server actions ? 
+Server Actions are asynchronous functions that are executed on the server. They can be used in Server and Client Components to handle form submissions and data mutations in Next.js applications.
+Server actions can be invoked using the action attribute in a <form> element:
+Server Components support progressive enhancement by default, meaning the form will be submitted even if JavaScript hasn't loaded yet or is disabled.
+In Client Components, forms invoking Server Actions will queue submissions if JavaScript isn't loaded yet, prioritizing client hydration.
+After hydration, the browser does not refresh on form submission.
+Server Actions are not limited to <form> and can be invoked from event handlers, useEffect, third-party libraries, and other form elements like <button>.
+Server Actions integrate with the Next.js caching and revalidation architecture. When an action is invoked, Next.js can return both the updated UI and new data in a single server roundtrip.
+Behind the scenes, actions use the POST method, and only this HTTP method can invoke them.
+The arguments and return value of Server Actions must be serializable by React. See the React docs for a list of serializable arguments and values.
+Server Actions are functions. This means they can be reused anywhere in your application.
+Server Actions inherit the runtime from the page or layout they are used on.
+Server Actions inherit the Route Segment Config from the page or layout they are used on, including fields like maxDuration.
+
+61. what do yu understand by mutating data / data mutations in next ? 
+
+62. how do yu define server action in react ? 
+A Server Action can be defined with the React "use server" directive. You can place the directive at the top of an async function to mark the function as a Server Action, or at the top of a separate file to mark all exports of that file as Server Actions,Server Components can use the inline function level or module level "use server" directive. To inline a Server Action, add "use server" to the top of the function body. 
+
+63. tell me how to work with forms with server actions ? 
+React extends the HTML <form> element to allow Server Actions to be invoked with the action prop.
+
+When invoked in a form, the action automatically receives the FormData object. You don't need to use React useState to manage fields, instead, you can extract the data using the native FormData methods
+When working with forms that have many fields, you may want to consider using the entries() method with JavaScript's Object.fromEntries(). For example: const rawFormData = Object.fromEntries(formData). One thing to note is that the formData will include additional $ACTION_ properties.
+You can pass additional arguments to a Server Action using the JavaScript bind method.
+You can use the React useFormStatus hook to show a pending state while the form is being submitted.
+useFormStatus returns the status for a specific <form>, so it must be defined as a child of the <form> element.
+useFormStatus is a React hook and therefore must be used in a Client Component.
+
+We recommend using HTML validation like required and type="email" for basic client-side form validation.
+For more advanced server-side validation, you can use a library like zod to validate the form fields before mutating the data:
+
+Once the fields have been validated on the server, you can return a serializable object in your action and use the React useFormState hook to show a message to the user.
+
+By passing the action to useFormState, the action's function signature changes to receive a new prevState or initialState parameter as its first argument.
+useFormState is a React hook and therefore must be used in a Client Component.
+Then, you can pass your action to the useFormState hook and use the returned state to display an error message.
+
+Before mutating data, you should always ensure a user is also authorized to perform the action. See Authentication and Authorization.
+
+You can use the React useOptimistic hook to optimistically update the UI before the Server Action finishes, rather than waiting for the response , You can trigger a form submission using the requestSubmit() method. For example, when the user presses ⌘ + Enter, you can listen for the onKeyDown event
+
+64. how to use Event Handlers with server actions ? 
+You can invoke a Server Action from event handlers such as onClick.To improve the user experience, we recommend using other React APIs like useOptimistic and useTransition to update the UI before the Server Action finishes executing on the server, or to show a pending state.
+You can also add event handlers to form elements, for example, to save a form field onChange
+For cases like this, where multiple events might be fired in quick succession, we recommend debouncing to prevent unnecessary Server Action invocations.
+
+
+65. wat is debouncing ? when to use it ? 
+
+66. what is Authentication and authorization ? 
+
+67. tell me how error is handled ? 
+When an error is thrown, it'll be caught by the nearest error.js or <Suspense> boundary on the client. We recommend using try/catch to return errors to be handled by your UI.
+
+68. useeffect for data mutation on global events ? 
+You can use the React useEffect hook to invoke a Server Action when the component mounts or a dependency changes. This is useful for mutations that depend on global events or need to be triggered automatically. For example, onKeyDown for app shortcuts, an intersection observer hook for infinite scrolling, or when the component mounts to update a view count. 
+
+69. revalidate data in next ? 
+You can revalidate the Next.js Cache inside your Server Actions with the revalidatePath APi , 
+Or invalidate a specific data fetch with a cache tag using revalidateTag
+
+70. when to use closures in next js ? 
+Closures are useful when you need to capture a snapshot of data , at the time of rendering so that it can be used later when the action is invoked.However, for this to happen, the captured variables are sent to the client and back to the server when the action is invoked. To prevent sensitive data from being exposed to the client, Next.js automatically encrypts the closed-over variables. A new private key is generated for each action every time a Next.js application is built. This means actions can only be invoked for a specific build.
+
+
+We don't recommend relying on encryption alone to prevent sensitive values from being exposed on the client. Instead, you should use the React taint APIs to proactively prevent specific data from being sent to the client.
+
+71. what is the roles of allow-origin in next js ? 
+Since Server Actions can be invoked in a <form> element, this opens them up to CSRF attacks.
+
+Behind the scenes, Server Actions use the POST method, and only this HTTP method is allowed to invoke them. This prevents most CSRF vulnerabilities in modern browsers, particularly with SameSite cookies being the default.
+
+As an additional protection, Server Actions in Next.js also compare the Origin header to the Host header (or X-Forwarded-Host). If these don't match, the request will be aborted. In other words, Server Actions can only be invoked on the same host as the page that hosts it.
+
+For large applications that use reverse proxies or multi-layered backend architectures (where the server API differs from the production domain), it's recommended to use the configuration option serverActions.allowedOrigins option to specify a list of safe origins. The option accepts an array of strings.
+serverActions: {
+      allowedOrigins: ['my-proxy.com', '*.my-proxy.com'],
+    },
+
+72. what are the importance of Fetching data on the server ? 
+Whenever possible, we recommend fetching data on the server with Server Components. This allows you to:
+Have direct access to backend data resources (e.g. databases).
+Keep your application more secure by preventing sensitive information, such as access tokens and API keys, from being exposed to the client.
+Fetch data and render in the same environment. This reduces both the back-and-forth communication between client and server, as well as the work on the main thread on the client.
+Perform multiple data fetches with single round-trip instead of multiple individual requests on the client.
+Reduce client-server waterfalls.
+Depending on your region, data fetching can also happen closer to your data source, reducing latency and improving performance.
+Then, you can mutate or update data with Server Actions.
+
+
+73.remember to Fetching data where it's needed in next ? 
+If you need to use the same data (e.g. current user) in multiple components in a tree, you do not have to fetch data globally, nor forward props between components. Instead, you can use fetch or React cache in the component that needs the data without worrying about the performance implications of making multiple requests for the same data.
+
+This is possible because fetch requests are automatically memoized. Learn more about request memoization
+
+Good to know: This also applies to layouts, since it's not possible to pass data between a parent layout and its children.
+
+74. explain streaming shortly . 
+Streaming and Suspense are React features that allow you to progressively render and incrementally stream rendered units of the UI to the client.
+
+With Server Components and nested layouts, you're able to instantly render parts of the page that do not specifically require data, and show a loading state for parts of the page that are fetching data. This means the user does not have to wait for the entire page to load before they can start interacting with it.To learn more about Streaming and Suspense, see the Loading UI and Streaming and Suspense pages.
+
+75.exaplin parallel and sequential data fetching . 
+When fetching data inside React components, you need to be aware of two data fetching patterns: Parallel and Sequential.
+With sequential data fetching, requests in a route are dependent on each other and therefore create waterfalls. There may be cases where you want this pattern because one fetch depends on the result of the other, or you want a condition to be satisfied before the next fetch to save resources. However, this behavior can also be unintentional and lead to longer loading times.
+With parallel data fetching, requests in a route are eagerly initiated and will load data at the same time. This reduces client-server waterfalls and the total time it takes to load data.
+
+76. explain what is Blocking Data Requests ? 
+If you have nested components, and each component fetches its own data, then data fetching will happen sequentially if those data requests are different (this doesn't apply to requests for the same data as they are automatically memoized).
+
+For example, the Playlists component will only start fetching data once the Artist component has finished fetching data because Playlists depends on the artistID prop, In cases like this, you can use loading.js (for route segments) or React <Suspense> (for nested components) to show an instant loading state while React streams in the result.
+
+This will prevent the whole route from being blocked by data fetching, and the user will be able to interact with the parts of the page that are not blocked.
+
+An alternative approach to prevent waterfalls is to fetch data globally, at the root of your application, but this will block rendering for all route segments beneath it until the data has finished loading. This can be described as "all or nothing" data fetching. Either you have the entire data for your page or application, or none.
+
+Any fetch requests with await will block rendering and data fetching for the entire tree beneath it, unless they are wrapped in a <Suspense> boundary or loading.js is used. Another alternative is to use parallel data fetching or the preload pattern.
+
+To fetch data in parallel, you can eagerly initiate requests by defining them outside the components that use the data, then calling them from inside the component. This saves time by initiating both requests in parallel, however, the user won't see the rendered result until both promises are resolved.
+
+Another way to prevent waterfalls is to use the preload pattern. You can optionally create a preload function to further optimize parallel data fetching. With this approach, you don't have to pass promises down as props. The preload function can also have any name as it's a pattern, not an API.
+
+
+You can combine the cache function, the preload pattern, and the server-only package to create a data fetching utility that can be used throughout your app.With this approach, you can eagerly fetch data, cache responses, and guarantee that this data fetching only happens on the server.
+
+We recommend using React's taint APIs, taintObjectReference and taintUniqueValue, to prevent whole object instances or sensitive values from being passed to the client/ Preventing sensitive data from being exposed to the client
+
+
+77. what are waterfalls  ? ways to prevvent it ? 
+
+

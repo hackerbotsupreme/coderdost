@@ -1,0 +1,38 @@
+we will talk about jsx (js extensions)
+important topic 
+<h1> hello world </h1>
+this is jsx in react 
+ReactDOM.render(<h1>Hello World!</h1>, document.getElementById('root'))// boom 
+
+
+import React from 'react'; 
+import ReactDOM from 'react-dom';
+ReactDOM.render(<h1>Hello World!</h1>, document.getElementById('root'))// boom 
+well here why do we need this - import React from 'react';  
+when we didnot used use why whould we keep it 
+then if yu comment it ypu will see 
+react must be in scope using jsx .
+
+keep in mind ,
+// var react = require('react');
+// var ReactDOM = require('react-dom');//accesing the root from the one and only index.html through requiring dom 
+// both are same 
+import React from 'react'; //here we are not writing 
+import ReactDOM from 'react-dom';// same here
+
+both are same 
+
+
+
+
+
+go to google , go to babel.io (js compiler )
+go to  try it out , paste ReactDOM.render(<h1>Hello World!</h1>, document.getElementById('root'))
+ it will show you  how the code written iside the react a=is 
+ actually getting compiled behind the scenes (how broswser looks it ).
+ and also with this we can understand exactly how and why the code is as it is .
+
+
+
+
+

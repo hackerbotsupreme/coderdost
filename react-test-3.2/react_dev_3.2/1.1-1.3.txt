@@ -1,0 +1,48 @@
+import { useState } from 'react'
+// import './App.css'
+import name from './Variables';
+import { LastName, motherName as ma, uncleName as uncle } from './Variables';
+
+function App() {
+  function Profile({ borderColour }) {
+    return (
+      <img
+        style={{ border: `5px solid ${borderColour}` }}
+        src="https://i.imgur.com/MK3eW3As.jpg"
+        alt="Katherine Johnson"
+      />
+    );
+  }
+  return (
+    <>
+      <u> <h1>1.1-Describing the ui</h1></u>
+      <hr />
+      <div>
+        <h1>1:props makes the difference between the ui-componets of same function</h1>
+        <div>
+          <Profile borderColour="red" />
+          <Profile borderColour="blue" />
+          <Profile borderColour="green" />
+        </div>
+        <hr />
+      </div>
+      <u> <h1>1.2:Importing and Exporting Components</h1> </u>
+      <hr />
+      <h2>1:normal importing and exporting </h2>
+      <div>
+        {name}{"  "}{LastName}
+        <h2>2:named imports  and export </h2>
+        {ma}{",  "}{uncle}
+        <h2>3:default imports and export </h2>
+        {LastName}
+      </div>
+      <hr />
+      <h2>1.3:Writing Markup with JSX</h2>
+      <div>
+
+      </div>
+    </>
+  )
+}
+
+export default App

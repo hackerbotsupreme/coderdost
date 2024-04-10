@@ -1,0 +1,33 @@
+what is react ?
+a javascript libeary for buildig user interfaces .
+
+the user interface(ui)  is the point of human-computer interaction and communication in a device . this can include 
+screens , keyboards , a mouse and the apperences of a desktop .
+
+is react a js library or framework ?
+react is not a framework . 
+react is a js library for building user interfaces .
+it is also known reactjs or react.js, so dont get confused if you read diff notation . 
+
+react is open-source .
+
+perks of react 
+1. component based approach - components is one of teh core building blocks of react . in other words , 
+we can say that every application you will develop in react will be made up of pieces called components .
+
+2. you can practice on codesandBox directly , you dont need local environment in your computer .
+
+3.learn once, write everywhere - 
+Created by Facebook and currently utilized by companies such as Netflix, Airbnb, Dropbox, as well as many others, the React JavaScript framework offers a fresh approach to creating user interfaces and is one of the hottest new web front end technologies. Now, with React Native — now available for iOs and Android — curious mobile developers can begin learning what makes React so special. Additionally, React Native can be used by seasoned web devs looking to spin up a quick mobile app, now have another handy tool to enable them to do so, whilst being to carry over a majority of their current skill set.
+
+The Dream of Write Once Run Anywhere
+From Java to C# Xamerian, the ability to write a single code base that works across multiple platforms has been the holy grail of mobile development. Additionally, many developers have far more experience with web development toolchains, than they do with mobile development ones, and are reluctant to expand a large amount of time and effort learning “yet another framework.”
+
+4. uses a declarative paradigm 
+declarative  programming is a programming paradigm ... that expresses teh logic of a computation without 
+describing its control flow . Declarative programming is like asking your frfiend to draw a landscape .
+you dont care how they draw it,that's up to them .
+
+5. dom updates are handled gracefully 
+
+6. reusable code 

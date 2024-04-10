@@ -1,0 +1,69 @@
+React provides a declarative way to manipulate the UI.
+Instead of manipulating individual pieces of the UI directly, you describe the different states that your component can be in, and switch between them in response to the user input.
+
+
+In imperative programming,You have to write the exact instructions to manipulate the UI depending on what just happened. imagine riding next to someone in a car and telling them turn by turn where to go , just follow your commands,And if you get the directions wrong, you end up in the wrong place!,from the spinner to the button, telling the computer how to update the UI.
+
+
+Manipulating the UI imperatively works well enough for isolated examples, but it gets exponentially more difficult to manage in more complex systems. Imagine updating a page full of different forms. Adding a new UI element or a new interaction would require carefully checking all existing code to make sure you haven’t introduced a bug
+
+
+
+React was built to solve this problem.
+
+
+In React, you don’t directly manipulate the UI—meaning you don’t enable, disable, show, or hide components directly. Instead, you declare what you want to show, and React figures out how to update the UI. Think of getting into a taxi and telling the driver where you want to go instead of telling them exactly where to turn. It’s the driver’s job to get you there, and they might even know some shortcuts you haven’t considered!.
+
+
+Thinking about UI declaratively 
+Identify your component’s different visual states(mockups)
+        1. imagine one is where   Form has a disabled “Submit” button.
+        2. next one is where   Form has an enabled “Submit” button.
+        3. next  one is where   Form is completely disabled. Spinner is shown.
+        4. next one is where   “Thank you” message is shown instead of a form.
+        5. next one is where  Same as Typing state, but with an extra error message.
+Mocking lets you quickly iterate on the UI before you wire up any logic. 
+
+
+If a component has a lot of visual states, it can be convenient to show them all on one page.Pages like this are often called “living styleguides” or “storybooks”.
+
+
+
+
+
+
+Determine what triggers those state changes
+You can trigger state updates in response to two kinds of inputs:
+    Human inputs, like clicking a button, typing in a field, navigating a link.
+    Computer inputs, like a network response arriving, a timeout completing, an image loading.
+In both cases, you must set state variables to update the UI.
+Changing the text input (human) should switch it from the Empty state to the Typing state or back, depending on whether the text box is empty or not.
+Clicking the Submit button (human) should switch it to the Submitting state.
+Successful network response (computer) should switch it to the Success state.
+Failed network response (computer) should switch it to the Error state with the matching error message.
+
+
+
+
+Represent the state in memory using useState
+    Simplicity is key: each piece of state is a “moving piece”, and you want as few “moving pieces” as possible. More complexity leads to more bugs!
+    Start with the state that absolutely must be there.
+    If you struggle to think of the best way immediately, start by adding enough state that you’re definitely sure that all the possible visual states are covered.
+
+Remove any non-essential state variables
+        Spending a little time on refactoring your state structure will make your components easier to understand, reduce duplication, and avoid unintended meanings.
+        Here are some questions you can ask about your state variables:
+    Does this state cause a paradox? For example, isTyping and isSubmitting can’t both be true.
+        Is the same information available in another state variable already? Another paradox: isEmpty and isTyping can’t be true at the same time.
+        Can you get the same information from the inverse of another state variable?
+        After this clean-up, you’re left with 3 (down from 7!) essential state variables
+
+Eliminating “impossible” states with a reducer 
+These three variables are a good enough representation of this form’s state. However, there are still some intermediate states that don’t fully make sense.To model the state more precisely, you can extract it into a reducer. Reducers let you unify multiple state variables into a single object and consolidate all the related logic!
+
+
+Connect the event handlers to set the state
+        Lastly, create event handlers that update the state.
+
+
+Although this code is longer than the original imperative example, it is much less fragile. Expressing all interactions as state changes lets you later introduce new visual states without breaking existing ones. 

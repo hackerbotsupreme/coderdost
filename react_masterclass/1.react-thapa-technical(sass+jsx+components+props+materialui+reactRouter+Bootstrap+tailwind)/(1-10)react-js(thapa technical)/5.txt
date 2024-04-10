@@ -1,0 +1,20 @@
+
+// there are two things in js that we must need 
+// 1.we need to require react module 
+// 2.and the react-dom , we also need to require it 
+
+var react = require('react');
+// import React from 'react'; here we are not writing import bcz the react syntax is doesnot supportss that way of writing  but the behind work is same , 
+var ReactDOM = require('react-dom');//accesing the root from the one and only index.html through requiring dom 
+// import React from 'react-dom'; same here 
+// if yu use es5 with npm , you can write ReactDOM = require('react-dom')
+// npm start to start the development server 
+
+// ReactDOM.render('kya dikhana hai ', ' kaha dikana hai ', ' callback function  ')
+// render means print / show 
+ReactDOM.render(<h1>Hello World!</h1>, document.getElementById('root'))// boom 
+// note - <h1>Hello World!</h1> this part is not html , its jsx - just hover over it 
+// when ever we reuires react we also gets a babbel(js compiler ) , wenbpack  (package )
+
+
+// code 

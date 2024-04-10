@@ -1,0 +1,225 @@
+React DOM Components
+React supports all of the browser built-in HTML and SVG components.
+
+Common components 
+All of the built-in browser components support some props and events.
+
+Common components (e.g. <div>)
+This includes React-specific props like ref and dangerouslySetInnerHTML.
+
+Form components 
+These built-in browser components accept user input:
+
+<input>
+<select>
+<textarea>
+They are special in React because passing the value prop to them makes them controlled.
+
+All HTML components 
+React supports all built-in browser HTML components. This includes:
+
+<aside>
+<audio>
+<b>
+<base>
+<bdi>
+<bdo>
+<blockquote>
+<body>
+<br>
+<button>
+<canvas>
+<caption>
+<cite>
+<code>
+<col>
+<colgroup>
+<data>
+<datalist>
+<dd>
+<del>
+<details>
+<dfn>
+<dialog>
+<div>
+<dl>
+<dt>
+<em>
+<embed>
+<fieldset>
+<figcaption>
+<figure>
+<footer>
+<form>
+<h1>
+<head>
+<header>
+<hgroup>
+<hr>
+<html>
+<i>
+<iframe>
+<img>
+<input>
+<ins>
+<kbd>
+<label>
+<legend>
+<li>
+<link>
+<main>
+<map>
+<mark>
+<menu>
+<meta>
+<meter>
+<nav>
+<noscript>
+<object>
+<ol>
+<optgroup>
+<option>
+<output>
+<p>
+<picture>
+<pre>
+<progress>
+<q>
+<rp>
+<rt>
+<ruby>
+<s>
+<samp>
+<script>
+<section>
+<select>
+<slot>
+<small>
+<source>
+<span>
+<strong>
+<style>
+<sub>
+<summary>
+<sup>
+<table>
+<tbody>
+<td>
+<template>
+<textarea>
+<tfoot>
+<th>
+<thead>
+<time>
+<title>
+<tr>
+<track>
+<u>
+<ul>
+<var>
+<video>
+<wbr>
+Note
+Similar to the DOM standard, React uses a camelCase convention for prop names. For example, you’ll write tabIndex instead of tabindex. You can convert existing HTML to JSX with an online converter.
+
+Custom HTML elements 
+If you render a tag with a dash, like <my-element>, React will assume you want to render a custom HTML element. In React, rendering custom elements works differently from rendering built-in browser tags:
+
+All custom element props are serialized to strings and are always set using attributes.
+Custom elements accept class rather than className, and for rather than htmlFor.
+If you render a built-in browser HTML element with an is attribute, it will also be treated as a custom element.
+
+Note
+A future version of React will include more comprehensive support for custom elements.
+
+You can try it by upgrading React packages to the most recent experimental version:
+
+react@experimental
+react-dom@experimental
+Experimental versions of React may contain bugs. Don’t use them in production.
+
+All SVG components 
+React supports all built-in browser SVG components. This includes:
+
+<a>
+<animate>
+<animateMotion>
+<animateTransform>
+<circle>
+<clipPath>
+<defs>
+<desc>
+<discard>
+<ellipse>
+<feBlend>
+<feColorMatrix>
+<feComponentTransfer>
+<feComposite>
+<feConvolveMatrix>
+<feDiffuseLighting>
+<feDisplacementMap>
+<feDistantLight>
+<feDropShadow>
+<feFlood>
+<feFuncA>
+<feFuncB>
+<feFuncG>
+<feFuncR>
+<feGaussianBlur>
+<feImage>
+<feMerge>
+<feMergeNode>
+<feMorphology>
+<feOffset>
+<fePointLight>
+<feSpecularLighting>
+<feSpotLight>
+<feTile>
+<feTurbulence>
+<filter>
+<foreignObject>
+<g>
+<hatch>
+<hatchpath>
+<image>
+<line>
+<linearGradient>
+<marker>
+<mask>
+<metadata>
+<mpath>
+<path>
+<pattern>
+<polygon>
+<polyline>
+<radialGradient>
+<rect>
+<script>
+<set>
+<stop>
+<style>
+<svg>
+<switch>
+<symbol>
+<text>
+<textPath>
+<title>
+<tspan>
+<use>
+<view>
+Note
+Similar to the DOM standard, React uses a camelCase convention for prop names. For example, you’ll write tabIndex instead of tabindex. You can convert existing SVG to JSX with an online converter.
+
+Namespaced attributes also have to be written without the colon:
+
+xlink:actuate becomes xlinkActuate.
+xlink:arcrole becomes xlinkArcrole.
+xlink:href becomes xlinkHref.
+xlink:role becomes xlinkRole.
+xlink:show becomes xlinkShow.
+xlink:title becomes xlinkTitle.
+xlink:type becomes xlinkType.
+xml:base becomes xmlBase.
+xml:lang becomes xmlLang.
+xml:space becomes xmlSpace.
+xmlns:xlink becomes xmlnsXlink.

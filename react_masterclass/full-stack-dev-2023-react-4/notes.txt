@@ -1,0 +1,86 @@
+in this chapter we will learn about events . 
+
+this is under the interactivity section of the react dev .
+
+when we create a new file like play.js(html+js) we also creates play.css(css) along with that , as practiced .
+
+{} -> this is called react epression .
+
+eventHandler functions - onClick,
+React provides different event handlers for different types of events. Here are some examples:
+
+onClick: For handling click events1.
+onChange: For handling input changes1.
+onSubmit: For handling form submissions1.
+onKeyDown: For handling key press events1.
+
+note that , dont use it to call any thing like , 
+function PlayButton(){
+    return(
+        <button onClick={console.log("play")}></button>
+    )
+}
+ddont call just define , 
+like , 
+simplest way using an arrow function
+function PlayButton(){
+    return(
+        <button onClick={()=>{console.log("play")}}></button>
+    )
+}
+so inside the onclick we defined this function , not called  defined 
+but we can also do it like , 
+function PlayButton(){
+    function handleClick(){
+        console.log('play')
+    }
+    return(
+        <button onClick={()=>{handleClick}}></button>
+    )
+}
+
+custom properties in react .
+
+
+whenever you are naming any function that triggeres an event means that works through user interaction 
+use on as prefix on that way whenever you look on the code in future , you will know that this function is an eventhandler 
+, it is also a react convention in react . 
+like 
+<PlayButton message="play-msg" onplay={()=>{console.log("Play")} onPause={()=>{console.log("Pause")}}}></PlayButton>
+
+function PlayButton({message,children,onplay,onpause}){
+    let paying = false ;
+    function handleClick(){
+        if (playing) onpause()
+        else onplay();
+        // and we can see that this is always gonna be false for that 
+        //we are just toggling values 
+        playing = !playing;
+    }
+    return (
+        <button onclick={handleClick}>{childern}</button>
+        // now lets upgrade it such tht it shows play while paused and pause while playing 
+        <button onclick={handleClick}>{childern}:{playing ?">":""}</button>
+    )
+}
+
+now , why this symbols are not updating when i am toggling 
+why 
+react only updates tose variables which are state variables . 
+and this is a feature of react , this has done by react intentionally so that no variable should directly update the dom . 
+which menas declaring the variable and the ui will get uupdated accorading to that , react does not uses that approach ,
+so there is two things props are coming from the top and if we declare any variable then it can not be used to changge the content . 
+and to resolve this problem react uses state .
+
+so we can say ,  // dont use this approach 
+    let paying = false ; // dont use this approach 
+    function handleClick(){
+        if (playing) onpause()
+        else onplay();
+        // and we can see that this is always gonna be false for that 
+        //we are just toggling values 
+        playing = !playing;
+    }
+
+
+

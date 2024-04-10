@@ -1,0 +1,48 @@
+after we get done with the installation , the most important thing is ,
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd app
+  npm start
+
+
+/////////////////////////////////////////////////////////////////
+
+in the source file to check the file is created ,
+we wil change the direcory and use dir 
+then cd app then to launch it use npm start
+now open teh browser and go to http://localhost:3000/
+you will see ,
+You can now view app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.0.102:3000
+
+/////////////////////////////////////////////////////////////////
+
+we will print hello world 
+
+and the most important  file is index.js 
+delete this ,
+ <React.StrictMode>
+    <App />
+  </React.StrictMode>
+then type write 
+heelo world 
+
+
+go to source then app.js 
+index.js is also important

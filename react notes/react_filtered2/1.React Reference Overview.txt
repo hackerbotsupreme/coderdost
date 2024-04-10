@@ -1,0 +1,163 @@
+api ? what is api ? - api stand are application programming language . 
+(In the context of React) the term “API” is often used to refer to the collection of features and functionalities that React provides for building applications. This includes Hooks, Components, and Directives .... 
+
+so  these aare the parts/components of react's technology offers to program the application , and the whole thing alltogether  is called api ? and  hooks, directives, components ... these are api's element to program the application ?
+
+yes .  when we talk about React’s API, we’re referring to the sum total of all these parts that you use to build and control your React application. It’s the interface that React provides for you to interact with and control the behavior of your application.
+
+
+but api also stands for the Application Programming Interface. It is a medium that allows different applications to communicate programmatically with one another and return a response in real time.  which in server and client context refers to json object . where ,
+apllicarion interacts and controls , interacts with accoradingly . 
+
+Yes, you're absolutely correct! 
+
+In the context of web development, an API (Application Programming Interface) often refers to a set of rules that allows different software applications to communicate with each other. These rules define how one application can request information from another application and how that information is delivered.
+
+In the client-server model, the client (for example, a React application running in a user's browser) can make API calls to the server to retrieve data (usually in JSON format), which it can then use to update the application's state and UI. The server processes the API request and returns the requested data to the client.
+
+So, in this context, an API serves as a contract between the client and the server, defining what requests can be made, how to make them, and what responses will be returned. This is a crucial aspect of modern web development, enabling the creation of dynamic, data-driven applications. 
+
+It's important to note that while APIs commonly refer to web services in web development, the term API in software development is a broader concept, as you correctly pointed out with React's API (Hooks, Components, etc.). These are all interfaces provided by React for developers to interact with and control their React applications. 
+
+
+so what i was understanding is just a part of an api  , the api is the grand total ?
+
+Yes, you've got it! The term "API" or Application Programming Interface is a broad term in software development. It refers to the methods and tools that allow different software applications to interact with each other.
+
+In the context of a library or framework like React, the API includes all the built-in functions, components, hooks, and other features that developers can use to build their applications. 
+
+In the context of web services, an API often refers to a set of rules for how a client can request data from a server, and how that data is delivered.
+
+So, the specific features of React you were referring to (like hooks and components) are part of React's API, but the concept of an API is much broader and applies to many areas of software development. It's like a menu in a restaurant: the API represents the whole menu, while hooks, components, etc., are like the individual dishes that you can order. Great job on grasping these concepts! 👍
+
+
+
+/////////////////////////////////
+
+
+This section provides detailed reference documentation for working with React(react apis )
+
+React 
+Programmatic React features:
+
+Hooks - Use different React features from your components.
+Components - Documents built-in components that you can use in your JSX.
+APIs - APIs that are useful for defining components.
+Directives - Provide instructions to bundlers compatible with React Server Components.
+React DOM 
+React-dom contains features that are only supported for web applications (which run in the browser DOM environment). This section is broken into the following:
+
+Hooks - Hooks for web applications which run in the browser DOM environment.
+Components - React supports all of the browser built-in HTML and SVG components.
+APIs - The react-dom package contains methods supported only in web applications.
+Client APIs - The react-dom/client APIs let you render React components on the client (in the browser).
+Server APIs - The react-dom/server APIs let you render React components to HTML on the server.
+Legacy APIs 
+Legacy APIs - Exported from the react package, but not recommended for use in newly written code.
+
+
+///////////////////////////////////////////////////////
+
+React DOM APIs
+The react-dom package contains methods that are only supported for the web applications (which run in the browser DOM environment). They are not supported for React Native.
+
+APIs 
+These APIs can be imported from your components. They are rarely used:
+
+createPortal lets you render child components in a different part of the DOM tree.
+flushSync lets you force React to flush a state update and update the DOM synchronously.
+Entry points 
+The react-dom package provides two additional entry points:
+
+react-dom/client contains APIs to render React components on the client (in the browser).
+react-dom/server contains APIs to render React components on the server.
+Deprecated APIs 
+Deprecated
+These APIs will be removed in a future major version of React.
+
+findDOMNode finds the closest DOM node corresponding to a class component instance.
+hydrate mounts a tree into the DOM created from server HTML. Deprecated in favor of hydrateRoot.
+render mounts a tree into the DOM. Deprecated in favor of createRoot.
+unmountComponentAtNode unmounts a tree from the DOM. Deprecated in favor of root.unmount().
+
+
+////////////////////////////////////////////////////////////////////
+
+react@18.2.0
+Overview
+    Hooks
+        use 
+        useCallback
+        useContext
+        useDebugValue
+        useDeferredValue
+        useEffect
+        useId
+        useImperativeHandle
+        useInsertionEffect
+        useLayoutEffect
+        useMemo
+        useOptimistic 
+        useReducer
+        useRef
+        useState
+        useSyncExternalStore
+        useTransition
+    Components
+        <Fragment> (<>)
+        <Profiler>
+        <StrictMode>
+        <Suspense>
+    APIs
+        cache 
+        createContext
+        forwardRef
+        lazy
+        memo
+        startTransition
+        experimental_taintObjectReference 
+        experimental_taintUniqueValue 
+    Directives 
+        'use client' 
+        'use server' 
+react-dom@18.2.0
+        Hooks
+            useFormState 
+            useFormStatus 
+        Components
+            Common (e.g. <div>)
+            <form> 
+            <input>
+            <option>
+            <progress>
+            <select>
+            <textarea>
+        APIs
+            createPortal
+            flushSync
+            findDOMNode
+            hydrate
+            render
+            unmountComponentAtNode
+        Client APIs
+            createRoot
+            hydrateRoot
+        Server APIs
+            renderToNodeStream
+            renderToPipeableStream
+            renderToReadableStream
+            renderToStaticMarkup
+            renderToStaticNodeStream
+            renderToString
+        Legacy APIs
+        Legacy React APIs
+            Children
+            cloneElement
+            Component
+            createElement
+            createFactory
+            createRef
+            isValidElement
+            PureComponent
+            API REFERENCE
+            HOOKS

@@ -1,0 +1,397 @@
+
+// 1 - Describing the UI
+// 1.1 - Your First Component
+// What a component is
+// What role components play in a React application
+// How to write your first React component
+// Components: UI building blocks 
+// Defining a component 
+// Step 1: Export the component 
+// Step 2: Define the function 
+// Step 3: Add markup 
+// Using a component 
+// What the browser sees 
+// Nesting and organizing components 
+// Components all the way down 
+// React lets you create components, reusable UI elements for your app.
+// In a React app, every piece of UI is a component.
+// React components are regular JavaScript functions except:
+// Their names always begin with a capital letter.
+// They return JSX markup.
+
+
+// 1.2 -Importing and Exporting Components
+// What a root component file is
+// How to import and export a component
+// When to use default and named imports and exports
+// How to import and export multiple components from one file
+// How to split components into multiple files
+// The root component file 
+// Exporting and importing a component 
+// Default vs named exports 
+// Exporting and importing multiple components from the same file 
+// What a root component file is
+// How to import and export a component
+// When and how to use default and named imports and exports
+// How to export multiple components from the same file
+
+
+// 1.3- Writing Markup with JSX
+// Why React mixes markup with rendering logic
+// How JSX is different from HTML
+// How to display information with JSX
+// JSX: Putting markup into JavaScript 
+// Converting HTML to JSX 
+// The Rules of JSX 
+// 1. Return a single root element 
+// Why do multiple JSX tags need to be wrapped? 
+// 2. Close all the tags 
+// 3. camelCase all most of the things! 
+// Pro-tip: Use a JSX Converter 
+// React components group rendering logic together with markup because they are related.
+// JSX is similar to HTML, with a few differences. You can use a converter if you need to.
+// Error messages will often point you in the right direction to fixing your markup.
+
+
+
+// 1.4 - JavaScript in JSX with Curly Braces
+// How to pass strings with quotes
+// How to reference a JavaScript variable inside JSX with curly braces
+// How to call a JavaScript function inside JSX with curly braces
+// How to use a JavaScript object inside JSX with curly braces
+// Passing strings with quotes 
+// Using curly braces: A window into the JavaScript world 
+// Where to use curly braces 
+// Using “double curlies”: CSS and other objects in JSX 
+// More fun with JavaScript objects and curly braces 
+// JSX attributes inside quotes are passed as strings.
+// Curly braces let you bring JavaScript logic and variables into your markup.
+// They work inside the JSX tag content or immediately after = in attributes.
+// {{ and }} is not special syntax: it’s a JavaScript object tucked inside JSX curly braces.
+
+
+
+
+// 1.5 - Passing Props to a Component
+// Passing Props to a Component
+// How to pass props to a component
+// How to read props from a component
+// How to specify default values for props
+// How to pass some JSX to a component
+// How props change over time
+// Familiar props 
+// Passing props to a component 
+// Step 1: Pass props to the child component 
+// Step 2: Read props inside the child component 
+// Specifying a default value for a prop 
+// Forwarding props with the JSX spread syntax 
+// Passing JSX as children 
+// How props change over time 
+// To pass props, add them to the JSX, just like you would with HTML attributes.
+// To read props, use the function Avatar({ person, size }) destructuring syntax.
+// You can specify a default value like size = 100, which is used for missing and undefined props.
+// You can forward all props with <Avatar {...props} /> JSX spread syntax, but don’t overuse it!
+// Nested JSX like <Card><Avatar /></Card> will appear as Card component’s children prop.
+// Props are read-only snapshots in time: every render receives a new version of props.
+// You can’t change props. When you need interactivity, you’ll need to set state.
+
+
+// 1.6 - Conditional Rendering
+// How to return different JSX depending on a condition
+// How to conditionally include or exclude a piece of JSX
+// Common conditional syntax shortcuts you’ll encounter in React codebases
+// Conditionally returning JSX 
+// Conditionally returning nothing with null 
+// Conditionally including JSX 
+// Conditional (ternary) operator (? :) 
+// Are these two examples fully equivalent? 
+// Logical AND operator (&&) 
+// Conditionally assigning JSX to a variable 
+// In React, you control branching logic with JavaScript.
+// You can return a JSX expression conditionally with an if statement.
+// You can conditionally save some JSX to a variable and then include it inside other JSX by using the curly braces.
+// In JSX, {cond ? <A /> : <B />} means “if cond, render <A />, otherwise <B />”.
+// In JSX, {cond && <A />} means “if cond, render <A />, otherwise nothing”.
+// The shortcuts are common, but you don’t have to use them if you prefer plain if.
+
+
+
+
+
+// 1.7 - Rendering Lists
+// How to render components from an array using JavaScript’s map()
+// How to render only specific components using JavaScript’s filter()
+// When and why to use React keys
+// Rendering data from arrays 
+// Filtering arrays of items 
+// Keeping list items in order with key 
+// Displaying several DOM nodes for each list item 
+// Where to get your key 
+// Rules of keys 
+// Why does React need keys? 
+// How to move data out of components and into data structures like arrays and objects.
+// How to generate sets of similar components with JavaScript’s map().
+// How to create arrays of filtered items with JavaScript’s filter().
+// Why and how to set key on each component in a collection so React can keep track of each of them even if their position or data changes.
+
+
+
+// 1.8 - Keeping Components Pure
+// What purity is and how it helps you avoid bugs
+// How to keep components pure by keeping changes out of the render phase
+// How to use Strict Mode to find mistakes in your components
+// Purity: Components as formulas 
+// Side Effects: (un)intended consequences 
+// Detecting impure calculations with StrictMode 
+// Local mutation: Your component’s little secret 
+// Where you can cause side effects 
+// Why does React care about purity? 
+// A component must be pure, meaning:
+// It minds its own business. It should not change any objects or variables that existed before rendering.
+// Same inputs, same output. Given the same inputs, a component should always return the same JSX.
+// Rendering can happen at any time, so components should not depend on each others’ rendering sequence.
+// You should not mutate any of the inputs that your components use for rendering. That includes props, state, and context. To update the screen, “set” state instead of mutating preexisting objects.
+// Strive to express your component’s logic in the JSX you return. When you need to “change things”, you’ll usually want to do it in an event handler. As a last resort, you can useEffect.
+// Writing pure functions takes a bit of practice, but it unlocks the power of React’s paradigm.
+
+
+
+// 1.9 - Understanding Your UI as a Tree
+// How React “sees” component structures
+// What a render tree is and what it is useful for
+// What a module dependency tree is and what it is useful for
+// Your UI as a tree 
+// The Render Tree 
+// Where are the HTML tags in the render tree? 
+// The Module Dependency Tree 
+// Trees are a common way to represent the relationship between entities. They are often used to model UI.
+// Render trees represent the nested relationship between React components across a single render.
+// With conditional rendering, the render tree may change across different renders. With different prop values, components may render different children components.
+// Render trees help identify what the top-level and leaf components are. Top-level components affect the rendering performance of all components beneath them and leaf components are often re-rendered frequently. Identifying them is useful for understanding and debugging rendering performance.
+// Dependency trees represent the module dependencies in a React app.
+// Dependency trees are used by build tools to bundle the necessary code to ship an app.
+// Dependency trees are useful for debugging large bundle sizes that slow time to paint and expose opportunities for optimizing what code is bundled.
+
+
+
+
+
+
+// 2 - Adding Interactivity
+// 2.1 - Responding to Events
+// You will learn
+// Different ways to write an event handler
+// How to pass event handling logic from a parent component
+// How events propagate and how to stop them
+// Adding event handlers 
+// Reading props in event handlers 
+// Passing event handlers as props 
+// Naming event handler props 
+// Event propagation 
+// Stopping propagation 
+// Capture phase events 
+// Passing handlers as alternative to propagation 
+// Preventing default behavior 
+// Can event handlers have side effects? 
+// Recap
+// You can handle events by passing a function as a prop to an element like <button>.
+// Event handlers must be passed, not called! onClick={handleClick}, not onClick={handleClick()}.
+// You can define an event handler function separately or inline.
+// Event handlers are defined inside a component, so they can access props.
+// You can declare an event handler in a parent and pass it as a prop to a child.
+// You can define your own event handler props with application-specific names.
+// Events propagate upwards. Call e.stopPropagation() on the first argument to prevent that.
+// Events may have unwanted default browser behavior. Call e.preventDefault() to prevent that.
+// Explicitly calling an event handler prop from a child handler is a good alternative to propagation.
+
+
+
+
+
+
+// 2.2 - State: A Component's Memory
+//When a regular variable isn’t enough 
+// How to add a state variable with the useState Hook
+// What pair of values the useState Hook returns
+// How to add more than one state variable
+// Why state is called local
+// Adding a state variable 
+// Meet your first Hook 
+// Anatomy of useState 
+// Giving a component multiple state variables 
+// State is isolated and private 
+// Recap
+// Use a state variable when a component needs to “remember” some information between renders.
+// State variables are declared by calling the useState Hook.
+// Hooks are special functions that start with use. They let you “hook into” React features like state.
+// Hooks might remind you of imports: they need to be called unconditionally. Calling Hooks, including useState, is only valid at the top level of a component or another Hook.
+// The useState Hook returns a pair of values: the current state and the function to update it.
+// You can have more than one state variable. Internally, React matches them up by their order.
+// State is private to the component. If you render it in two places, each copy gets its own state.
+
+// 2.3 - Render and Commit
+// What rendering means in React
+// When and why React renders a component
+// The steps involved in displaying a component on screen
+// Why rendering does not always produce a DOM update
+// Step 1: Trigger a render 
+// Initial render 
+// Re-renders when state updates 
+// Step 2: React renders your components 
+// Step 3: React commits changes to the DOM 
+// Epilogue: Browser paint 
+// Recap
+// Any screen update in a React app happens in three steps:
+// Trigger
+// Render
+// Commit
+// You can use Strict Mode to find mistakes in your components
+// React does not touch the DOM if the rendering result is the same as last time
+
+
+// 2.4 - State as a Snapshot (interesting problems/assignments  )
+// How setting state triggers re-renders
+// When and how state updates
+// Why state does not update immediately after you set it
+// How event handlers access a “snapshot” of the state
+// Setting state triggers renders 
+// Rendering takes a snapshot in time 
+// State over time 
+// Recap
+// Setting state requests a new render.
+// React stores state outside of your component, as if on a shelf.
+// When you call useState, React gives you a snapshot of the state for that render.
+// Variables and event handlers don’t “survive” re-renders. Every render has its own event handlers.
+// Every render (and functions inside it) will always “see” the snapshot of the state that React gave to that render.
+// You can mentally substitute state in event handlers, similarly to how you think about the rendered JSX.
+// Event handlers created in the past have the state values from the render in which they were created.
+
+
+// 2.5 - Queueing a Series of State Updates
+// What “batching” is and how React uses it to process multiple state updates
+// How to apply several updates to the same state variable in a row
+// React batches state updates 
+// Updating the same state multiple times before the next render 
+// What happens if you update state after replacing it 
+// What happens if you replace state after updating it 
+// Naming conventions 
+// Recap
+// Setting state does not change the variable in the existing render, but it requests a new render.
+// React processes state updates after event handlers have finished running. This is called batching.
+// To update some state multiple times in one event, you can use setNumber(n => n + 1) updater function.
+
+
+// 2.6 -Updating Objects in State
+// You will learn
+// How to correctly update an object in React state
+// How to update a nested object without mutating it
+// What immutability is, and how not to break it
+// How to make object copying less repetitive with Immer
+// What’s a mutation? 
+// Treat state as read-only 
+// Local mutation is fine 
+// Copying objects with the spread syntax 
+// Using a single event handler for multiple fields 
+// Updating a nested object 
+// Objects are not really nested 
+// Write concise update logic with Immer 
+// How does Immer work? 
+// Why is mutating state not recommended in React? 
+// Recap
+// Treat all state in React as immutable.
+// When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”.
+// Instead of mutating an object, create a new version of it, and trigger a re-render by setting state to it.
+// You can use the {...obj, something: 'newValue'} object spread syntax to create copies of objects.
+// Spread syntax is shallow: it only copies one level deep.
+// To update a nested object, you need to create copies all the way up from the place you’re updating.
+// To reduce repetitive copying code, use Immer.
+
+
+
+// 2.7 - Updating Arrays in State
+// You will learn
+// How to add, remove, or change items in an array in React state
+// How to update an object inside of an array
+// How to make array copying less repetitive with Immer
+// Updating arrays without mutation 
+// Adding to an array 
+// Removing from an array 
+// Transforming an array 
+// Replacing items in an array 
+// Inserting into an array 
+// Making other changes to an array 
+// Updating objects inside arrays 
+// Write concise update logic with Immer 
+// Recap
+// You can put arrays into state, but you can’t change them.
+// Instead of mutating an array, create a new version of it, and update the state to it.
+// You can use the [...arr, newItem] array spread syntax to create arrays with new items.
+// You can use filter() and map() to create new arrays with filtered or transformed items.
+// You can use Immer to keep your code concise.
+
+
+// 3- managing state 
+// 3.1- Reacting to Input with State
+// You will learn
+// How declarative UI programming differs from imperative UI programming
+// How to enumerate the different visual states your component can be in
+// How to trigger the changes between the different visual states from code
+// How declarative UI compares to imperative 
+// Thinking about UI declaratively 
+// Step 1: Identify your component’s different visual states 
+// Displaying many visual states at once 
+// Step 2: Determine what triggers those state changes 
+// Step 3: Represent the state in memory with useState 
+// Step 4: Remove any non-essential state variables 
+// Eliminating “impossible” states with a reducer 
+// Step 5: Connect the event handlers to set state 
+// Recap
+// Declarative programming means describing the UI for each visual state rather than micromanaging the UI (imperative).
+// When developing a component:
+// Identify all its visual states.
+// Determine the human and computer triggers for state changes.
+// Model the state with useState.
+// Remove non-essential state to avoid bugs and paradoxes.
+// Connect the event handlers to set state.
+
+
+
+
+// 3.2 -Choosing the State Structure
+// When to use a single vs multiple state variables
+// What to avoid when organizing state
+// How to fix common issues with the state structure
+// Principles for structuring state 
+// Group related state 
+// Avoid contradictions in state 
+// Avoid redundant state 
+// Don’t mirror props in state 
+// Avoid duplication in state 
+// Avoid deeply nested state 
+// Improving memory usage 
+// Recap
+// If two state variables always update together, consider merging them into one.
+// Choose your state variables carefully to avoid creating “impossible” states.
+// Structure your state in a way that reduces the chances that you’ll make a mistake updating it.
+// Avoid redundant and duplicate state so that you don’t need to keep it in sync.
+// Don’t put props into state unless you specifically want to prevent updates.
+// For UI patterns like selection, keep ID or index in state instead of the object itself.
+// If updating deeply nested state is complicated, try flattening it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

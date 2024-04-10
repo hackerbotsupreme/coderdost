@@ -1,0 +1,512 @@
+when and why we should use setState hooks ?
+
+The `setState` function in React is used to update the state of a component⁵. It accepts a new state value and enqueues a re-render of the component⁵. During subsequent re-renders, the first value returned by `useState` will always be the most recent state after applying updates⁵.
+
+You should use `setState` or the `useState` hook in the following scenarios:
+
+1. **Reacting to User Interactions**: One of the main reasons to use `setState` is in response to user interactions³. For example, when a user clicks a button, you might want to change the state of your component and re-render it with the updated state.
+
+2. **Storing User Input**: You'll want to use the `useState` hook when you need to store input from a user⁴. As a rule of thumb, you should only use state to keep this kind of information – that requires the user to input data, or trigger events⁴. A very common use case is form data. Almost every app or website needs to collect info from the user⁴.
+
+3. **Managing Component's UI State**: `setState` holds a pivotal position in the ecosystem of React development. It's the primary method to induce changes in your component's UI by modifying the state³.
+
+Remember, unlike normal functions, custom hooks encapsulate React state. This means that the hook can utilize react's own hooks and perform custom logic¹. For example, you might want to return the state of the data, not just the data by itself because the state is tied to a `useEffect`¹. That means that fetch will only run and by extension only update data when its dependencies are changed¹. If it was a normal function just returning the data from the fetch, you would send a request every time the component using the hook re-renders¹. That's why you use `useState` coupled with `useEffect` to make sure it only updates when it should¹.
+
+function vs class comonent ?
+
+In React, there are two types of components: **Functional Components** and **Class Components**¹².
+
+**Functional Components**:
+- These are basic JavaScript functions¹.
+- They are sometimes referred to as “dumb” or “stateless” components as they simply accept data and display them in some form¹.
+- They are mainly responsible for rendering UI¹.
+- React lifecycle methods (for example, `componentDidMount`) cannot be used in functional components¹.
+- There is no render method used in functional components¹.
+- Functional components can accept and use props¹.
+- Functional components should be favored if you do not need to make use of React state¹.
+
+Here's an example of a functional component:
+
+```jsx
+import React from "react";
+const Person = props => (
+  <div>
+    <h1>Hello, {props.name}</h1>
+  </div>
+);
+export default Person;
+```
+
+**Class Components**:
+- Class components make use of ES6 class and extend the Component class in React¹.
+- They are sometimes called “smart” or “stateful” components as they tend to implement logic and state¹.
+- React lifecycle methods can be used inside class components (for example, `componentDidMount`)¹.
+- You pass props down to class components and access them with `this.props`¹.
+
+Here's an example of a class component:
+
+```jsx
+import React, { Component } from "react";
+class Person extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      myState: true;
+    }
+  }
+  render() {
+    return (
+      <div>
+        <h1>Hello Person</h1>
+      </div>
+    );
+  }
+}
+export default Person;
+```
+
+In summary, the choice between functional and class components depends on the specific requirements of your project¹². With the introduction of Hooks in React 16.8, you can use state and other React features without writing a class, making functional components more powerful and capable of doing everything a class component can do².
+
+why  props-drilling is a problem ?
+
+Prop drilling, also known as "threading", is a process in React where props (properties) are passed from one part of a tree to another by going through other parts that do not need the data, but merely help pass it around¹². It's like a courier system where a package goes through several transit locations before reaching its final destination¹².
+
+The problem with prop drilling is that it can lead to several issues:
+
+1. **Decreased Reusability**: Components that rely on props passed down from their parents are more tightly coupled to the component hierarchy³. This can make it harder to reuse these components in other parts of the application, or to change the component hierarchy without affecting the components that rely on the props³.
+
+2. **Increased Complexity**: Prop drilling can quickly become cumbersome, especially if you have multiple levels of nesting⁴. Passing data through multiple components can lead to "prop hell," where you end up with a long chain of props that need to be passed down⁴.
+
+3. **Maintenance Difficulty**: Additionally, prop drilling can make your code more brittle and harder to maintain⁴. Any change in the prop being passed will require changes at all levels of the component tree¹².
+
+4. **Performance Issues**: Every component that consumes or uses these providers is re-rendered whenever there is a state change¹. This can lead to unnecessary re-renders and potential performance issues¹.
+
+To avoid prop drilling, you can use context, Redux, or other state management libraries¹². These tools allow you to share state across multiple components without having to pass props down manually at every level¹².
+
+how to update ui in react ?
+
+In React, the UI updates when the state or props of a component change¹². Here are some ways to update the UI in React:
+
+1. **Using `setState`**: In class components, you can use the `setState` method to update the state and re-render the component¹. For example:
+
+```jsx
+this.setState({ count: this.state.count + 1 });
+```
+
+2. **Using Hooks**: In functional components, you can use the `useState` hook to update the state¹. For example:
+
+```jsx
+const [count, setCount] = useState(0);
+setCount(count + 1);
+```
+
+3. **Using `forceUpdate`**: In some cases, you might want to force a component to re-render without changing the state. You can do this using the `forceUpdate` method⁵. However, this is generally not recommended because it goes against the idea of having a "single source of truth" in your components⁵.
+
+4. **Using Context or Redux**: If you need to manage global state and propagate changes across multiple components, you can use Context or Redux¹². These tools allow you to manage global state and automatically update components when the state changes¹².
+
+Remember, React components re-render when their state or props change, so the key to updating the UI is to manage your state and props effectively¹².
+
+what are higher order component  in react ? examples ?
+
+Higher-order components (HOCs) are a powerful feature of the React library. They allow you to reuse component logic across multiple components¹. In React, a higher-order component is a function that takes a component as an argument and returns a new component that wraps the original component¹. HOCs allow you to add additional functionality to a component without modifying the component's code¹.
+
+Here's a basic example of a higher-order component:
+
+```jsx
+// Higher Order Component that Contains the logic to detect the hover.
+function withHover(WrappedComponent) {
+  return function (props) {
+    const [isHovered, setHovered] = useState(false);
+    function handleMouseEnter() {
+      setHovered(true);
+    }
+    function handleMouseLeave() {
+      setHovered(false);
+    }
+    return (
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <WrappedComponent {...props} isHovered={isHovered} />
+      </div>
+    );
+  };
+}
+
+// Updated Text Component without the Hover Logic
+const TextComponent = ({ text, isHovered }) => {
+  return (
+    <>
+      <p style={{ backgroundColor: isHovered ? "blue" : "white" }}>{text}</p>
+    </>
+  );
+};
+
+// Creating components that contain hover logic using Higher Order Component.
+const TextComponentWithHover = withHover(TextComponent);
+
+// Using the Components in our App
+const App = () => {
+  return (
+    <div className="App">
+      <TextComponentWithHover text="Hello, World!" />
+    </div>
+  );
+};
+```
+In this example, the `withHover` function is a higher-order component that adds hover functionality to any component². The `TextComponent` is a simple component that displays some text². The `TextComponentWithHover` is a new component that is created by wrapping the `TextComponent` with the `withHover` higher-order component². This new component has the same functionality as the `TextComponent`, but also changes its background color when it is hovered over²..
+
+simplest way to make and read a cookie ?
+
+Cookies can be created, read, and erased by JavaScript. They are accessible through the property `document.cookie`. Here's a simple way to create, read, and erase cookies:
+
+```javascript
+// Function to create a cookie
+function createCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+// Function to read a cookie
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
+// Function to erase a cookie
+function eraseCookie(name) {
+  createCookie(name, "", -1);
+}
+```
+
+You can use these functions like this:
+
+```javascript
+createCookie('myCookie', 'myValue', 7); // Creates a cookie that expires in 7 days
+var myValue = readCookie('myCookie'); // Reads the value of the cookie
+eraseCookie('myCookie'); // Erases the cookie
+```
+
+Please note that these functions should be used in a JavaScript environment where `document.cookie` is available. If you're using React and want to manage cookies, consider using libraries like `js-cookie` or `react-cookie`, which provide a more straightforward API and handle many edge cases for you. Also, be aware of the privacy implications and regulations (like GDPR) when using cookies. Always ensure that you have user consent before setting cookies.
+
+what is arrow functions ?
+
+Arrow functions, introduced in ES6, provide a more concise way to write functions in JavaScript¹²³⁴⁵. They are anonymous functions, meaning they are not bound by an identifier³⁵.
+
+Here's the syntax of an arrow function:
+
+```javascript
+const myFunction = (param1, param2) => {
+  // function body
+}
+```
+
+This is equivalent to the following traditional function expression:
+
+```javascript
+const myFunction = function(param1, param2) {
+  // function body
+}
+```
+
+Arrow functions have some unique features:
+
+1. **Shorter Syntax**: Arrow functions allow us to write shorter function syntax¹²³⁴⁵.
+2. **No Binding of `this`**: In arrow functions, the `this` keyword always represents the object that defined the arrow function¹. This is different from regular functions, where the `this` keyword can represent the object that called the function¹.
+3. **Implicit Returns**: If the function body consists of a single expression, you can omit the `return` keyword and the curly braces¹²³⁴⁵.
+
+Here's an example of an arrow function with an implicit return:
+
+```javascript
+const add = (a, b) => a + b;
+```
+
+This function takes two parameters, `a` and `b`, and returns their sum¹²³⁴⁵. The `return` keyword is not needed because the function consists of a single expression¹²³⁴⁵.
+
+Remember, arrow functions are always unnamed. If the arrow function needs to call itself, use a named function expression instead. You can also assign the arrow function to a variable so it has a name⁵..
+
+list of frameworks in js ?
+
+Here are some of the popular JavaScript frameworks:
+
+1. **React**: An open-source front-end JavaScript library created by a team of Facebook developers¹.
+2. **AngularJS**: A popular JavaScript framework for building web applications¹.
+3. **Vue.js**: A progressive JavaScript framework used to build user interfaces¹.
+4. **Ember.js**: A JavaScript framework that allows developers to build scalable single-page web applications⁵.
+5. **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine⁵.
+6. **Aurelia**: A modern, open-source UI framework for web and mobile app development³.
+7. **Mithril**: A modern client-side JavaScript framework for building single-page applications³.
+8. **Meteor**: A full-stack JavaScript platform for developing modern web and mobile applications¹.
+9. **Next.js**: A React framework for building JavaScript applications¹.
+10. **Gatsby**: A React-based open-source framework for creating websites and apps¹.
+
+Each of these frameworks has its own strengths and is suited to different kinds of projects. It's important to choose the one that best fits your specific needs¹³⁵.
+
+what is the difference between undefined and undeclared ?
+
+
+In JavaScript, **undefined** and **undeclared** are two different concepts related to variables¹²³⁴:
+
+- **Undefined**: A variable is considered undefined when it has been declared but has not been assigned a value¹²³. For example:
+
+```javascript
+let x;
+console.log(x); // Outputs: undefined
+```
+In this case, the variable `x` is declared but not defined, so its value is `undefined`¹.
+
+- **Undeclared**: A variable is considered undeclared when we try to access a variable that has not been declared or initialized earlier using the `var`, `let`, or `const` keyword¹²³. If we try to access an undeclared variable, JavaScript throws a `ReferenceError`¹. For example:
+
+```javascript
+console.log(y); // Outputs: ReferenceError: y is not defined
+```
+In this case, the variable `y` is not declared anywhere in the code, so it is `undeclared`¹.
+
+In summary, `undefined` means a variable has been declared but not assigned a value, while `undeclared` means the variable does not exist at all¹²³⁴.
+
+difference between undefined and null ?
+
+In JavaScript, **undefined** and **null** are two distinct types¹²³⁴:
+
+- **Undefined**: A variable is considered undefined when it has been declared but has not yet been assigned a value¹²³⁴. For example:
+
+```javascript
+let x;
+console.log(x); // Outputs: undefined
+```
+
+In this case, the variable `x` is declared but not defined, so its value is `undefined`¹.
+
+- **Null**: Null is an assignment value. It can be assigned to a variable as a representation of no value¹²³⁴. For example:
+
+```javascript
+let x = null;
+console.log(x); // Outputs: null
+```
+
+In this case, the variable `x` is declared and defined as `null`¹.
+
+It's important to note that `undefined` and `null` are considered equal in value, but not identical in type¹²³⁴. This can be demonstrated as follows:
+
+```javascript
+console.log(null == undefined)  // true
+console.log(null === undefined) // false
+```
+
+In the first log statement, `null` is equal to `undefined`¹²³⁴. However, in the second log statement, `null` is not identical to `undefined` because they are of different types¹²³⁴.
+
+session vs local Storage ?
+
+In JavaScript, **localStorage** and **sessionStorage** are two web storage objects that allow you to store data on the client side¹²³⁴⁵. They are almost identical and have the same API³. The main difference between them lies in the lifespan and scope of the data they store¹²³⁴⁵:
+
+- **localStorage**: This stores data with no expiration date¹²³⁴⁵. The data is not deleted when the browser is closed¹²³⁴⁵. It's useful for storing data that the user will need to access later, such as offline data⁴. The data stored in localStorage is specific to a protocol in the document¹.
+
+- **sessionStorage**: This stores data only for the duration of the current session¹²³⁴⁵. The data is cleared when the page session ends, that is, when the page is closed¹²³⁴⁵. It's similar to cookies, but the data is only stored for the current session⁴.
+
+Both localStorage and sessionStorage are useful for storing small pieces of data on the client side⁵. However, the data stored in both can be easily read or changed from within the client/browser, so they should not be relied upon for storage of sensitive or security-related data within applications².
+
+
+how you empty an array in js ?
+
+There are several ways to empty an array in JavaScript:
+
+1. **Setting the length property to 0**:
+```javascript
+let arr = [1, 2, 3, 4, 5];
+arr.length = 0;
+console.log(arr); // Outputs: []
+```
+This is the fastest and most recommended way to clear an array.
+
+2. **Using the splice method**:
+```javascript
+let arr = [1, 2, 3, 4, 5];
+arr.splice(0, arr.length);
+console.log(arr); // Outputs: []
+```
+The `splice` method changes the contents of an array by removing or replacing existing elements.
+
+3. **Creating a new array**:
+```javascript
+let arr = [1, 2, 3, 4, 5];
+arr = [];
+console.log(arr); // Outputs: []
+```
+This method works by creating a new, empty array. However, it's important to note that if there are other references to the original array, they will not be updated.
+
+Remember, the method you choose depends on your specific needs and the context in which you're working.
+
+
+
+what is event bubling  in react ?
+
+Event bubbling in React refers to the process where an event triggered on a child element is also triggered on its parent elements¹. This means that if an innermost component handles an event, the event then "bubbles" outwards, allowing surrounding elements to handle it as well¹.
+
+Here's an example to illustrate this:
+
+```jsx
+function App() {
+  function outerHandle() {
+    console.log('outer')
+  }
+  function innerHandle() {
+    console.log('inner')
+  }
+  return (
+    <div onClick={outerHandle}>
+      <div onClick={innerHandle}>
+        Hello World
+      </div>
+    </div>
+  );
+}
+```
+
+In this example, when you click on "Hello World", the `onClick` events fire. The 'inner' gets printed before the 'outer', because of event bubbling¹. The innermost component in this case is the inner `<div>`, so its event gets handled first (printing 'inner' to the console). After it does so, the outer `<div>` is allowed to handle the event, printing 'outer' to the console¹.
+
+It's important to note that event bubbling is the default behavior for most events in the DOM². However, in some cases, you may want to stop this behavior to prevent unwanted effects. To stop event bubbling, you can use the `event.stopPropagation()` method³.
+
+
+what is event capturing   in react ?
+
+
+Event capturing in React is the opposite of event bubbling¹². It's a process where an event is first captured by the outermost element and then propagated to the inner elements¹².
+
+In the capturing phase, the event is first captured by the outermost element and propagated to the inner elements¹². This is contrary to event bubbling, where the event is first captured by the innermost element and then propagated to the outer elements¹².
+
+Here's an example to illustrate this:
+
+```jsx
+function App() {
+  function outerHandle() {
+    console.log('outer')
+  }
+  function innerHandle() {
+    console.log('inner')
+  }
+  return (
+    <div onClickCapture={outerHandle}>
+      <div onClickCapture={innerHandle}>
+        Hello World
+      </div>
+    </div>
+  );
+}
+```
+
+In this example, when you click on "Hello World", the `onClickCapture` events fire. The 'outer' gets printed before the 'inner', because of event capturing¹². The outermost component in this case is the outer `<div>`, so its event gets handled first (printing 'outer' to the console). After it does so, the inner `<div>` is allowed to handle the event, printing 'inner' to the console¹².
+
+To handle capturing in React, you can add `Capture` to the prop name after the event handler’s prop name³. For example, instead of `onClick`, you would use `onClickCapture`³.
+
+It's important to note that both event bubbling and capturing are part of the event propagation process in the Document Object Model (DOM)¹². By understanding both, you can have better control over how events are handled in your React applications¹².
+
+
+what is the difference between event bubling and event capturing ?
+
+Event bubbling and event capturing are two ways of event propagation in the HTML DOM API, when an event occurs in an element inside another element, and both elements have registered a handle for that event¹⁴.
+
+- **Event Bubbling**: In event bubbling, the event is first captured and handled by the innermost element and then propagated to outer elements¹⁴. This means that if an innermost component handles an event, the event then "bubbles" outwards, allowing surrounding elements to handle it as well¹⁴.
+
+- **Event Capturing (or Trickling)**: In event capturing, the event is first captured by the outermost element and propagated to the inner elements¹⁴. This is contrary to event bubbling, where the event is first captured by the innermost element and then propagated to the outer elements¹⁴.
+
+Here's an example to illustrate this:
+
+```jsx
+<div onClick={outerHandle}>
+  <div onClick={innerHandle}>
+    Click me
+  </div>
+</div>
+```
+
+In the structure above, assume that a click event occurred in the inner `div` element. 
+
+- In the **bubbling phase**, the event will be handled by the inner `div` first (click event handlers in the inner `div` will fire first), then in the outer `div`¹⁴.
+- In the **capturing phase**, the event will be handled by the outer `div` first (click event handlers in the outer `div` will fire first), then in the inner `div`¹⁴.
+
+The event propagation mode determines in which order the elements receive the event¹⁴. Both are part of the W3C Document Object Model Events standard¹. All major browsers support both¹.
+
+can yiuyou write a js code for adding new elements in a dynamic manner ?
+
+Sure, here's a simple example of how you can dynamically add new elements to the DOM using JavaScript:
+
+```javascript
+// Create a new div element
+var newDiv = document.createElement("div"); 
+
+// Create a text node
+var newContent = document.createTextNode("Hello, World!"); 
+
+// Add the text node to the newly created div
+newDiv.appendChild(newContent);  
+
+// Add the newly created element and its content into the DOM 
+var currentDiv = document.getElementById("div1"); 
+document.body.insertBefore(newDiv, currentDiv);
+```
+
+In this example, a new `div` element is created, a text node "Hello, World!" is created and added to the `div`, and then the `div` is inserted into the body of the document before an existing `div` with the id "div1". Please note that you need to replace `"div1"` with the actual id of an existing element in your HTML. If you want to append the new element at the end of the body, you can simply use `document.body.appendChild(newDiv)`.
+
+
+what is the difference betwen call and apply ?
+
+
+In JavaScript, both `call` and `apply` are methods on the function prototype that allow you to invoke a function and specify the context (`this`) in which the function should be executed¹²⁴. The difference between them lies in how they accept arguments¹²⁴:
+
+- **call()**: The `call()` method takes arguments individually¹²⁴. The first argument is the value of `this`, and the remaining arguments are the parameters to pass to the function¹²⁴. Here's the syntax¹²⁴:
+
+```javascript
+function.call(thisArg, arg1, arg2, ...)
+```
+
+- **apply()**: The `apply()` method takes arguments as an array¹²⁴. The first argument is the value of `this`, and the second argument is an array of parameters to pass to the function¹²⁴. Here's the syntax¹²⁴:
+
+```javascript
+function.apply(thisArg, [arg1, arg2, ...])
+```
+
+In summary, the difference between `call()` and `apply()` is that `call()` requires the parameters to be listed explicitly, while `apply()` takes an array of arguments¹²⁴.
+
+how do yu remove  duplicates from js array ?
+
+There are several ways to remove duplicates from an array in JavaScript:
+
+1. **Using the Set Object**: The Set object lets you store unique values of any type. When an array is passed, it removes duplicate values.
+
+```javascript
+let arr = [1, 2, 2, 3, 4, 4, 5];
+let uniqueArr = [...new Set(arr)];
+console.log(uniqueArr); // Outputs: [1, 2, 3, 4, 5]
+```
+
+2. **Using the filter Method**: The filter() method creates a new array with all elements that pass the test implemented by the provided function.
+
+```javascript
+let arr = [1, 2, 2, 3, 4, 4, 5];
+let uniqueArr = arr.filter((value, index, self) => {
+  return self.indexOf(value) === index;
+});
+console.log(uniqueArr); // Outputs: [1, 2, 3, 4, 5]
+```
+
+3. **Using the reduce Method**: The reduce() method executes a reducer function on each element of the array, resulting in a single output value.
+
+```javascript
+let arr = [1, 2, 2, 3, 4, 4, 5];
+let uniqueArr = arr.reduce((accumulator, current) => {
+  return accumulator.includes(current) ? accumulator : [...accumulator, current];
+}, []);
+console.log(uniqueArr); // Outputs: [1, 2, 3, 4, 5]
+```
+
+Each of these methods has its own advantages and use cases, so you can choose the one that best fits your needs. Remember, these methods do not modify the original array; they return a new array that doesn't include the duplicates.
+

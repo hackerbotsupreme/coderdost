@@ -1,0 +1,224 @@
+// TaskList.jsx
+import React, { useState } from "react";
+
+let initialTasks = [
+  {id:0,task:"brush"},
+  {id:1,task:"set mood"},
+  {id:2,task:"play beautiful song"}
+]
+
+export default function TaskList(){
+  let [tasks, updateTasks] = useState(initialTasks)
+  return(
+    <>
+      <p>{tasks}</p>
+    </>
+  )
+}
+now the error is - Error: Objects are not valid as a React child (found: object with keys {id, task}). If you meant to render a collection of children, use an array instead. - correct it
+
+The error you're seeing is because you're trying to render an array of objects (`tasks`) directly inside a JSX expression. React doesn't know how to display objects as they are not valid JSX children. 
+
+You need to map over your `tasks` array and return JSX for each item. Here's how you can do it:
+
+```jsx
+// TaskList.jsx
+import React, { useState } from "react";
+
+let initialTasks = [
+  {id:0,task:"brush"},
+  {id:1,task:"set mood"},
+  {id:2,task:"play beautiful song"}
+]
+
+export default function TaskList(){
+  let [tasks, updateTasks] = useState(initialTasks)
+  return(
+    <>
+      {tasks.map(task => (
+        <p key={task.id}>{task.task}</p>
+      ))}
+    </>
+  )
+}
+```
+
+In this code, `tasks.map` creates a new array with the results of calling a provided function on every element in the array. The provided function returns a `<p>` element for each item in the `tasks` array. The `key` prop is a special string attribute you need to include when creating lists of elements in React. 
+
+This should resolve the error you were facing. Let me know if you need further assistance! 😊
+
+///////////////////////////////////////////////////////////////
+
+
+
+best problems here  - 
+Try out some challenges
+first problem 
+second  problem 
+
+problem under 
+What happens if you update state after replacing it 
+
+
+problem under 
+Updating the same state multiple times before the next render 
+
+problem under 
+React batches state updates 
+
+/////////////////////////////////////////////////////////////////////////////////
+
+Setting a state variable will queue another render.But 
+sometimes you might want to perform multiple operations on the value before queueing the next render. To do this, it helps to understand how React batches state updates.
+
+React batches state updates 
+
+React waits until all code in the event handlers has run before processing your state updates.
+This is why the re-render only happens after all these setNumber() calls.
+This lets you update multiple state variables—even from multiple components—without triggering too many re-renders. 
+But this also means that the UI won’t be updated until after your event handler, and any code in it, completes. This behavior, also known as batching,
+
+React does not batch across multiple intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do.
+
+so does the batching in react means like if te state of one component is related with another components state then when we first trigger event through the first component the react lets all the code including the states on that chain updates , and this alltogether is called batching , right ?
+
+Yes, you're on the right track! Batching in React is a process that groups multiple state updates together into a single update for better performance⁴. This means that if you have multiple state updates within the same event, React will batch these updates together and perform a single re-render⁵.
+
+For example, if you have two state updates inside of the same click event, React has always batched these into one re-render⁵. This is beneficial because it prevents unnecessary re-renders and improves the performance of your React application⁴.
+
+With the release of React 18, automatic batching was introduced. This allows all state updates, even those within promises, to be batched together¹. This means that even if the state of one component is related to the state of another component, React will ensure that all state updates are batched together, leading to a single re-render².
+
+So, in essence, batching in React is a performance optimization feature that minimizes the number of re-renders by grouping multiple state updates together³⁴. This is particularly useful in larger React applications where performance is crucial⁴.
+
+and then the react renders and the ui gets updated ?
+
+Yes, exactly! After the state updates are batched and processed, React triggers a re-render of the component. During this re-render, React creates a new virtual DOM and compares it with the old one. It then updates the real DOM to match the new virtual DOM in the most efficient way possible. This process is known as reconciliation.
+
+The updated real DOM is what the user sees on the screen, so after the re-render, the UI gets updated with the new state values. This entire process ensures that the UI is always in sync with the state of the application. It's one of the reasons why React is so popular for building dynamic and responsive user interfaces. 👍
+
+
+You might expect that clicking the “+3” button will increment the counter three times because it calls setNumber(number + 1) three times. so in this example , when you click on the button first all the code inside the 
+onclick gets executed then it checks if it is connected to any other code or state updates then it re-renders and updates the ui . 
+
+
+, each render’s state values are fixed - what does this means ?
+
+Yes, in React, each render’s state values are indeed fixed. This means that within a particular render, the state values do not change, even if you call a state update function1.This concept is often referred to as “State as a Snapshot” in React1. When React renders your component, it “takes a snapshot” of the current state and props. During that render, those values (state and props) do not change, no matter what happens.
+
+For example, if you have a state variable count and a button that increments count when clicked, inside the event handler for the button click, even after setCount(count + 1) is called, the value of count remains the same for the current render1.
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+i dont get it -  This means that within a particular render, the state values do not change, even if you call a state update function1.
+
+This concept is often referred to as “State as a Snapshot” in React1. When React renders your component, it “takes a snapshot” of the current state and props. During that render, those values (state and props) do not change, no matter what happens. - if the states dont cahnge/ updates how will the components will update ?
+
+I understand the confusion. Let me clarify.
+
+When we say “state values do not change during a particular render”, it means that the state value remains constant during the execution of a single render function. However, when you call a state update function (like setState or the update function from useState), it schedules a re-render.
+
+During this re-render, the updated state value is used. So, the component does indeed update, but it happens in the next render, not during the current one.
+
+no i am saying that react took a snapshot of state and props before re-render then its starts rendering the queue and the queue have the setter function , but the state dosnot gets updated duting render  ,the state still is not updated , but the react memorizes  what it  need to do in state , render finishes , the react auto-updates the state and a new virtual dom gets created , comparson  concludes ,changes displayed .... right ? now if react memorizes the changes then it should remember how many times i applied the setter function then why when i call multiple times the state only updates only one time why ?
+
+
+no i am saying that react took a snapshot of state and props before re-render then its starts rendering the queue and the queue have the setter function , but the state dosnot gets updated duting render  ,the state still is not updated , but the react memorizes  what it  need to do in state , render finishes , the react auto-updates the state and a new virtual dom gets created , comparson  concludes ,changes displayed  so it has one cache that when i call a setter function multiple times in one event handler , it does memorizes how many calls but it cant remember the previous calls so it could not sustain result  values of previous calls  , it can only remember the value in the snapshot ,so the whole operation takes the same value again and again always the same result , for which we need to use updator function which schedules how many times   the state should render and as ecah render completes the state updates and we get the expected value this time .. which makes a conclusion that in one render the state will only get updated once apperently , to update the value multple times , we need multiple renders , and only updater function function could do that but even if it will look like the function is rendered once but behind the scenes the updator has rendered as may times as i told it to do .. right ?
+
+yeah , 
+
+but we also need to remember that When you call a state setter function, it doesn’t immediately update the state. Instead, it schedules an update to be performed later. the fact is all this happens so quickly , it seems like , we clicked and ui updated . 
+
+Absolutely, you're spot on! The process of state updating and re-rendering in React is highly optimized and happens very quickly. This is why, from a user's perspective, it seems almost instantaneous - you interact with the UI (like clicking a button), and the UI updates almost immediately. 
+
+But behind the scenes, React is efficiently managing state updates and batching them together, scheduling re-renders, and updating the DOM as needed. This entire process, while complex, is designed to provide the best possible user experience and performance. 
+
+queuing/scheduling  the batches ,memorization during the render , finishers render , applies memorization , changes/updates the state and ui and if its sees updator it update/change/memorizes the value and upadates/changes again  untill rescheduling triggers then updates the state,displays change in ui . 
+
+
+This lets you update multiple state variables—even from multiple components—without triggering too many re-renders
+/ or unfinished results / bugs etc.. . But this also means that the UI won’t be updated until after your event handler, and any code in it, completes. This behavior, also known as batching, makes your React app run much faster. 
+
+
+so untill now i am saying that on the next rerender it will update the state  and updator function  introduces a series of render after  a  the render but i am a liitle wrong .
+
+Updating the same state multiple times before the next render 
+
+It is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like setNumber(number + 1), you can pass a function that calculates the next state based on the previous one in the queue, like setNumber(n => n + 1). It is a way to tell React to “do something with the state value” instead of just replacing it.
+
+wehen we say , 
+
+setNumber(0 + 1);
+this means replace the value of current state with this result state 
+
+
+setNumber(0 + 1);//first replace ment 
+setNumber(0 + 1);
+setNumber(0 + 1);
+this means replace the value of current state with this result state 
+again and 
+again 
+but after the first replace ment when it will come to the second setter func call it will forget the previous result value of previous call so it search the similar value , which it finds from the snapshot so after the doing replace ment two times the result is same so it will look like the replacement is occuring two times . 
+
+
+so the problem is the memorization which is happening when we say replace it so if we say do something with the value means writing a function         setNumber(n => n + 1);
+then it works as we introduced a new render within the replacement but it is not a render ,and remember the state is also updating once as the result is first calculted  then the render/replacement happens so we sucessfully solved the problem also   thus we are able to change a value multiple times between re-renders . 
+
+/////////////////////////////////////////////////////
+
+so what is happening is the job of setter function is to update the state , and after the call of the setter function its does updates but when it sees that there is more same function to call then it does not goes to update immediately rather first calculates the fincal result during the render and after the last call it updates the state . 
+
+for ,
+setNumber(0 + 1);
+setNumber(0 + 1);
+setNumber(0 + 1);
+this what is happening is on first call it calculates the result and see that there is more so it does not run to update the state rather it keeps calling and calculates so 
+1. 1 and 2.1 and 3.1 so the it will replace 1 with the state . 
+
+
+and for this ,
+setNumber(n => n + 1);
+setNumber(n => n + 1);
+setNumber(n => n + 1);
+here only one thing happening is it assigning the calculated result to the variable named n and in the next call it searches for n , then calculates and updates agin and this way it will give the expected result like 
+1.1 and 2.2 2.3 so this will  replace 3 with the state .
+
+
+in this way , we create "Updating the same state multiple times before the next render " effect but in reality the state is not really updating multiple times it only updates once but when we see the code and result it looks like it rendered multiple times . 
+
+
+also this is also the reason why it looks like that even if we calling/appliiyng the seeter multiple times but it only gets applied oonly one time , but thats not the case the difference is in logic/how things working .
+
+
+so first think logically , dont get lost in the words . 
+
+
+You're absolutely correct! Your understanding of how state updates in React is spot on. 
+
+In React, state updates are asynchronous. When you call a state setter function multiple times in a row, React batches these updates and applies them all at once during the next render for performance reasons. 
+
+For the first example, `setNumber(0 + 1);` is called three times. Each call doesn't depend on the previous state, so they all set the state to `1`. React batches these updates and applies them once during the next render, so the final state is `1`.
+
+In the second example, `setNumber(n => n + 1);` is called three times. Each call depends on the previous state `n`, so each call increments the state by `1`. React batches these updates and applies them once during the next render, so the final state is `3`.
+
+This is why it seems like the state is updated multiple times, but in reality, it's updated once per render. It's crucial to understand this aspect of React to avoid potential bugs in your application. Keep up the good work! 👍
+
+
+
+Naming conventions 
+It’s common to name the updater function argument by the first letters of the corresponding state variable.
+If you prefer more verbose code, another common convention is to repeat the full state variable name, like setEnabled(enabled => !enabled)
+
+
+
+

@@ -1,0 +1,63 @@
+the magic happens when you finds out 
+
+react dev  and 
+this 
+https://react18-docs.vercel.app/learn/scaling-up-with-reducer-and-context.html 
+site baby 
+
+
+
+
+////////////////////////////////////////////////////////
+
+Usually, you will pass information from a parent component to a child component via props. 
+
+But passing props can become verbose and inconvenient when you need to pass some prop deeply through the tree, pass them through many components in the middle, or if many components in your app need the same information.
+
+
+Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props.
+
+
+To pass context:
+
+Create and export it with export const MyContext = createContext(defaultValue).
+import { createContext } from 'react';
+export const LevelContext = createContext(1);
+
+
+
+Pass it to the useContext(MyContext) Hook to read it in any child component, no matter how deep.
+import { useContext } from 'react';
+export default function Heading({ children }) {
+  const level = useContext(LevelContext);
+  // ...
+}
+
+Wrap children into <MyContext.Provider value={...}> to provide it from a parent.
+
+Context lets you write components that “adapt to their surroundings” and display themselves differently depending on where (or, in other words, in which context) they are being rendered.
+
+different React contexts don’t override each other. Each context that you make with createContext() is completely separate from other ones.
+
+
+Use cases for context 
+
+Theming: If your app lets the user change its appearance (e.g. dark mode), you can put a context provider at the top of your app, and use that context in components that need to adjust their visual look.
+
+Current account: Many components might need to know the currently logged in user. Putting it in context makes it convenient to read it anywhere in the tree. Some apps also let you operate multiple accounts at the same time (e.g. to leave a comment as a different user). In those cases, it can be convenient to wrap a part of the UI into a nested provider with a different current account value.
+
+
+Routing: Most routing solutions use context internally to hold the current route. This is how every link “knows” whether it’s active or not. If you build your own router, you might want to do it too.
+
+
+ It is common to use a reducer together with context to manage complex state and pass it down to distant components without too much hassle.
+
+
+
+Context is not limited to static values. If you pass a different value on the next render, React will update all the components reading it below! This is why context is often used in combination with state.
+
+Context lets a component provide some information to the entire tree below it.In general, if some information is needed by distant components in different parts of the tree, it’s a good indication that context will help you.
+
+
+Context lets you write components that “adapt to their surroundings”.
+

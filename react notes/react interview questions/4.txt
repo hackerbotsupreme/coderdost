@@ -1,0 +1,1747 @@
+what is function expression in js ?
+
+A function expression in JavaScript is a way to define a function within an expression. It allows us to create an anonymous function that doesn’t have any function name². This is the main difference between a function expression and a function declaration².
+
+Here's the syntax for a function expression:
+
+```javascript
+let variableName = function (param1, param2) {
+  // statements...
+  return result;
+};
+```
+
+In this syntax, `variableName` is the name of the variable that the function is being assigned to. `param1` and `param2` are the parameters of the function, and `result` is the value that the function returns².
+
+Function expressions are not hoisted, unlike function declarations. This means you can't use function expressions before you create them¹.
+
+Here's an example of a function expression:
+
+```javascript
+let square = function (x) {
+  return x * x;
+};
+```
+
+In this example, `square` is a function that takes a number `x` and returns the square of `x`¹.
+
+Function expressions can also be immediately invoked (IIFE - Immediately Invoked Function Expression), which means they run as soon as they are defined¹².
+
+```javascript
+(function () {
+  console.log("This is an IIFE!");
+})();
+```
+
+In this example, the function is defined and then immediately invoked¹.
+
+For more detailed information, you can refer to the [MDN Web Docs](^1^) or [GeeksforGeeks](^2^).
+
+
+what is arrow functions in js ?
+
+Arrow functions were introduced in ES6 and provide a more concise syntax for writing function expressions in JavaScript¹². They are always unnamed and are also known as anonymous functions⁵.
+
+Here's the basic syntax of an arrow function:
+
+```javascript
+let myFunction = (param1, param2) => {
+  // function body...
+  return result;
+};
+```
+
+In this syntax, `myFunction` is the variable that the function is assigned to. `param1` and `param2` are the parameters of the function, and `result` is the value that the function returns¹.
+
+Here's an example of an arrow function:
+
+```javascript
+let greet = name => `Hello ${name}`;
+```
+
+In this example, `greet` is a function that takes a string `name` and returns a greeting message³.
+
+Arrow functions have a few key differences from traditional function expressions:
+
+1. **Shorter syntax**: If the function has only one statement, and the statement returns a value, you can remove the brackets and the return keyword¹.
+
+2. **No binding of `this`**: In regular functions, the `this` keyword represents the object that called the function. However, in arrow functions, the `this` keyword always represents the object that defined the arrow function¹.
+
+3. **Can't be used as constructors**: Arrow functions cannot be used as constructors. Calling them with `new` throws a TypeError².
+
+4. **Don't have their own bindings**: Arrow functions don't have their own bindings to `this`, `arguments`, or `super`, and should not be used as methods².
+
+For more detailed information, you can refer to the [W3Schools](^1^) or [MDN Web Docs](^2^)..
+
+
+what is the higher order functions ?
+
+Higher-order functions in JavaScript are a special category of functions that either accept functions as an argument or return functions⁵. They are a higher level of abstraction than your typical functions¹.
+
+Here's an example of a higher-order function:
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+numbers.forEach((number) => console.log(number + 1));
+```
+
+In this example, `forEach` is a higher-order function that applies a function (in this case, an anonymous function that adds 1 to a number and logs it to the console) to each element of an array¹.
+
+Another example of a higher-order function is `filter`, which creates a new array with all elements that pass a test implemented by the provided function².
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+let oddNumbers = numbers.filter(number => number % 2 !== 0);
+
+console.log(oddNumbers); // Output: [1, 3, 5]
+```
+
+In this example, `filter` is a higher-order function that applies a function (in this case, a function that checks if a number is odd) to each element of an array and returns a new array with the elements that pass the test².
+
+Higher-order functions are a powerful feature of JavaScript, allowing for more abstract and concise code¹². For more detailed information, you can refer to the [FreeCodeCamp](^1^) or [MDN Web Docs](^2^).
+
+in how many ways cana yu pass arguments to a function ?
+
+In JavaScript, you can pass arguments to a function in several ways:
+
+1. **Positional arguments**: This is the most common way to pass arguments to a function. Each argument corresponds to a specific parameter in the function definition¹.
+
+```javascript
+function myFunction(param1, param2) {
+  // function body...
+}
+myFunction(arg1, arg2);
+```
+
+2. **Default parameters**: If a function is called with missing arguments (less than declared), the missing values are set to `undefined`. Sometimes it is better to assign a default value to the parameter¹.
+
+```javascript
+function myFunction(x, y = 10) {
+  return x + y;
+}
+myFunction(5); // y is not passed or undefined, then y = 10.
+```
+
+3. **Rest parameters**: The rest parameter (`...`) allows a function to treat an indefinite number of arguments as an array¹.
+
+```javascript
+function sum(...args) {
+  let sum = 0;
+  for (let arg of args) sum += arg;
+  return sum;
+}
+let x = sum(4, 9, 16, 25, 29, 100, 66, 77);
+```
+
+4. **The `arguments` object**: JavaScript functions have a built-in object called the `arguments` object. The `arguments` object contains an array of the arguments used when the function was called (invoked)¹.
+
+```javascript
+function findMax() {
+  let max = -Infinity;
+  for (let i = 0; i < arguments.length; i++) {
+    if (arguments[i] > max) {
+      max = arguments[i];
+    }
+  }
+  return max;
+}
+let x = findMax(1, 123, 500, 115, 44, 88);
+```
+
+5. **Passing a function as an argument**: In JavaScript, you can pass a function as an argument to another function⁴.
+
+```javascript
+function myFunction(callback) {
+  callback();
+}
+myFunction(function() { console.log('Hello World!'); });
+```
+
+6. **Using `.apply()` or `.call()`**: These methods allow you to invoke a function with an array of arguments or a list of arguments respectively².
+
+```javascript
+function myFunction(x, y, z) {
+  console.log(x + y + z);
+}
+let args = [1, 2, 3];
+myFunction.apply(null, args);
+```
+
+7. **Using the spread operator (`...`)**: The spread operator allows an expression to be expanded in places where multiple arguments (for function calls) are expected².
+
+```javascript
+function myFunction(x, y, z) {
+  console.log(x + y + z);
+}
+let args = [1, 2, 3];
+myFunction(...args);
+```
+
+Remember, arguments are always passed by value and never passed by reference. This means that if a function reassigns a parameter, the value won't change outside the function³. However, object arguments are passed by sharing, which means if the object's properties are mutated, the change will impact the outside of the function³.
+
+
+what is the diff between arguments and parameters ?
+
+In JavaScript, the terms "parameters" and "arguments" are often used interchangeably, but they do have different meanings¹²³:
+
+- **Parameters** are the variables that are part of the function's definition¹²³. They act as placeholders for the values that will be passed to the function¹². For example, in the function definition `function add(x, y) { return x + y; }`, `x` and `y` are parameters¹.
+
+- **Arguments** are the actual values that are passed into the function when it is invoked¹²³. These values are assigned to the parameters when the function is called¹. For example, in the function call `add(2, 3)`, `2` and `3` are arguments¹.
+
+Here's a simple analogy: if a function were a recipe, the parameters would be the list of ingredients, and the arguments would be the actual ingredients you use when you make the recipe¹.
+
+For more detailed information, you can refer to the [FreeCodeCamp](^1^) or [StackOverflow](^2^) or [StackOverflow](^3^).
+
+
+what is the use of event handling in js ?
+
+Event handling in JavaScript is a powerful feature that allows JavaScript to interact with HTML and react to user actions or browser events¹²³⁴⁵. Here are some uses of event handling:
+
+1. **Reacting to User Actions**: Event handlers can be used to respond to user actions like clicks, mouse movements, keyboard input, form submissions, and more¹²³⁴⁵.
+
+2. **Manipulating HTML Elements**: Event handlers can change the content of HTML elements, modify their attributes, or even create new elements¹²³⁴⁵.
+
+3. **Validating User Input**: Event handlers can be used to validate user input in forms before it's submitted¹²³⁴⁵.
+
+4. **Handling Browser Events**: Event handlers can react to browser events like page load, page unload, window resize, and more¹²³⁴⁵.
+
+5. **Creating Interactive Web Pages**: By responding to user actions and browser events, event handlers can make web pages more interactive and dynamic¹²³⁴⁵.
+
+Here's an example of an event handler that changes the content of an HTML element when a button is clicked:
+
+```javascript
+<button onclick="document.getElementById('demo').innerHTML = Date()">
+  The time is?
+</button>
+```
+
+In this example, the `onclick` attribute is an event handler that executes JavaScript code when the button is clicked¹.
+
+For more detailed information, you can refer to the [W3Schools](^1^), [JavaTpoint](^2^), [Tools QA](^3^), [Online Tutorials Library](^4^), or [Tutorialspoint](^5^).
+
+
+what are the first class functions in js ?
+
+First-class functions in JavaScript are functions that are treated like any other variable¹²³⁴⁵. This means that first-class functions can be:
+
+- **Assigned to variables**: You can assign a function to a variable and then use that variable to invoke the function¹²³⁴⁵.
+
+```javascript
+let greet = function() {
+  console.log('Hello, world!');
+};
+greet();
+```
+
+- **Passed as arguments to other functions**: Functions can be passed as arguments to other functions, just like any other value¹²³⁴⁵.
+
+```javascript
+function sayHello() {
+  return 'Hello, world!';
+}
+
+function greet(fnMessage) {
+  console.log(fnMessage());
+}
+
+greet(sayHello);
+```
+
+- **Returned by another function**: Functions can also be returned by other functions¹²³⁴⁵.
+
+```javascript
+function greet(name) {
+  return function() {
+    console.log('Hello, ' + name);
+  };
+}
+
+let sayHello = greet('world');
+sayHello();
+```
+
+- **Stored in data structures**: Functions can be stored in other data structures like objects and arrays¹²³⁴⁵.
+
+```javascript
+let funcs = [function() { console.log('Hello'); }, function() { console.log('world'); }];
+funcs[0]();
+funcs[1]();
+```
+
+The concept of first-class functions is central to functional programming paradigms and is one of the features that make JavaScript a highly expressive and flexible language¹²³⁴⁵.
+
+
+what are pure and impure functions ?
+
+In JavaScript, functions are classified as pure or impure based on their behavior¹²³⁴⁵:
+
+- **Pure Functions**: A pure function is a function that always produces the same output for the same input and does not have any side effects¹²³⁴⁵. In other words, it only depends on its input parameters and does not modify any external state¹²³⁴⁵. Here's an example of a pure function:
+
+```javascript
+function add(a, b) {
+  return a + b;
+}
+```
+
+In this example, the `add` function takes two parameters `a` and `b` and returns their sum. This function is considered pure because it does not modify any variables outside its scope and always returns the same result for the same inputs².
+
+- **Impure Functions**: Impure functions are functions that can modify the state of the application or have side effects¹²³⁴⁵. In other words, impure functions can have unpredictable behavior and do affect other parts of the application¹²³⁴⁵. Here's an example of an impure function:
+
+```javascript
+let result = 0;
+function addToResult(value) {
+  result += value;
+  return result;
+}
+```
+
+In this example, the `addToResult` function takes a value, adds it to the `result` variable, and returns the updated `result`. The function depends on and modifies the external `result` variable².
+
+Pure functions have several advantages over impure functions. They are easier to test, debug, and maintain because they have predictable behavior and do not modify any state or have side effects¹²³⁴⁵. However, pure functions can be more difficult to write when the problem requires state changes or side effects¹²³⁴⁵.
+
+what is function  currying ?
+
+Function currying in JavaScript is an advanced technique that transforms a function with multiple arguments into a sequence of functions, each with a single argument¹²³⁴. This means a function that would be called as `f(a, b, c)` would instead be called as `f(a)(b)(c)`¹²³⁴.
+
+Here's an example of a curried function:
+
+```javascript
+function curry(f) {
+  return function(a) {
+    return function(b) {
+      return f(a, b);
+    };
+  };
+}
+
+function sum(a, b) {
+  return a + b;
+}
+
+let curriedSum = curry(sum);
+
+console.log(curriedSum(1)(2)); // Output: 3
+```
+
+In this example, the `curry` function takes a function `f` as an argument and returns a function that takes one argument `a`. This function, in turn, returns another function that takes one argument `b`. The innermost function calls the original function `f` with `a` and `b` as arguments¹.
+
+Currying is useful for several reasons¹²³⁴:
+
+- It allows you to create higher-order functions.
+- It can make your code more readable and modular.
+- It can help avoid passing the same variable multiple times.
+- It allows you to generate partially applied functions, which are functions that have some of their arguments fixed.
+
+For more detailed information, you can refer to the [Modern JavaScript Tutorial](^1^), [GeeksforGeeks](^2^), [Online Tutorials Library](^3^), or [Built In](^4^).
+
+
+what are call , bind and apply methods ?
+
+In JavaScript, `call`, `bind`, and `apply` are methods that allow you to set the `this` context and call a function¹²³⁴.
+
+- **call()**: The `call()` method calls a function with a given `this` value and arguments provided individually¹²³⁴. Here is the syntax:
+
+```javascript
+func.call(thisArg, arg1, arg2, ...);
+```
+
+- **apply()**: The `apply()` method calls a function with a given `this` value and arguments provided as an array (or an array-like object)¹²³⁴. Here is the syntax:
+
+```javascript
+func.apply(thisArg, [arg1, arg2, ...]);
+```
+
+- **bind()**: The `bind()` method creates a new function that, when called, has its `this` keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called¹²³⁴. Here is the syntax:
+
+```javascript
+let boundFunc = func.bind(thisArg, arg1, arg2, ...);
+```
+
+The main difference between `call`/`apply` and `bind` is that `call` and `apply` invoke the function immediately, whereas `bind` returns a new function that can be invoked later¹²³⁴.
+
+For more detailed information, you can refer to the [GeeksforGeeks](^1^), [W3docs](^2^), [C# Corner](^3^), or [Stack Overflow](^4^)..
+
+what is template literals ?
+
+Template literals in JavaScript are a way to concatenate strings while allowing embedded expressions and improving readability³. They are string literals that allow for multi-line strings, string interpolation with embedded expressions, and special constructs called tagged templates²⁴. Template literals are enclosed by backtick (`) characters instead of double or single quotes².
+
+Here's the basic syntax of a template literal:
+
+```javascript
+`string text ${expression} string text`
+```
+
+In this syntax, `string text` is the string text that will become part of the template literal, and `expression` is an expression to be inserted in the current position².
+
+Here are some features of template literals:
+
+- **Multi-line strings**: Template literals allow for multi-line strings².
+
+```javascript
+console.log(`string text line 1
+string text line 2`);
+```
+
+- **String interpolation**: Template literals provide an easy way to interpolate variables and expressions into strings¹.
+
+```javascript
+let firstName = "John";
+let lastName = "Doe";
+let text = `Welcome ${firstName}, ${lastName}!`;
+```
+
+- **Expression substitution**: Template literals allow expressions in strings¹.
+
+```javascript
+let price = 10;
+let VAT = 0.25;
+let total = `Total: ${(price * (1 + VAT)).toFixed(2)}`;
+```
+
+- **HTML templates**: Template literals can be used to create HTML templates¹.
+
+```javascript
+let header = "Templates Literals";
+let tags = ["template literals", "javascript", "es6"];
+let html = `<h2>${header}</h2><ul>`;
+for (const x of tags) {
+  html += `<li>${x}</li>`;
+}
+html += `</ul>`;
+```
+
+
+what is string interpolation ?
+
+
+String interpolation in JavaScript is a process in which an expression is inserted or placed in the string³. It's a feature that allows injecting variables, function calls, arithmetic expressions directly into a string¹. This is done by using template literals, which are strings wrapped in backticks (` `), and `${expression}` as placeholders¹⁴.
+
+Here's an example of string interpolation:
+
+```javascript
+let name = "John";
+console.log(`Hello, ${name}!`);  // Output: Hello, John!
+```
+
+In this example, `${name}` is a placeholder for the `name` variable. The value of `name` is inserted into the string where the placeholder is located¹.
+
+String interpolation is a great feature of ES6, that can make multi-line strings without the need for an escape character¹. It makes code more readable and avoids clumsiness¹.
+
+For more detailed information, you can refer to the [GeeksforGeeks](^1^), [MDN Web Docs](^2^), [Online Tutorials Library](^3^), [Dmitri Pavlutin Blog](^4^), or [Career Karma](^5^).
+
+
+what is the difference between the single/double quotes and backtick in js ? when to use them ?
+
+In JavaScript, single quotes (`'`), double quotes (`"`), and backticks (` `) are used to create string literals¹²³⁴:
+
+- **Single Quotes (`'`) and Double Quotes (`"`)**: These are used to create string literals and they act in exactly the same way¹. The only noticeable difference between single quotes and double quotes comes into play when we have to escape characters¹. If you use single quotes to create a string, you cannot use single quotes within that string without escaping them using a backslash (`\\`)¹. The same theory applies to double quotes¹. However, you can use single quotes inside double quotes or double quotes inside single quotes without escaping¹.
+
+- **Backticks (` `)**: Backticks are an ES6 feature that allows you to create strings in JavaScript¹. Although backticks are mostly used for HTML or code embedding purposes, they also act similar to single and double quotes¹. Besides, using backticks makes it easier for string operations¹. They allow for easy string concatenation, you don't need to escape single or double quotes, and you can write multiline without using the new line character¹. They also allow for string interpolation, which is the inclusion of expressions within the string that will be evaluated and converted to a string¹.
+
+When to use them:
+
+- **Single or Double Quotes**: Use these when you're dealing with simple strings¹. Some developers prefer to use double quotes to create strings in JavaScript as it makes strings more readable since we don't use backslashes¹.
+- **Backticks**: Use these when you want to include variables or expressions within your strings (string interpolation), when you want to create multi-line strings, or when you're dealing with complex strings that might include quotes¹.
+
+For more detailed information, you can refer to the [Bits and Pieces](^1^), [Stack Overflow](^2^), [Stack Overflow](^3^), or [W3docs](^4^).
+
+
+in how many  ways can yu concatinate strings ?
+
+In JavaScript, you can concatenate strings in several ways:
+
+1. **Using the `+` operator**: The `+` operator can be used to concatenate two strings¹²³⁴⁵. You can also use `+=`, where `a += b` is a shorthand for `a = a + b`¹²³⁴⁵.
+
+```javascript
+let str = 'Hello' + ' ' + 'World'; // 'Hello World'
+```
+
+2. **Using the `concat()` method**: The `concat()` method joins or merges two or more strings¹²³⁴⁵. It doesn't modify the string in place, instead, it creates and returns a new string containing the text of the joined strings¹²³⁴⁵.
+
+```javascript
+const str1 = 'Hello';
+const str2 = str1.concat(' ', 'World'); // 'Hello World'
+```
+
+3. **Using the `Array.join()` method**: The `Array.join()` method creates a new string by concatenating all elements in an array¹²³⁴⁵. The first parameter to `join()` is called the separator¹²³⁴⁵.
+
+```javascript
+['Hello', ' ', 'World'].join(''); // 'Hello World'
+```
+
+4. **Using Template Literals**: Template literals provide a modern way to work with strings in JavaScript¹²³⁴⁵. They are primarily string literals with embedded expressions¹²³⁴⁵.
+
+```javascript
+const name = 'John';
+const str = `Hello, ${name}!`; // 'Hello, John!'
+```
+
+For more detailed information, you can refer to the [Mastering JS](^1^), [Atta-Ur-Rehman Shah](^2^), [Ask JavaScript](^3^), [Scaler Topics](^4^), or [MSR](^5^).
+
+
+explain  what is hoisting in js ?
+
+Hoisting in JavaScript is a behavior where declarations of variables, functions, and classes are moved to the top of their scope before code execution¹²³⁴. This allows us to use functions, variables, and classes before they are declared¹²³⁴.
+
+Here's an example to illustrate hoisting:
+
+```javascript
+console.log(myVar); // Output: undefined
+var myVar = 5;
+```
+
+In this example, even though `myVar` is declared after the `console.log` statement, JavaScript doesn't throw an error. Instead, it prints `undefined`. This is because the declaration (`var myVar`) is hoisted to the top of the scope¹.
+
+However, it's important to note that only the declarations are hoisted, not the initializations¹²³⁴. If you try to print a variable before it's initialized, it will print `undefined`¹²³⁴.
+
+Variables defined with `let` and `const` are also hoisted to the top of the block, but they are not initialized¹. This means that the block of code is aware of the variable, but it cannot be used until it has been declared¹. Using a `let` or `const` variable before it is declared will result in a `ReferenceError`¹.
+
+For more detailed information, you can refer to the [W3Schools](^1^), [GeeksforGeeks](^2^), [Stack Abuse](^3^), or [Udacity](^4^).
+
+
+why do we use debugger in js ? what do they actually reveals ?
+
+The debugger in JavaScript is a powerful tool used for testing and debugging code¹²³. Here's what it can do:
+
+- **Identify Errors**: Debugging is the process of finding and fixing errors in your code¹. The debugger can help identify both syntax errors and logical errors¹.
+
+- **Control Execution**: With a debugger, you can set breakpoints, which are places where code execution can be stopped¹. This allows you to step through your code one line at a time and see what happens¹.
+
+- **Inspect Variables**: While the code is stopped at a breakpoint, you can examine the current values of variables¹. This can help you understand how your code is working (or why it's not working)¹.
+
+- **Call Debugging Function**: When the debugger keyword is turned on, it stops the execution of JavaScript code, and if a debugging function is available, it calls the debugging function².
+
+- **Force Error Reporting**: Built-in debuggers can be turned on and off, forcing errors to be reported to the user¹.
+
+Remember, debugging is not easy, but it's a crucial part of programming¹. It helps you understand what your code is doing and why it's doing it, making it an invaluable tool for learning and problem-solving¹.
+
+
+explain implicit type of coercien in js ?
+
+Implicit type coercion in JavaScript refers to the automatic or implicit conversion of values from one data type to another¹. This usually occurs during operations that involve different data types, such as arithmetic or comparison³. Here are some examples of implicit type coercion:
+
+1. **Number to String Conversion**: When any string or non-string value is added to a string, JavaScript converts the non-string value to a string implicitly¹.
+
+```javascript
+var x = 10 + '20'; // '1020'
+var y = '20' + 10; // '2010'
+var z = true + '10'; // 'true10'
+```
+
+2. **String to Number Conversion**: When an operation like subtraction (-), multiplication (*), division (/), or modulus (%) is performed, all the values that are not numbers are converted into the number data type¹.
+
+```javascript
+var w = 10 - '5'; // 5
+var x = 10 * '5'; // 50
+var y = 10 / '5'; // 2
+var z = 10 % '5'; // 0
+```
+
+3. **Boolean to Number Conversion**: When a Boolean is added to a Number, the Boolean value is converted to a number. A Boolean value can be represented as 0 for `false` or 1 for `true`¹.
+
+```javascript
+var x = true + 2; // 3
+var y = false + 2; // 2
+```
+
+4. **The Equality Operator**: The equality operator (`==`) can be used to compare values irrespective of their type. This is done by coercing a non-number data type to a number¹.
+
+```javascript
+var x = (10 == '10'); // true
+var y = (true == 1); // true
+var z = (true == 'true'); // false
+```
+
+While implicit type coercion can be convenient, it can also lead to unexpected results if you're not aware of it⁴. Therefore, it's often recommended to use explicit type coercion (i.e., manually converting values from one type to another) to avoid confusion⁴.
+
+what is nan and when nan error comes ?
+
+In JavaScript, `NaN` stands for "Not a Number". It represents a value that is not a valid number³⁴. `NaN` is a property of the global object². In other words, it is a variable in global scope². 
+
+`NaN` is returned by JavaScript from certain functions and operations when the result should be a number, but the result is not defined or not representable as a number⁴. Here are some operations that return `NaN`²:
+
+- Failed number conversion, such as `parseInt("blabla")`, `Number(undefined)`, or implicit ones like `Math.abs(undefined)`.
+- Math operation where the result is not a real number, such as `Math.sqrt(-1)`.
+- Indeterminate form, such as `0 * Infinity`, `1 ** Infinity`, `Infinity / Infinity`, `Infinity - Infinity`.
+- A method or expression whose operand is or gets coerced to `NaN`, such as `7 ** NaN`, `7 * "blabla"`. This means `NaN` is contagious.
+- Other cases where an invalid value is to be represented as a number, such as an invalid Date `new Date("blabla").getTime()`, `"".charCodeAt(1)`.
+
+It's important to note that `NaN` is not equal to anything, including itself. That means, `NaN === NaN` will return `false`². To check if a value is `NaN`, you can use `Number.isNaN()` or `isNaN()`².
+
+For more detailed information, you can refer to the [W3Schools](^1^), [MDN Web Docs](^2^), [GeeksforGeeks](^3^), or [Mastering JS](^4^).
+
+
+what is immediately invoked function in js ?
+
+An Immediately Invoked Function Expression (IIFE, pronounced "iffy") is a JavaScript function that runs as soon as it is defined²⁵. It is a design pattern which is also known as a Self-Executing Anonymous Function¹².
+
+Here is the syntax for an IIFE:
+
+```javascript
+(function() {
+  // Function logic here.
+})();
+```
+
+The first part of the IIFE contains a function expression, and the final part invokes it immediately². This type of function is called immediately invoked as these functions are executed as soon as they are mounted to the stack².
+
+IIFEs are primarily used to create a new scope, avoiding variable hoisting from within blocks⁵. They allow public access to methods while retaining privacy for variables defined within the function⁵. This pattern is used to avoid polluting the global scope and to create a fresh environment for each run⁴.
+
+For more detailed information, you can refer to the [MDN Web Docs](^1^), [GeeksforGeeks](^2^), [Wikipedia](^3^), [Stack Abuse](^4^), or [JavaTpoint](^5^).
+
+
+currying in js?
+
+Currying in JavaScript is an advanced technique that transforms a function with multiple arguments into a sequence of functions, each with a single argument¹². This means a function that would be called as `f(a, b, c)` would instead be called as `f(a)(b)(c)`¹².
+
+Here's an example of a curried function:
+
+```javascript
+function curry(f) {
+  return function(a) {
+    return function(b) {
+      return f(a, b);
+    };
+  };
+}
+
+function sum(a, b) {
+  return a + b;
+}
+
+let curriedSum = curry(sum);
+
+console.log(curriedSum(1)(2)); // Output: 3
+```
+
+In this example, the `curry` function takes a function `f` as an argument and returns a function that takes one argument `a`. This function, in turn, returns another function that takes one argument `b`. The innermost function calls the original function `f` with `a` and `b` as arguments¹.
+
+Currying is useful for several reasons¹²:
+
+- It allows you to create higher-order functions.
+- It can make your code more readable and modular.
+- It can help avoid passing the same variable multiple times.
+- It allows you to generate partially applied functions, which are functions that have some of their arguments fixed.
+
+For more detailed information, you can refer to the [Modern JavaScript Tutorial](^1^), [JavaTpoint](^2^), [DigitalOcean](^3^), or [Built In](^4^).
+
+
+what are the advantages of using external js ?
+
+Using external JavaScript files has several advantages¹²³:
+
+1. **Code Reusability**: The same JavaScript code can be used in many different web pages¹².
+2. **Readability and Maintainability**: It separates HTML and JavaScript code, making both more readable and easier to maintain¹²³.
+3. **Performance**: Web browsers cache external JavaScript files, which can speed up page loads¹²³.
+4. **Parallel Work**: It enables both web designers and coders to work with HTML and JavaScript files parallelly and separately, i.e., without facing any code conflictions².
+5. **Reduced Code Length**: Only the location of the JavaScript file needs to be specified, reducing the length of the code².
+
+However, there are also some disadvantages to consider¹²:
+
+1. **Code Accessibility**: Coders can easily download your code using the URL of the script (.js) file¹.
+2. **Additional HTTP Request**: The web browser needs to make an additional HTTP request to get the JavaScript code¹².
+3. **Dependency Issues**: If two JavaScript files are dependent on one another, then a failure in one file may affect the execution of the other dependent file².
+4. **Change Impact**: A tiny to a large change in the JavaScript code may cause unexpected results in all its dependent files².
+5. **Check Dependency**: We need to check each file that depends on the commonly created external JavaScript file².
+6. **Small Code Preference**: If it is a few lines of code, then it's better to implement the internal JavaScript code².
+
+
+list of types of errors?
+
+There are several types of programming errors¹²³⁴⁵:
+
+1. **Syntax Errors**: These occur when code violates the rules of the programming language, such as missing semicolons, brackets, or wrong indentation of the code¹²³⁴⁵.
+
+2. **Logic Errors**: These occur when incorrect logic is implemented in the code and the code produces unexpected output¹²³⁴⁵.
+
+3. **Compilation Errors**: These occur when the compiler doesn't know how to turn your code into the lower-level code¹²³⁴⁵.
+
+4. **Runtime Errors**: These are caused by unexpected conditions encountered while executing the code that prevents the code from compiling¹²³⁴⁵.
+
+5. **Arithmetic Errors**: These occur when a mathematical operation is performed that is not allowed, such as division by zero¹²³⁴⁵.
+
+6. **Resource Errors**: These occur when a resource (like memory, file, etc.) that the program needs to execute is not available⁴.
+
+7. **Interface Errors**: These occur when there is a mismatch in the interaction between different parts of the program⁴.
+
+8. **Semantic Errors**: These occur when the syntax of the code is correct, but the code does not do what the programmer intended⁵.
+
+9. **Linker Errors**: These occur when the linker is unable to link together all of the object files that make up a program¹.
+
+10. **TypeError**: These occur when an operation could not be performed, typically (but not exclusively) when a value is not of the expected type¹.
+
+11. **ReferenceError**: These occur when you try to use a variable that has not been declared¹.
+
+For more detailed information, you can refer to the [Common Programming Errors](^1^), [GeeksforGeeks](^2^), [TextExpander](^3^), [CodingHero](^4^), or [OSlash](^5^).
+
+
+what is memoizzation?
+
+Memoization is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls to pure functions and returning the cached result when the same inputs occur again³. This technique gets its name from the Latin word, “memorandum”, which means to be remembered⁵.
+
+Memoization improves the speed of a program by storing any new inputs for future reference, if needed⁵. This cuts down on any repeated computations in the program where the same inputs are being used to return the same result⁵.
+
+For example, let's consider a recursive function to find the N-th term of a Fibonacci series. Without memoization, the same subproblem repeats again and again, leading to a lot of repeated work². However, by memoizing the return value of fib (x) at index x of an array, we can reduce the number of recursive calls at the next step when fib (x) has already been called². So without doing further recursive calls to compute the value of fib (x), we return the memoized result when fib (x) has already been computed previously to avoid a lot of repeated work².
+
+For more detailed information, you can refer to the [GeeksforGeeks](^1^), [GeeksforGeeks](^2^), [Wikipedia](^3^), [How-To Geek](^4^), or [Codecademy](^5^).
+
+
+what is constructor and what is the use of them ?
+
+In object-oriented programming, a constructor is a special type of function that is used to initialize a newly created object¹²³. It prepares the new object for use, often accepting arguments that the constructor uses to set required member variables¹²³.
+
+Here are some key points about constructors:
+
+- Constructors have the same name as the class or structure².
+- They are automatically invoked when an object of the class is created².
+- They do not return a value, hence they do not have a return type².
+- They can be overloaded, which means there can be more than one constructor for a class, with differing parameters¹.
+- They are mostly declared in the public section of the class, though they can be declared in the private section of the class².
+
+The main uses of constructors are:
+
+- **Initialization**: Constructors allow you to control the initialization of objects¹²³. They ensure that the object is in a valid state when it is created¹.
+- **Code Reusability**: Constructors allow you to avoid duplicating code that is common to all objects of a class¹²³.
+- **Encapsulation**: By using constructors, you can hide the details of object initialization from the code that uses the object¹²³.
+
+For more detailed information, you can refer to the [Wikipedia](^1^), [GeeksforGeeks](^2^), or [CodeDocs](^3^).
+
+how many ways can you make an object ?
+
+There are several ways to create objects in JavaScript¹²³⁴:
+
+1. **Object Literal**: This is the simplest way to create an object. You define the property and values inside curly braces¹².
+
+```javascript
+let car = {
+  name: 'GT',
+  maker: 'BMW',
+  engine: '1998cc'
+};
+```
+
+2. **Constructor Function**: This method allows you to create multiple objects of the same type¹².
+
+```javascript
+function Vehicle(name, maker, engine) {
+  this.name = name;
+  this.maker = maker;
+  this.engine = engine;
+}
+let car = new Vehicle('GT', 'BMW', '1998cc');
+```
+
+3. **Object.create() Method**: This method creates a new object, using an existing object as the prototype of the newly created object¹².
+
+```javascript
+const vehicle = {
+  name: 'GT',
+  maker: 'BMW',
+  engine: '1998cc'
+};
+let car = Object.create(vehicle);
+```
+
+4. **Classes**: ES6 introduced classes, which is a template for creating objects. It provides a much simpler and clearer syntax to create objects and deal with inheritance⁴.
+
+```javascript
+class Vehicle {
+  constructor(name, maker, engine) {
+    this.name = name;
+    this.maker = maker;
+    this.engine = engine;
+  }
+}
+let car = new Vehicle('GT', 'BMW', '1998cc');
+```
+
+5. **Factory Functions**: These are functions that return an object and can be used as an alternative to classes for creating objects⁴.
+
+```javascript
+function createVehicle(name, maker, engine) {
+  return {
+    name: name,
+    maker: maker,
+    engine: engine
+  };
+}
+let car = createVehicle('GT', 'BMW', '1998cc');
+```
+
+Each of these methods has its own use cases and advantages, and the choice of method often depends on the specific requirements of your code¹²³⁴..
+
+
+what is the use of promises ?
+
+Promises in JavaScript are used to handle asynchronous operations¹²³⁴⁵. They represent processes that are already happening, which can be chained with callback functions⁴. Here are some key uses of Promises:
+
+- **Code Management**: Promises are easy to manage when dealing with multiple asynchronous operations where callbacks can create callback hell leading to unmanageable code².
+- **Asynchronous Operations**: Promises are used to handle situations where you must wait for the outcome of an operation. For example, uploading files to the server and awaiting the response of an API call³.
+- **Error Handling**: Promises provide a solid pattern for handling asynchronous error handling¹²³⁴⁵.
+- **Chaining**: Promises allow you to chain asynchronous operations together — that is, you can start another operation to be executed when the previous operation is finished¹²³⁴⁵.
+
+For more detailed information, you can refer to the [W3Schools](^1^), [GeeksforGeeks](^2^), [freeCodeCamp](^3^), [MDN Web Docs](^4^), or [The Modern JavaScript Tutorial](^5^).
+
+
+classes in js ?
+
+In JavaScript, classes are a blueprint or template for creating objects³. They encapsulate data with code to work on that data¹. Classes in JavaScript are built on prototypes but also have some syntax and semantics that are unique to classes¹.
+
+Here's how you can define classes in two ways: a class expression or a class declaration¹:
+
+- **Declaration**:
+
+```javascript
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+```
+
+- **Expression**:
+
+```javascript
+// The class is anonymous but assigned to a variable
+const Rectangle = class {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+
+// The class has its own name
+const Rectangle = class Rectangle2 {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+```
+
+The body of a class is the part that is in curly braces `{}`¹. This is where you define class members, such as methods or constructor¹. The constructor method is a special method for creating and initializing an object created with a class¹. There can only be one special method with the name "constructor" in a class¹.
+
+You can create instance properties inside the constructor¹:
+
+```javascript
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+```
+
+For more detailed information, you can refer to the [MDN Web Docs](^1^), [W3Schools](^2^), [GeeksforGeeks](^3^), [Programiz](^4^), or [MDN Web Docs](^5^).
+
+
+what is generator function? what is the use of them / when to use them ?
+
+In JavaScript, generator functions are special functions that can generate a sequence of values³. They are defined like normal functions, but whenever they need to generate a value, they do so with the `yield` keyword rather than `return`². The `yield` statement suspends the function’s execution and sends a value back to the caller, but retains enough state to enable the function to resume where it left off². When resumed, the function continues execution immediately after the last yield run².
+
+Here's an example of a generator function:
+
+```javascript
+function* gen() {
+  yield 1;
+  yield 2;
+}
+```
+
+In this example, `gen` is a generator function that yields the values 1 and 2².
+
+Generator functions return a generator object³. Generator objects are used either by calling the `next` method on the generator object or using the generator object in a `for...of` loop². The Generator object is returned by a generating function and it conforms to both the iterable protocol and the iterator protocol².
+
+Here's how you can use the `next` method with a generator object:
+
+```javascript
+let g = gen();
+console.log(g.next().value); // 1
+console.log(g.next().value); // 2
+```
+
+In this example, each call to `g.next()` returns the next value yielded by the generator function².
+
+The main uses of generator functions are:
+
+- **Handling Asynchronous Operations**: Generator functions can be used to handle asynchronous operations in a way that allows you to write asynchronous code that looks synchronous⁵.
+- **Iteration**: Generator functions provide a powerful alternative to iterators, allowing you to define an iterative algorithm by writing a single function whose execution is not continuous⁵.
+- **Control Flow Management**: Generator functions can be used to manage control flow in complex applications, allowing you to pause and resume execution as needed⁵.
+
+For more detailed information, you can refer to the [MDN Web Docs](^1^), [GeeksforGeeks](^2^), [Scaler](^3^), [Online Tutorials Library](^4^), or [Codeburst](^5^).
+
+
+what is weakset in js ?
+
+The JavaScript `WeakSet` object is a type of collection that allows you to store weakly held objects³. Unlike `Set`, `WeakSet` are collections of objects only³. It doesn't contain arbitrary values³.
+
+Here are some key characteristics of `WeakSet`:
+
+- A `WeakSet` is a collection of garbage-collectable values, including objects and non-registered symbols¹.
+- A value in the `WeakSet` may only occur once. It is unique in the `WeakSet`'s collection¹.
+- The `WeakSet` is weak, meaning references to objects in a `WeakSet` are held weakly¹. If no other references to a value stored in the `WeakSet` exist, those values can be garbage collected¹.
+- `WeakSet`s are not enumerable¹.
+
+Here's an example of how to use a `WeakSet`:
+
+```javascript
+let weakSetObject = new WeakSet();
+let objectOne = {};
+let objectTwo = {};
+
+weakSetObject.add(objectOne);
+console.log("objectOne added");
+
+weakSetObject.add(objectTwo);
+console.log("objectTwo added");
+
+console.log("WeakSet has objectTwo : " + weakSetObject.has(objectTwo));
+
+weakSetObject.delete(objectTwo);
+console.log("objectTwo deleted");
+
+console.log("WeakSet has objectTwo : " + weakSetObject.has(objectTwo));
+```
+
+In this example, `objectOne` and `objectTwo` are added to the `WeakSet`. Then `objectTwo` is removed from the `WeakSet`².
+
+For more detailed information, you can refer to the [MDN Web Docs](^1^), [GeeksforGeeks](^2^), or [JavaTpoint](^3^).
+
+
+what is temporal dead zone ?
+
+The Temporal Dead Zone (TDZ) in JavaScript is a term used to describe the state where variables are unreachable¹. They are in scope, but they aren't declared¹. The `let` and `const` variables exist in the TDZ from the start of their enclosing scope until they are declared¹.
+
+Here's an example:
+
+```javascript
+{
+  // This is the temporal dead zone for the age variable!
+  let age = 25; // Whew, we got there! No more TDZ
+  console.log(age);
+}
+```
+
+In this example, if you accessed the `age` variable earlier than its declaration, it would throw a `ReferenceError`¹. This is because it's in the TDZ¹.
+
+The TDZ starts at the beginning of the block's local scope and ends when the computer fully initializes your variable with a value². If you attempt to access a variable before its complete initialization, JavaScript will throw a `ReferenceError`². So, to prevent JavaScript from throwing such an error, you’ve got to remember to access your variables from outside the temporal dead zone².
+
+For more detailed information, you can refer to the [freeCodeCamp.org](^1^) or [freeCodeCamp.org](^2^).
+
+
+what is lexixal scoping ? what has to be done in order to put lexical scoping into praactice ?
+
+**Lexical scoping**, also known as static scoping, is a fundamental concept in programming that determines the accessibility of variables and functions within a program⁵¹. It is the scope of a variable or function based on where it is defined in the source code⁵¹. The scope is determined by the placement of variables and functions in the code, and it remains the same throughout the execution of the program⁵.
+
+To put lexical scoping into practice, you need to understand the different types of scopes:
+
+1. **Global Scope**: When a variable is defined outside of any functions or blocks, it has a global scope. This means that it can be accessed from anywhere within the program, including within functions⁵.
+```javascript
+let name = "John";
+function sayHello() {
+    console.log("Hello " + name);
+}
+sayHello();  // Outputs: Hello John
+```
+2. **Local Scope**: When a variable is defined within a function or block, it has a local scope. This means that it can only be accessed within that function or block⁵.
+```javascript
+function sayHello() {
+    let name = "John";
+    console.log("Hello " + name);
+}
+sayHello();  // Outputs: Hello John
+console.log(name);  // Throws an error
+```
+3. **Nested Scope**: When a function is defined within another function, it has access to variables defined in the parent function. This is known as nested scope⁵.
+```javascript
+function outer() {
+    let name = "John";
+    function inner() {
+        console.log("Hello " + name);
+    }
+    inner();
+}
+outer();  // Outputs: Hello John
+```
+4. **Block Scope**: ES6 introduced the `let` and `const` keywords, which allow variables to have block scope. This means that variables defined within a block of code (such as within an `if` statement or a `for` loop) can only be accessed within that block⁵.
+
+Remember, the process of determining the scopes of the variables/functions during runtime is called lexical scoping⁴. The word lexical comes from the lexical/tokenization phase of the JS compiler steps⁴. During runtime, JavaScript does these two things: parsing and execution⁴.
+
+
+write a function that performs binary search on a  sorted array ?
+
+Sure, here is a simple implementation of a binary search function in JavaScript:
+
+```javascript
+function binarySearch(array, target) {
+    let left = 0;
+    let right = array.length - 1;
+
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+
+        if (array[mid] === target) {
+            return mid;
+        } else if (array[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return -1;  // Return -1 if the target is not found
+}
+```
+
+This function takes a sorted array and a target value as input. It returns the index of the target value in the array if it is found, otherwise it returns -1. The function uses a while loop to repeatedly divide the search interval in half. If the value of the search key is less than the item in the middle of the interval, the function continues the search with the lower half of the interval. If the value of the search key is greater than the item in the middle, it continues to search in the upper half. The search process repeats until the size of the search interval is zero, which means the target is not in the array. This is a very efficient search method with a time complexity of O(log n).
+
+
+write a code to dynamically inserting  new components ?
+
+Sure, here is an example of how you can dynamically insert new components in JavaScript using the DOM manipulation methods. This example creates a new `div` element and appends it to the body of the HTML document:
+
+```javascript
+// Create a new div element
+var newDiv = document.createElement("div");
+
+// Add some content to the new div
+newDiv.innerHTML = "This is a dynamically inserted component!";
+
+// Append the new div to the body of the document
+document.body.appendChild(newDiv);
+```
+
+In this code, `document.createElement("div")` creates a new `div` element, `newDiv.innerHTML = "This is a dynamically inserted component!"` adds some content to the new `div`, and `document.body.appendChild(newDiv)` appends the new `div` to the body of the document.
+
+Please note that this is a simple example and actual dynamic component insertion might involve more complex operations depending on the requirements of your application. For instance, in a React application, you would typically use the state to dynamically render components. If you're working with a specific framework or library (like React, Angular, Vue, etc.), let me know so I can provide a more tailored example.
+
+
+write a code given if two strings are anagrams of one another then return true?
+
+Sure, here is a simple JavaScript function that checks if two strings are anagrams of each other:
+
+```javascript
+function areAnagrams(str1, str2) {
+    // Remove any non-alphabet character and convert strings to lowercase
+    str1 = str1.replace(/[^a-z\d]/g, '').toLowerCase();
+    str2 = str2.replace(/[^a-z\d]/g, '').toLowerCase();
+
+    // Create character maps
+    const charMapA = getCharMap(str1);
+    const charMapB = getCharMap(str2);
+
+    // Compare character maps
+    for (let char in charMapA) {
+        if (charMapA[char] !== charMapB[char]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Helper function to build a character map
+function getCharMap(str) {
+    let charMap = {};
+    for (let char of str) {
+        charMap[char] = charMap[char] + 1 || 1;
+    }
+    return charMap;
+}
+```
+
+This function works by creating a character map (an object where the keys are characters and the values are the number of times each character appears in the string) for each string, and then comparing the two character maps. If they are identical, then the two strings are anagrams of each other, and the function returns `true`. Otherwise, it returns `false`.
+
+You can use this function like this:
+
+```javascript
+console.log(areAnagrams('listen', 'silent'));  // Outputs: true
+console.log(areAnagrams('hello', 'world'));  // Outputs: false
+```
+
+
+how do you turn an array into an object ?
+
+
+In JavaScript, you can convert an array into an object using various methods. Here are a few examples:
+
+1. **Using the `Object.assign()` method:**
+
+```javascript
+let array = ['a', 'b', 'c'];
+let obj = Object.assign({}, array);
+console.log(obj);  // Outputs: { '0': 'a', '1': 'b', '2': 'c' }
+```
+
+In this example, `Object.assign()` is used to convert the array into an object. The indices of the array become the keys of the object.
+
+2. **Using the `reduce()` method:**
+
+```javascript
+let array = ['a', 'b', 'c'];
+let obj = array.reduce((obj, item, index) => {
+    obj[index] = item;
+    return obj;
+}, {});
+console.log(obj);  // Outputs: { '0': 'a', '1': 'b', '2': 'c' }
+```
+
+In this example, `reduce()` is used to iterate over the array and construct an object. The callback function takes an accumulator (which starts as an empty object), the current item, and its index, and adds a new property to the object with the index as the key and the item as the value.
+
+3. **Using array of key-value pairs:**
+
+```javascript
+let array = [['name', 'John'], ['age', 30], ['city', 'New York']];
+let obj = Object.fromEntries(array);
+console.log(obj);  // Outputs: { name: 'John', age: 30, city: 'New York' }
+```
+
+In this example, `Object.fromEntries()` is used to convert an array of key-value pairs into an object. Each sub-array is treated as a property of the object, with the first element as the key and the second element as the value.
+
+Please note that these methods work best with arrays of primitives (strings, numbers, etc.). If your array contains complex data structures (like other objects or arrays), you might need a more sophisticated approach. Let me know if you need help with that!
+
+how do you explain functional programming ?
+
+Functional programming is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data². It is a declarative type of programming style that's focused on "what to solve" rather than "how to solve" as is common in imperative programming³.
+
+Here are some key principles of functional programming:
+
+1. **Pure Functions**: These are functions that give the same output for the same set of inputs and have no side-effects². That is, a function should not alter any external state and should not rely on any external state⁵.
+
+2. **Immutability**: In functional programming, data is immutable. That means, once a data structure is created, it cannot be changed¹. Any modification to the data structure results in a new data structure¹.
+
+3. **Stateless Functions**: Functions in functional programming are stateless, they must only depend on their input to produce output¹.
+
+4. **First-Class Functions**: Functions in functional programming are treated as first-class citizens, meaning they can be assigned to variables, stored in data structures, passed as arguments to other functions, and even returned as values from other functions².
+
+5. **Function Composition**: Complex problems are solved by breaking down the problem into simple functions, and then these functions are composed together to form a solution⁵.
+
+Functional programming languages have their roots in academia, evolving from the lambda calculus, a formal system of computation based only on functions². Examples of functional programming languages include Lisp, Scheme, Clojure, Wolfram Language, Erlang, Elixir, OCaml, Haskell, and F#². Many other programming languages like JavaScript, Python, and Java also support functional programming².
+
+Functional programming can lead to code that's easier to understand, test, and debug, because the behavior of a function depends only on its inputs, not on any global state¹. However, it can also require a different mindset to understand and use effectively, especially if you're used to imperative programming paradigms⁴.
+
+
+explain the js event delegation model ?
+
+Event delegation in JavaScript is a pattern that efficiently handles events³. It allows you to handle events for multiple elements with a single event handler⁴. Instead of adding an event handler to each individual element, you add it to a higher-level element, and then determine the target element that actually received the event based on the event object⁴.
+
+This pattern is based upon the concept of Event Bubbling¹. By default, events triggered on an element propagate up the DOM tree to the element's parent, its ancestors, and on up until the root element (html)¹. This is known as event bubbling¹.
+
+Here's an example of how event delegation works:
+
+```javascript
+const div = document.getElementsByTagName("div")[0]
+div.addEventListener("click", (event) => {
+    if(event.target.tagName === 'BUTTON') {
+        console.log("button was clicked")
+    }
+})
+```
+
+In this code, when you click the button, the event bubbles up to the div which handles the event¹.
+
+Event delegation is a useful pattern that allows you to write cleaner code, and create fewer event listeners with similar logic¹. It uses less memory and gives better performance³.
+
+For instance, if you have a list of items and you want to add a click event to each item, instead of adding an event listener to each individual item, you can add a single event listener to the parent element that listens for clicks on its child elements⁵.
+
+This technique is especially useful when dealing with a large number of similar elements, such as a list or a table⁵. It also helps when you have elements that are added dynamically and you want to attach events to them⁵.
+
+
+explain arrow functions ?
+
+Arrow functions, introduced in ES6, provide a concise way to write JavaScript functions¹. They are anonymous functions, meaning they don't have a name and are often assigned to a variable¹. Here's the basic syntax of an arrow function:
+
+```javascript
+const myFunction = (param1, param2) => {
+    // function body
+}
+```
+
+Key characteristics of arrow functions include:
+
+1. **Conciseness**: Arrow functions can be written in a shorter way compared to traditional function expressions¹. For example, if the function body consists of a single expression, you can omit the curly braces and the `return` keyword¹:
+
+```javascript
+const add = (a, b) => a + b;
+```
+
+2. **No separate `this`**: Unlike regular functions, arrow functions do not have their own `this`². They inherit `this` from the enclosing scope, which can be useful when working with event listeners or callback functions¹.
+
+3. **Implicit return**: If the function body consists of a single expression, the function implicitly returns the result of that expression¹.
+
+4. **Always anonymous**: Arrow functions are always unnamed². If you need to call the function recursively, you would need to assign it to a variable².
+
+However, there are some limitations to arrow functions¹²:
+
+- Arrow functions do not have the `prototype` property¹.
+- They cannot be used with the `new` keyword².
+- They cannot be used as constructors¹.
+- Arrow functions cannot be used as generator functions².
+- They are not suited for object methods².
+
+Despite these limitations, arrow functions are a powerful feature of JavaScript that can make your code more concise and easier to read¹.
+
+
+explain nan and its role ?
+
+In JavaScript, `NaN` stands for "Not-a-Number". It is a special value that represents a value that is not a valid number¹³. `NaN` is a property of the global object². In other words, it is a variable in global scope².
+
+There are five different types of operations that return `NaN`²:
+
+1. Failed number conversion (e.g., explicit ones like `parseInt("blabla")`, `Number(undefined)`, or implicit ones like `Math.abs(undefined)`).
+2. Math operation where the result is not a real number (e.g., `Math.sqrt(-1)`).
+3. Indeterminate form (e.g., `0 * Infinity`, `1 ** Infinity`, `Infinity / Infinity`, `Infinity - Infinity`).
+4. A method or expression whose operand is or gets coerced to `NaN` (e.g., `7 ** NaN`, `7 * "blabla"`). This means `NaN` is contagious.
+5. Other cases where an invalid value is to be represented as a number (e.g., an invalid Date `new Date("blabla").getTime()`, `"".charCodeAt(1)`).
+
+`NaN`'s behaviors include²:
+
+- If `NaN` is involved in a mathematical operation (but not bitwise operations), the result is usually also `NaN`.
+- When `NaN` is one of the operands of any relational comparison (`>`, `<`, `>=`, `<=`), the result is always `false`.
+- `NaN` compares unequal (via `==`, `!=`, `===`, and `!==`) to any other value — including to another `NaN` value.
+- `NaN` is also one of the falsy values in JavaScript.
+
+To check if a value is `NaN`, you can use `Number.isNaN()` or `isNaN()`². However, do note the difference between `isNaN()` and `Number.isNaN()`: the former will return `true` if the value is currently `NaN`, or if it is going to be `NaN` after it is coerced to a number, while the latter will return `true` only if the value is currently `NaN`².
+
+
+how do you calculate fibonacci numbers in js?
+
+Sure, here is a simple implementation of a function that calculates Fibonacci numbers in JavaScript:
+
+```javascript
+function fibonacci(n) {
+    if (n <= 0) {
+        return 0;
+    } else if (n === 1) {
+        return 1;
+    } else {
+        let fibPrev = 1;
+        let fibPrevPrev = 0;
+        let fibNext;
+        for (let i = 2; i <= n; i++) {
+            fibNext = fibPrev + fibPrevPrev;
+            fibPrevPrev = fibPrev;
+            fibPrev = fibNext;
+        }
+        return fibNext;
+    }
+}
+```
+
+This function calculates the nth Fibonacci number iteratively. It starts with the first two Fibonacci numbers, 0 and 1, and then adds them together to get the next Fibonacci number. It then updates the two previous numbers to be the last and the next-to-last Fibonacci numbers, and repeats this process until it has calculated the nth Fibonacci number.
+
+You can use this function like this:
+
+```javascript
+console.log(fibonacci(10));  // Outputs: 55
+```
+
+This will output the 10th Fibonacci number, which is 55. Note that this function uses zero-based indexing for the Fibonacci sequence, so `fibonacci(0)` returns 0, `fibonacci(1)` returns 1, and so on.
+
+how to add and remove object  properties dynamically in js ?
+
+In JavaScript, you can add and remove properties from objects dynamically. Here's how:
+
+**Adding Properties:**
+
+You can add properties to an object by simply assigning a value to a new property on the object. For example:
+
+```javascript
+let obj = {};
+obj.newProperty = 'New Value';
+console.log(obj);  // Outputs: { newProperty: 'New Value' }
+```
+
+In this example, a new property called `newProperty` is added to the `obj` object, and it is assigned the value `'New Value'`.
+
+**Removing Properties:**
+
+You can remove properties from an object using the `delete` operator. For example:
+
+```javascript
+let obj = { propertyToRemove: 'Value' };
+delete obj.propertyToRemove;
+console.log(obj);  // Outputs: {}
+```
+
+In this example, the `propertyToRemove` property is removed from the `obj` object using `delete obj.propertyToRemove`.
+
+Please note that the `delete` operator only removes the property from the object. If there are any other references to the property value, those are not affected. Also, `delete` does not touch any of the object's prototype properties. It only affects the object's own properties.
+
+
+difference  between object.freeze and const ?
+
+`const` and `Object.freeze()` in JavaScript are used for different purposes¹²:
+
+1. **const**: The `const` keyword creates a read-only reference to a value¹. Variables created by the `const` keyword are immutable, meaning you can’t reassign them to different values¹. However, the `const` keyword only ensures that the variable itself cannot be reassigned. It does not mean that the actual value to which the `const` variable reference is immutable¹. For example, if the `const` variable is an object, you can still modify the properties of the object¹.
+
+```javascript
+const person = { name: "John" };
+person.name = "Jane";  // This is allowed
+console.log(person.name);  // Outputs: Jane
+```
+
+2. **Object.freeze()**: The `Object.freeze()` method in JavaScript is used to make an object immutable¹. When an object is frozen, you can't add new properties to it, delete existing properties from it, or modify the existing properties¹. However, `Object.freeze()` is shallow, meaning that it can freeze the properties of the object, not the objects referenced by the properties¹.
+
+```javascript
+const person = Object.freeze({ name: "John" });
+person.name = "Jane";  // This is not allowed
+console.log(person.name);  // Outputs: John
+```
+
+In conclusion, `const` prevents reassignment, while `Object.freeze()` prevents mutability¹. They are used in different scenarios based on the requirements¹².
+
+
+advantages and disadvantages  of monolithic and microservice architectures ?
+
+Sure, let's discuss the advantages and disadvantages of both monolithic and microservice architectures:
+
+**Monolithic Architecture:**
+
+Advantages¹²⁴:
+- **Simplicity of development**: The monolithic approach is a standard way of building applications. No additional knowledge is required¹.
+- **Simplicity of debugging and testing**: The debugging and testing processes are simple because all code is located in one place¹.
+- **Simplicity of deployment**: Only one deployment unit (e.g. jar file) should be deployed¹.
+- **Simplicity of application evolution**: Basically, the application does not have any limitation from a business logic perspective¹.
+- **Low cost in the early stages of the application**: All source code is located in one place, packaged in a single deployment unit, and deployed¹.
+- **High performance**: System calls can be made directly to the kernel without the overhead of message passing between user-level processes⁴.
+
+Disadvantages²:
+- **Difficult to maintain**: Monolithic architecture can be tough to upkeep because all the components are interlinked².
+- **Limited scalability**: When it comes to scaling, this architecture struggles².
+- **Slow deployment process**: Deployment can be slow with this kind of architecture².
+- **Hard to isolate faults**: It’s also challenging to spot and isolate faults².
+- **Changes affect entire system**: Any modification, no matter how small, affects the entire system, potentially leading to unexpected issues².
+
+**Microservice Architecture:**
+
+Advantages⁵⁶⁷:
+- **Faster performance**: Microservices offer faster performance⁷.
+- **Easier scalability**: Microservices can enable more and more services as the need arises⁶.
+- **Easier code reuse**: Microservices allow for easier code reuse⁷.
+- **Independently manageable services**: Microservices are self-contained, independent deployment modules⁶.
+- **Dynamic scaling**: The demanding service can be deployed on multiple servers to enhance performance⁶.
+- **Faster release cycle**: Microservices allow for a faster release cycle⁶.
+
+Disadvantages⁵⁶⁸:
+- **More complex development and deployment**: Microservices architecture has all the associated complexities of the distributed system⁶.
+- **Higher implementation costs**: Upfront costs are higher with microservices⁸.
+- **Difficult to manage a large number of services**: It can be difficult to manage a large number of services⁶.
+- **Complex testing over a distributed environment**: Testing can be complex over a distributed environment⁶.
+- **Higher chance of failure during communication**: There is a higher chance of failure during communication between different services⁶.
+
+In conclusion, the choice between monolithic and microservice architectures depends on the specific needs and constraints of your project. Monolithic architecture might be a good choice for small applications due to its simplicity and lower initial cost, while microservice architecture might be more suitable for large, complex applications due to its scalability and flexibility¹⁵.
+
+
+how to execute after pageload in js ?
+
+In JavaScript, you can use the `window.onload` event to execute code after the page has fully loaded. This event is fired when the entire page (including all dependent resources such as images and stylesheets) has finished loading.
+
+Here's an example:
+
+```javascript
+window.onload = function() {
+    // Your code here
+};
+```
+
+In this example, the function will be executed once the page is fully loaded.
+
+Alternatively, you can use the `DOMContentLoaded` event, which is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This can be faster than `window.onload` in many cases.
+
+Here's an example:
+
+```javascript
+document.addEventListener("DOMContentLoaded", function() {
+    // Your code here
+});
+```
+
+In this example, the function will be executed once the DOM is fully loaded, which might be before some other resources like images have finished loading. This can be useful if your code doesn't depend on those resources. However, if your code does depend on those resources (for example, if it needs to know the dimensions of an image), you should use `window.onload` instead.
+
+
+
+how tosolve js heapout of memory on prime number ?
+
+A JavaScript heap out of memory error when calculating prime numbers typically indicates that your algorithm is consuming too much memory. This can happen if you're storing a large number of prime numbers in memory, or if your algorithm has a high time complexity.
+
+Here are a few ways to address this issue:
+
+1. **Optimize Your Algorithm**: If your algorithm is inefficient, it could be using more memory than necessary. For example, if you're checking whether each number up to `n` is prime by checking divisibility by all numbers less than it, this could be optimized to only check divisibility up to its square root.
+
+2. **Use a Generator**: If you're storing all prime numbers up to `n` in an array, this could consume a lot of memory for large `n`. Instead, you could use a generator function to yield each prime number one at a time.
+
+3. **Increase the Node.js Heap Size**: If you're running your script in Node.js, you can increase the maximum heap size using the `--max-old-space-size` flag. However, this is generally not recommended as a first resort, as it can lead to other issues.
+
+Here's an example of a more memory-efficient way to generate prime numbers using a generator function:
+
+```javascript
+function* primeGenerator() {
+    yield 2;
+    let primes = [2];
+    for (let i = 3; ; i += 2) {
+        if (primes.every(prime => i % prime !== 0)) {
+            primes.push(i);
+            yield i;
+        }
+    }
+}
+
+let gen = primeGenerator();
+console.log(gen.next().value);  // Outputs: 2
+console.log(gen.next().value);  // Outputs: 3
+// and so on...
+```
+
+In this code, `primeGenerator` is a generator function that yields each prime number one at a time. It keeps track of all previously found prime numbers and checks each new number for divisibility by those primes. This way, it only needs to store the prime numbers up to the square root of `n` in memory, which is much more memory-efficient for large `n`.
+
+Remember, always try to optimize your algorithm before resorting to increasing the heap size. A more efficient algorithm will not only use less memory, but will also typically run faster. If you're still having trouble, please provide more details about your current implementation and I'd be happy to help further!
+
+how to create  an array with random values with the help of js ?
+
+Sure, here's a simple way to create an array with random values in JavaScript:
+
+```javascript
+let arr = Array.from({length: 10}, () => Math.floor(Math.random() * 100));
+console.log(arr);
+```
+
+In this code, `Array.from()` is used to create a new array with a specified length (10 in this case). The second argument is a map function, which is called for each element in the array. This map function generates a random number between 0 and 100 (exclusive) using `Math.random()`, and then rounds it down to the nearest whole number using `Math.floor()`. The result is an array of 10 random numbers between 0 and 99.
+
+You can adjust the length of the array and the range of the random numbers as needed. For example, to create an array of 5 random numbers between 1 and 50, you could use:
+
+```javascript
+let arr = Array.from({length: 5}, () => Math.floor(Math.random() * 50) + 1);
+console.log(arr);
+```
+
+This will give you an array of 5 random numbers between 1 and 50. Note the `+ 1` at the end of the map function, which shifts the range of the random numbers from 0-49 to 1-50.
+
+
+what is efficient way to insert way a number into a sorted array of numbers in js ?
+
+In JavaScript, you can insert a number into a sorted array of numbers by using the `splice()` method in combination with the `findIndex()` method. Here's an example:
+
+```javascript
+function insertIntoSortedArray(arr, num) {
+    let index = arr.findIndex((el) => num <= el);
+    if (index === -1) {
+        arr.push(num);
+    } else {
+        arr.splice(index, 0, num);
+    }
+    return arr;
+}
+
+let arr = [1, 3, 5, 7, 9];
+console.log(insertIntoSortedArray(arr, 6));  // Outputs: [1, 3, 5, 6, 7, 9]
+```
+
+In this code, `findIndex()` is used to find the index of the first element in the array that is greater than or equal to the number to be inserted. If such an element is found, `splice()` is used to insert the number at that index. If no such element is found (i.e., if the number to be inserted is greater than all elements in the array), the number is added to the end of the array using `push()`.
+
+This method assumes that the input array is already sorted. If the array is not sorted, the results will be incorrect. Also, this method modifies the original array. If you don't want to modify the original array, you can create a copy of the array before performing the insertion.
+
+Please note that while this method is simple and works well for small arrays, it may not be the most efficient for large arrays because `findIndex()` and `splice()` both have a time complexity of O(n). For large arrays, a more efficient method may be to use a binary search to find the insertion point, which has a time complexity of O(log n). However, JavaScript does not have a built-in method for binary search, so you would need to implement this yourself or use a library.
+
+
+how to underline text of a div element in js ?
+
+You can underline the text of a `div` element in JavaScript by changing its CSS `text-decoration` property to `underline`. Here's an example:
+
+```javascript
+// Get the div element by its id
+let div = document.getElementById('myDiv');
+
+// Set the text-decoration property to underline
+div.style.textDecoration = 'underline';
+```
+
+In this code, `document.getElementById('myDiv')` is used to get the `div` element with the id `myDiv`. Then, `div.style.textDecoration = 'underline'` is used to set the `text-decoration` CSS property of the `div` to `underline`, which underlines the text.
+
+Please replace `'myDiv'` with the actual id of your `div` element. If your `div` does not have an id, you can use other methods like `document.getElementsByClassName()` or `document.getElementsByTagName()` to get the `div`.
+
+Remember, this will change the style of the `div` element on the page. If you want to change the style permanently, you should update the CSS in your stylesheet.
+
+
+how to detect if a function is called as constructor ?
+
+In JavaScript, you can detect if a function is called as a constructor by using the `new.target` property inside the function. The `new.target` property is a meta property that is available to all functions, and inside a function, it refers to the constructor that was invoked by `new`. If a function is called without `new`, `new.target` will be `undefined`.
+
+Here's an example:
+
+```javascript
+function MyFunction() {
+    if (new.target) {
+        console.log('Called with new');
+    } else {
+        console.log('Not called with new');
+    }
+}
+
+new MyFunction();  // Outputs: Called with new
+MyFunction();  // Outputs: Not called with new
+```
+
+In this code, `MyFunction` checks if it was called as a constructor by checking if `new.target` is defined. If it is, that means the function was called with `new`. If it's not, that means the function was not called with `new`.
+
+Please note that `new.target` is not supported in Internet Explorer. If you need to support Internet Explorer, you will need to use a different method to detect if a function is called as a constructor, such as checking if `this` is an instance of the function.
+
+how to use regex  to get the string between  curly braces using js ?
+
+Sure, you can use a regular expression (regex) to match the content between curly braces `{}` in a string. Here's an example:
+
+```javascript
+let str = "Hello {world}!";
+let matches = str.match(/{([^}]+)}/);
+if (matches) {
+    console.log(matches[1]);  // Outputs: world
+}
+```
+
+In this code, `str.match(/{([^}]+)}/)` is used to find the content between curly braces in the string. The regular expression `/{([^}]+)}/` matches any sequence of characters that is surrounded by `{}`. If a match is found, it is returned as an array where the first element is the entire match (including the `{}`), and the second element is the content between the `{}`.
+
+Please note that this will only find the first match in the string. If you want to find all matches, you can use the `g` flag with the regular expression and a loop to iterate over the matches:
+
+```javascript
+let str = "Hello {world}! How are {you}?";
+let regex = /{([^}]+)}/g;
+let match;
+while ((match = regex.exec(str)) !== null) {
+    console.log(match[1]);
+}
+```
+
+This will output:
+
+```
+world
+you
+```
+
+This code uses `regex.exec(str)` in a loop to find all matches in the string. Each time `regex.exec(str)` is called, it returns the next match in the string, or `null` if there are no more matches. The `g` flag in the regular expression tells it to find all matches, not just the first one.
+
+
+how to filter objects array based on attributes ?
+
+In JavaScript, you can use the `filter()` method to filter an array of objects based on their attributes. Here's an example:
+
+```javascript
+let arr = [
+    { name: 'John', age: 30 },
+    { name: 'Jane', age: 20 },
+    { name: 'Jim', age: 40 }
+];
+
+let filteredArr = arr.filter(obj => obj.age > 25);
+
+console.log(filteredArr);
+// Outputs: [ { name: 'John', age: 30 }, { name: 'Jim', age: 40 } ]
+```
+
+In this code, `arr.filter(obj => obj.age > 25)` is used to create a new array that includes only the objects from `arr` where the `age` attribute is greater than 25.
+
+The `filter()` method creates a new array with all elements that pass the test implemented by the provided function. In this case, the test is `obj.age > 25`, which checks if the `age` attribute of each object is greater than 25.
+
+You can replace `obj.age > 25` with any condition you want, based on the attributes of the objects in your array. For example, if you wanted to filter based on the `name` attribute, you could use `obj.name === 'John'` to include only objects where the `name` is 'John'.
+
+
+how to get the first key name of a js object ?
+
+In JavaScript, you can get the first key name of an object using the `Object.keys()` method, which returns an array of a given object's own enumerable property names. Here's an example:
+
+```javascript
+let obj = { name: 'John', age: 30, city: 'New York' };
+let firstKey = Object.keys(obj)[0];
+console.log(firstKey);  // Outputs: name
+```
+
+In this code, `Object.keys(obj)[0]` is used to get the first key name of the object. `Object.keys(obj)` returns an array of the object's keys, and `[0]` gets the first element of that array.
+
+Please note that JavaScript objects are not ordered, so the "first" key may vary between different JavaScript engines. If you need a specific order, you should use a `Map` or an array of key-value pairs instead.
+
+
+js architecture  flux components ?
+
+Flux is a JavaScript architecture or pattern for UI which runs on a unidirectional data flow and has a centralized dispatcher¹. It is an application architecture designed to build client-side web apps¹. The Flux architecture is based on the following components¹:
+
+1. **Dispatcher**: It coordinates actions and updates to stores¹. The dispatcher is the central hub that manages all data flow in a flux application¹. It controls what flows into the stores of the Flux application¹. It servers as the housing place for the callbacks that are created by the stores and which are linked to the dispatcher¹.
+
+2. **Stores**: It serves as a container for the app state and logic¹. The store is the hub of the application’s state and logic¹. It contains the logic and state of the Flux application¹. Instead of representing a single data structure like a traditional model, the store in Flux can actually represent the state of management of many objects¹.
+
+3. **Actions**: It enables data passing to the dispatcher¹. Actions represent user interactions or events that trigger state changes¹. Actions have a type property identifying the action type². Actions may come from different places. They may come from views as a result of user interaction². They may come from other places like the initialization code, where data may be taken from a Web API and actions are fired to update the views².
+
+4. **Views**: It is the same as the view in MVC architecture but in the context of React components¹. View is the user interface component². It is responsible for rendering the user interface and for handling the user interaction². Views are in a tree structure². Views listen for store changes and re-render². Views can be further split in Presentation and Container Views².
+
+The data in a flux application flows in a single direction¹. The flow is: Action => Dispatcher => Store => View¹.
+
+how to create custom errors in js ?
+
+In JavaScript, you can create custom errors by extending the built-in `Error` class. Here's an example:
+
+```javascript
+class CustomError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'CustomError';
+    }
+}
+
+try {
+    throw new CustomError('This is a custom error');
+} catch (e) {
+    console.log(e.name);    // Outputs: CustomError
+    console.log(e.message); // Outputs: This is a custom error
+}
+```
+
+In this code, a new class `CustomError` is created that extends the `Error` class. The `constructor` function is used to create and initialize an object created from a class. It takes one parameter `message` which is the text string of the error message. The `super(message)` call is used to call the constructor of the `Error` class. The `this.name` property is set to `'CustomError'`, which will be the name of the error.
+
+The `try`/`catch` block is used to throw and catch the custom error. The `throw` statement throws a `CustomError`, and the `catch` statement catches the error and logs its name and message to the console. This is just an example, and you can customize the `CustomError` class to suit your needs. For example, you could add additional properties or methods to the class.
+
+js programs to print alphabets from a to z using loop ?
+
+Sure, here's a simple JavaScript program that uses a loop to print the alphabets from 'a' to 'z':
+
+```javascript
+for(let i = 'a'.charCodeAt(0); i <= 'z'.charCodeAt(0); i++) {
+    console.log(String.fromCharCode(i));
+}
+```
+
+In this code, `charCodeAt(0)` is used to get the Unicode value of the character, and `String.fromCharCode(i)` is used to convert a Unicode value back to a string. The loop starts at the Unicode value for 'a' and ends at the Unicode value for 'z', printing each character in between.
+
+
+strict vs non-strict mode?
+
+JavaScript has two modes of operation: strict mode and non-strict mode¹. These modes affect how JavaScript code is executed, and understanding the differences between them is crucial for writing secure and reliable code¹.
+
+**Strict Mode**¹²⁴⁵:
+
+- Introduced in ECMAScript 5 (ES5), strict mode is a subset of JavaScript that provides better error checking and enforces stricter rules for coding¹.
+- When strict mode is enabled, the JavaScript engine checks for syntax errors and runtime errors that would otherwise go unnoticed in non-strict mode¹.
+- It eliminates some JavaScript silent errors by changing them to throw errors⁵.
+- It fixes mistakes that make it difficult for JavaScript engines to perform optimizations: strict mode code can sometimes be made to run faster than identical code that's not strict mode⁵.
+- It prohibits some syntax likely to be defined in future versions of ECMAScript².
+- To enable strict mode in JavaScript, you simply add the string “use strict” at the beginning of a script or function¹.
+
+**Non-strict Mode**¹:
+
+- Non-strict mode, on the other hand, is the default mode of operation in JavaScript¹.
+- In this mode, the JavaScript engine allows for more flexible coding and provides fewer restrictions¹.
+- This means that some code that would cause errors in strict mode may execute without any issues in non-strict mode¹.
+- While this may seem advantageous at first, it can lead to unexpected behavior and security vulnerabilities¹.
+
+Here are a few examples of how the ‘strict’ mode changes the behavior of JavaScript code¹:
+
+1. **Prevents the use of undeclared variables**: In non-strict mode, you can use a variable without declaring it first, which can lead to unexpected behavior if you mistype the variable name. In strict mode, however, using an undeclared variable will throw a reference error¹.
+2. **Disallows deleting certain properties**: In non-strict mode, you can delete properties of an object even if they are non-configurable, which can lead to unexpected behavior. In strict mode, attempting to delete a non-configurable property will throw a type error¹.
+3. **Prevents duplicate function parameters**: In non-strict mode, you can declare multiple parameters with the same name, which can lead to confusion and errors. In strict mode, however, duplicate parameters will throw a syntax error¹.
+
+These examples demonstrate just a few of the ways that the ‘strict’ mode can help to catch errors and improve the reliability of JavaScript code¹.
+
+how to tell if a script tag failed to load ?
+
+In JavaScript, you can use the `onerror` and `onload` event handlers of the `script` tag to detect if the script has failed to load or loaded successfully. Here's an example:
+
+```javascript
+let script = document.createElement('script');
+script.src = 'path/to/your/script.js';
+
+script.onload = function() {
+    console.log('Script loaded successfully');
+};
+
+script.onerror = function() {
+    console.log('Failed to load script');
+};
+
+document.head.appendChild(script);
+```
+
+In this code, a new `script` element is created and its `src` attribute is set to the path of the script file. The `onload` event handler is set to a function that logs a message when the script loads successfully, and the `onerror` event handler is set to a function that logs a message when the script fails to load. Finally, the `script` element is appended to the `head` of the document.
+
+Please replace `'path/to/your/script.js'` with the actual path to your script file. If the script file is not found or cannot be loaded for any reason, the `onerror` event handler will be called and 'Failed to load script' will be logged to the console. If the script loads successfully, the `onload` event handler will be called and 'Script loaded successfully' will be logged to the console. This way, you can tell if a script tag failed to load or loaded successfully.
+
+
+definition of global variables ?
+
+In JavaScript, global variables are variables that are accessible from anywhere in your code¹². They can be accessed outside any function or block¹. Global variables are declared within the window object or outside any block or scope¹. A variable declared without a keyword is also considered global even though it is declared in the function¹. 
+
+Here's an example of a global variable:
+
+```javascript
+let courseName = 'GeeksforGeeks';
+function myFunction () {
+    console.log(courseName);
+}
+myFunction();  // Outputs: GeeksforGeeks
+```
+
+In this example, `courseName` is a global variable because it is declared outside of any function¹. It can be accessed both outside and inside the `myFunction` function¹.
+
+However, if you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable². This code example will declare a global variable `carName`, even if the value is assigned inside a function².
+
+```javascript
+myFunction();
+// code here can use carName
+function myFunction () {
+    carName = 'Volvo';
+}
+```
+
+In this example, `carName` is a global variable because it is not declared with a keyword like `var`, `let`, or `const`². It can be accessed both outside and inside the `myFunction` function².
+
+Please note that the use of global variables is generally discouraged because they can lead to code that is difficult to understand and debug. It's usually better to use local variables where possible, and pass values between functions as arguments or return values³.
+
+
+name the different types  of groups of data types  are used in js  and define them ?
+
+In JavaScript, data types can be divided into two main categories: **primitive** (or primary) and **composite** (or reference) data types³. There are also special data types³.
+
+**Primitive Data Types**¹²⁵:
+
+1. **String**: A string (or a text string) is a series of characters like "John Doe". Strings are written with quotes. You can use single or double quotes¹.
+2. **Number**: All JavaScript numbers are stored as decimal numbers (floating point). Numbers can be written with, or without decimals¹.
+3. **BigInt**: BigInt is a built-in object that provides a way to represent whole numbers larger than 2^53 - 1, which is the largest number JavaScript can reliably represent with the Number primitive¹.
+4. **Boolean**: Boolean represents a logical entity and can have two values: true and false¹.
+5. **Undefined**: The Undefined type is inhabited by exactly one value: undefined².
+6. **Null**: The Null type is inhabited by exactly one value: null².
+7. **Symbol**: The Symbol type is a primitive data type whose instances are unique and immutable².
+
+**Composite Data Types**³:
+
+1. **Object**: The object data type can contain an object, an array, or a date¹.
+2. **Array**: An array is a special variable, which can hold more than one value at a time¹.
+3. **Function**: Functions are one of the fundamental building blocks in JavaScript. A function is a JavaScript procedure—a set of statements that performs a task or calculates a value¹.
+
+**Special Data Types**³:
+
+1. **Null**: It is a special data type that can have only one value-the null value³.
+2. **Undefined**: A variable that has not been assigned a value is of type undefined³.
+
+JavaScript is a dynamic language with dynamic types. Variables in JavaScript are not directly associated with any particular value type, and any variable can be assigned (and re-assigned) values of all types²..
+
+
+name of the problems that are associated with the use of global variables ?
+
+Global variables in JavaScript can cause several issues¹²³:
+
+1. **Namespace Pollution**: The more global variables that are used in a program, the higher the risk of collisions and overwriting variables unintentionally¹.
+2. **Mutability**: Global variables can be modified from anywhere in the code, potentially leading to bugs that are difficult to track down¹.
+3. **Coupling**: Global variables can increase coupling in the code, as functions and modules may become dependent on these variables¹.
+4. **Testing and Debugging Difficulty**: Code that relies on global variables can be harder to test and debug, as functions that use them have hidden dependencies¹.
+5. **Code Management**: It's easy to forget you declared a variable somewhere and accidentally re-declare it somewhere else. If your first variable was local then you don't have a problem. If it was global, then it just got overwritten¹.
+6. **Performance**: Global variables take longer for JavaScript to "find" than local variables¹.
+
+To avoid these issues, it's generally recommended to minimize the use of global variables and use local variables wherever possible¹²³. Now multiple functions or blocks can have variables defined locally with the same name and not cause any conflicts, which in turn leads to a low chance for errors².
+
+
+
+
+
+
+
+

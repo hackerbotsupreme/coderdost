@@ -1,0 +1,193 @@
+matching path 
+This order represents the sequence in which Next.js processes a request and determines what to return in response. Here's what each step means:
+
+1. **headers from next.config.js**: Custom HTTP headers are added to the response.
+2. **redirects from next.config.js**: Next.js checks if the request matches any custom redirect rules. If a match is found, it redirects the request accordingly.
+3. **Middleware (rewrites, redirects, etc.)**: Next.js invokes any middleware functions. Middleware can modify the request or response, or even send a response on its own.
+4. **beforeFiles (rewrites) from next.config.js**: Next.js checks if the request matches any "beforeFiles" rewrite rules. These rules can rewrite the request to a different route before file handling takes place.
+5. **Filesystem routes (public/, _next/static/, pages/, app/, etc.)**: Next.js checks if the request matches any filesystem routes. These include static files in the `public/` directory, Next.js internal files in `_next/static/`, page components in `pages/`, and so on.
+6. **afterFiles (rewrites) from next.config.js**: Next.js checks if the request matches any "afterFiles" rewrite rules. These rules can rewrite the request to a different route after file handling has taken place.
+7. **Dynamic Routes (/blog/[slug])**: If the request hasn't matched any previous routes or rewrites, Next.js checks if it matches any dynamic routes, such as `/blog/[slug]`.
+8. **fallback (rewrites) from next.config.js**: Finally, if the request hasn't matched any previous routes, rewrites, or dynamic routes, Next.js checks if it matches any "fallback" rewrite rules.
+
+This order ensures that more specific routing logic (like custom headers or redirects) can run before more general logic (like filesystem routes or dynamic routes). It also allows for powerful routing patterns, like having a dynamic route and a fallback rewrite for unmatched requests. 
+
+I hope this clarifies your question! If you have any more questions, feel free to ask. 😊
+
+
+---------------------------------------------------------------------------------
+
+on demand revalidation 
+
+You can then revalidate this fetch call tagged with collection by calling revalidateTag in a Server Action:
+'use server'
+ 
+import { revalidateTag } from 'next/cache'
+ 
+export default async function action() {
+  revalidateTag('collection')
+}
+https://nextjs.org/docs/app/building-your-application/caching#on-demand-revalidation
+
+Error handling on revalidation
+If an error is thrown while attempting to revalidate data, the last successfully generated data will continue to be served from the cache. On the next subsequent request, Next.js will retry revalidating the data.
+
+
+Opting out of Data Caching
+fetch requests are not cached if:
+
+The cache: 'no-store' is added to fetch requests.
+The revalidate: 0 option is added to individual fetch requests.
+The fetch request is inside a Router Handler that uses the POST method.
+The fetch request comes after the usage of headers or cookies.
+The const dynamic = 'force-dynamic' route segment option is used.
+The fetchCache route segment option is configured to skip cache by default.
+The fetch request uses Authorization or Cookie headers and there's an uncached request above it in the component tree.
+
+View all the available cache options in
+https://nextjs.org/docs/app/api-reference/functions/fetch
+
+If you have multiple fetch requests in a route segment (e.g. a Layout or Page), you can configure the caching behavior of all data requests in the segment using the Segment Config Options.
+https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+
+
+Fetching data on the Server with third-party libraries
+In cases where you're using a third-party library that doesn't support or expose fetch (for example, a database, CMS, or ORM client), you can configure the caching and revalidating behavior of those requests using the Route Segment Config Option and React's cache function.
+https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+
+Whether the data is cached or not will depend on whether the route segment is statically or dynamically rendered. If the segment is static (default), the output of the request will be cached and revalidated as part of the route segment(https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies). If the segment is dynamic, the output of the request will not be cached and will be re-fetched on every request when the segment is rendered.
+
+Example
+In the example below:
+
+The React cache function is used to memoize(https://nextjs.org/docs/app/building-your-application/caching#request-memoization) data requests.
+The revalidate option is set to 3600 in the Layout and Page segments, meaning the data will be cached and revalidated at most every hour.
+import { cache } from 'react'
+ 
+export const getItem = cache(async (id: string) => {
+  const item = await db.item.findUnique({ id })
+  return item
+})
+Although the getItem function is called twice, only one query will be made to the database.
+app/item/[id]/layout.tsx
+
+import { getItem } from '@/utils/get-item'
+ 
+export const revalidate = 3600 // revalidate the data at most every hour
+ 
+export default async function Layout({
+  params: { id },
+}: {
+  params: { id: string }
+}) {
+  const item = await getItem(id)
+  // ...
+}
+
+app/item/[id]/page.tsx
+
+import { getItem } from '@/utils/get-item'
+ 
+export const revalidate = 3600 // revalidate the data at most every hour
+ 
+export default async function Page({
+  params: { id },
+}: {
+  params: { id: string }
+}) {
+  const item = await getItem(id)
+  // ...
+}
+
+Fetching Data on the Client with Route Handlers
+If you need to fetch data in a client component, you can call a Route Handler(https://nextjs.org/docs/app/building-your-application/routing/route-handlers) from the client. Route Handlers execute on the server and return the data to the client. This is useful when you don't want to expose sensitive information to the client, such as API tokens.
+
+See the Route Handler(https://nextjs.org/docs/app/building-your-application/routing/route-handlers) documentation for examples.
+
+Server Components and Route Handlers
+Since Server Components render on the server, you don't need to call a Route Handler from a Server Component to fetch data. Instead, you can fetch the data directly inside the Server Component.
+
+Server Actions and Mutations
+Server Actions are asynchronous functions that are executed on the server. They can be used in Server and Client Components to handle form submissions and data mutations in Next.js applications.
+
+🎥 Watch: Learn more about forms and mutations with Server Actions → YouTube (10 minutes).https://youtu.be/dDpZfOQBMaU?si=cJZHlUu_jFhCzHUg
+
+Convention
+A Server Action can be defined with the React "use server" directive. You can place the directive at the top of an async function to mark the function as a Server Action, or at the top of a separate file to mark all exports of that file as Server Actions.
+
+Server Components
+Server Components can use the inline function level or module level "use server" directive. To inline a Server Action, add "use server" to the top of the function body:
+app/page.tsx
+// Server Component
+export default function Page() {
+  // Server Action
+  async function create() {
+    'use server'
+ 
+    // ...
+  }
+ 
+  return (
+    // ...
+  )
+}
+
+Client Components
+Client Components can only import actions that use the module-level "use server" directive.
+To call a Server Action in a Client Component, create a new file and add the "use server" directive at the top of it. All functions within the file will be marked as Server Actions that can be reused in both Client and Server Components:
+
+app/actions.ts
+'use server'
+ 
+export async function create() {
+  // ...
+}
+
+app/ui/button.tsx
+import { create } from '@/app/actions'
+ 
+export function Button() {
+  return (
+    // ...
+  )
+}
+
+You can also pass a Server Action to a Client Component as a prop:
+<ClientComponent updateItem={updateItem} />
+
+app/client-component.jsx
+'use client'
+ 
+export default function ClientComponent({ updateItem }) {
+  return <form action={updateItem}>{/* ... */}</form>
+}
+
+Behavior
+Server actions can be invoked using the action attribute in a <form> element:(https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

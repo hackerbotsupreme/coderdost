@@ -1,0 +1,1089 @@
+
+
+1. how will you make a webpage such that - 
+user does not have to wait for the entire page to load before they can interact with it ?  - hint using sever components and nested layouts . 
+2. in squential data fetching   how will yu  prevent the whole route from being blocked by data fetching ? 
+3. what is wawterfall in next ? ways  to prevent it ? 
+4. if we are fetching data in react component , how many patterns are there for fetching data ? -> parallel and sequential data fetching 
+5. explain "all or nothing " data fetching in next js ? 
+6. explain how sequential data fetching works ? 
+7. explain how parallel data fetching works ? 
+8. exaplin what is Preloading Data / preload pattern and when is it used ? 
+
+9. if you have a tree under a component that fetches data using await then will it block the rendering and data fetching for the entire tree beneath ? yes 
+how to avoid it ? -> 1. use suspense boundary or loading js 
+2. parallel data fetching /preload pattern 
+
+10. how will yu gurentee fetch data, cache responses, and guarantee that this data fetching only happens on the server.
+11. what is tainting ? 
+
+12. what you will do  to prevent whole object instances or sensitive values from being passed to the client ? -> use react taint api / the Next.js Config experimental.taint option to true.
+
+13. we know next js caches the data requests .. but does it chahes the rendering results too ? 
+
+14. explain the Request-Response Lifecycle in  web development . 
+
+15. what is hybrid web application ? 
+
+16. what is network boundary ? and what is the role of it / why is it important ? 
+
+17. why is it important to think about file dependencies/flow of the code  when creating a hybrid application ? 
+
+18. you send a new request to the server rather than re-use the same request  - is it true ? - yes 
+
+19. yu said that server components are rendered in server and optionally cached on it  , then explain how does the rendering work is handled furthur ? - the rendering work is further split by route segments to enable streaming and partial rendering......
+
+20. how many ways/strategies  are there to render server coponents  in server ?  and which on is used by default , and also tell me that is the rendered result is cached in those ways  ? -> 
+Static Rendering(dafault)   
+Dynamic Rendering         
+Streaming                   
+
+21. what are the benefits of server side rendering ? 
+
+
+22. what is First Contentful Paint (FCP) ? 
+
+23. what is streaming (FCP) ? 
+
+24.How are Server Components rendered?
+
+25.What is the React Server Component Payload (RSC)?
+
+26. exaplin Static Rendering ? and when is it preferred ? -> Static rendering is useful when a route has data that is not personalized to the user and can be known at build time, such as a static blog post or a product page.
+
+
+27. exaplin dynamic  Rendering ? and when is it preferred ?  -> Dynamic rendering is useful when a route has data that is personalized to the user or has information that can only be known at request time, such as cookies or the URL's search params.
+
+
+
+28. exaplin streaming  ? and when is it preferred ? 
+
+29. can next js switch from static to dynamic rendering ? and when does this happen ? 
+
+30. tell me when sshould we use caching in a site and when we should not ? 
+
+31.so how do we choose what type of  rendering  should happen or next js chooses that automatically ? 
+
+32.what are dynamic functions ? 
+what are the examples of dynamic fucntions ? -> 
+Dynamic functions rely on information that can only be known at request time such as a user's cookies, current requests headers, or the URL's search params. In Next.js, these dynamic functions are:
+cookies() and headers(): Using these in a Server Component will opt the whole route into dynamic rendering at request time.
+searchParams: Using the Pages prop will opt the page into dynamic rendering at request time.
+
+33. what is the diffrenece between sequential,parallel  vs streaming , in data fetching ? 
+
+// Streaming enables you to progressively render UI from the server. Work is split 
+// into chunks and streamed to the client as it becomes ready. This allows the user 
+// to see parts of the page immediately, before the entire content has
+//  finished rendering.
+// Diagram showing partially rendered page on the client, with loading UI 
+// for chunks that are being streamed.
+// Streaming is built into the Next.js App Router by default. This helps improve both 
+// the initial page loading performance, as well as UI that depends on slower data 
+// fetches that would block rendering the whole route. For example, reviews on a 
+// product page.
+// You can start streaming route segments using loading.js and UI components with 
+// React Suspense. See the Loading UI and Streaming section(https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming) for more information.
+
+34. is the streaming inbuilt in next js ? -> yes 
+
+35.explain how client components works ? 
+
+36. benefits of client sode rendering ? 
+-> one critical point if yu want to use client rendering that is client rendering /client components have access to browser apis / in other words when you need to use browser apis usse client components / also  By defining the "use client" directive ,  you can tell React to render the component and its children on the client,
+//  where the APIs are available.
+//"use client" doesn't need to be defined in every component that needs 
+// to be rendered on the client. Once you define the boundary, all child components
+//  and modules imported into it are considered part of the client bundle. 
+
+37.what are directives in next js ? tell me some important directives and when do we use them ?
+
+38. how the first full page loading happens , in subsequent navigations  in next ? 
+
+39 . what is hydration ?
+
+Sometimes, after you've declared the "use client" boundary, you may want to go back to the server environment. For example, you may want to reduce the client bundle size, fetch data on the server, or use an API that is only available on the server.
+
+You can keep code on the server even though it's theoretically nested inside Client Components by interleaving Client and Server Components and Server Actions. See the Composition Patterns page for more information.
+
+
+40. what is the recommended composition patterns when using Server and Client Components.? 
+
+41. give me a summaray of when we use clent components and when do we use server components ? 
+// Fetch data		
+// Access backend resources (directly)		
+// Keep sensitive information on the server (access tokens, API keys, etc)		
+// Keep large dependencies on the server / Reduce client-side JavaScript		
+// Add interactivity and event listeners (onClick(), onChange(), etc)		
+// Use State and Lifecycle Effects (useState(), useReducer(), useEffect(), etc)		
+// Use browser-only APIs		
+// Use custom hooks that depend on state, effects, or browser-only APIs		
+// Use React Class components		
+
+42. tell me if you cant use state , context and props in  server side /components then how will yu distribute the data fetched into the server into the components ? 
+
+When fetching data on the server, there may be cases where you need to share data across different components. For example, you may have a layout and a page that depend on the same data.
+
+Instead of using React Context (which is not available on the server) or passing data as props, you can use fetch or React's cache function to fetch the same data in the components that need it, without worrying about making duplicate requests for the same data. This is because React extends fetch to automatically memoize data requests, and the cache function can be used when fetch is not available.
+
+43. how to make a code server only / or in other words how to keep  Server-only Code out of the Client Environment ? and also show me with the code how to do it ? 
+
+export async function getData() {
+  const res = await fetch('https://external-service.com/data', {
+    headers: {
+      authorization: process.env.API_KEY,
+    },
+  })
+ 
+  return res.json()
+}
+At first glance, it appears that getData works on both the server and the client. However, this function contains an API_KEY, written with the intention that it would only ever be executed on the server.
+
+Since the environment variable API_KEY is not prefixed with NEXT_PUBLIC, it's a private variable that can only be accessed on the server. To prevent your environment variables from being leaked to the client, Next.js replaces private environment variables with an empty string.
+
+As a result, even though getData() can be imported and executed on the client, it won't work as expected. And while making the variable public would make the function work on the client, you may not want to expose sensitive information to the client.
+
+To prevent this sort of unintended client usage of server code, we can use the server-only package to give other developers a build-time error if they ever accidentally import one of these modules into a Client Component.
+
+npm install server-only
+
+Then import the package into any module that contains server-only code:
+
+import 'server-only'
+ 
+export async function getData() {
+  const res = await fetch('https://external-service.com/data', {
+    headers: {
+      authorization: process.env.API_KEY,
+    },
+  })
+ 
+  return res.json()
+}
+Now, any Client Component that imports getData() will receive a build-time error explaining that this module can only be used on the server.
+
+The corresponding package client-only can be used to mark modules that contain client-only code – for example, code that accesses the window object.
+
+
+44. which module is used to make code server only ? - > server-only module 
+
+45. which module is used to make code server only ? - > clent-only module
+
+46. what we will see if we try to render client component directly inside server component ? -> error 
+
+47.lets say wwe have installed an npm package/ui component- a third party component  for client side / which uses react and browser apis now if we use it in a server component what will happen ? error
+so how to solve this error ?  
+
+48. tell me some typical usecases of a context/usecontext  ? 
+
+49. how to use contexts in server components ? 
+
+50 . It's worth noting some bundlers might strip out "use client" directives. You can find an example of how to configure esbuild to include the "use client" directive in the React Wrap Balancer(https://github.com/shuding/react-wrap-balancer/blob/main/tsup.config.ts#L10-L13) and Vercel Analytics repositories(https://github.com/vercel/analytics/blob/main/packages/web/tsup.config.js#L26-L30).
+
+51.what is js bundle size ? 
+
+52. when will yu move client components down the tree ? when is it recommended ? 
+
+53.what is serialization in node js ? Passing props from Server to Client Components , If you fetch data in a Server Component, you may want to pass data down as props to Client Components. Props passed from the Server to Client Components need to be serializable by React.
+
+If your Client Components depend on data that is not serializable, you can fetch data on the client with a third party library or on the server via a Route Handler.
+
+54. what is Interleaving Server and Client Components ?
+
+55. what is root layout ?
+
+56. During a request-response lifecycle, your code moves from the server to the client. If you need to access data or resources on the server while on the client, you'll be making a new request to the server - not switching back and forth , Since Client Components are rendered after Server Components, you cannot import a Server Component into a Client Component module (since it would require a new request back to the server). Instead, you can pass a Server Component as props to a Client Component.  See the unsupported pattern and supported pattern sections below.
+
+57. discuss the the unsupported pattern and supported pattern of importing the servercomponent in the client . also reflect your explanation on your example codes too .
+
+58. what is runtime in your code ? 
+ runtime refers to the set of libraries, APIs, and general functionality available to your code during execution.
+
+59. what are the runtimes in next ? 
+ there are two runtimes where parts of your application code can be rendered:- The Node.js Runtime (default) , The Edge Runtime is based on Web APIs.
+
+60 . what/which criterias you should choose when yu are choosing a runtime ? 
+
+61. tell me criterias of node runtime ? 
+This table compares three different runtimes in Next.js: Node, Serverless, and Edge, and highlights the key differences between them across various aspects. Here's what it tells us about the Node runtime:
+
+1. **Cold Boot/Normal**: When using the Node runtime, the cold boot time (the time it takes to start the runtime from scratch) is low compared to other runtimes.
+
+2. **HTTP Streaming**: The Node runtime supports HTTP streaming, which allows for efficient transfer of data in real-time.
+
+3. **IO**: In the Node runtime, you have access to all I/O operations (file system, network, etc.).
+
+4. **Scalability/High**: The Node runtime has high scalability, which means it can handle a significant number of concurrent requests efficiently.
+
+5. **Security/Normal**: The security level of the Node runtime is considered normal or standard.
+
+6. **Latency/Normal**: The latency (the delay between a request and a response) in the Node runtime is considered normal or average.
+
+7. **npm Packages/All**: When using the Node runtime, you have access to all npm packages, which means you can use any third-party package available on the npm registry.
+
+8. **Static Rendering/Yes**: The Node runtime supports static rendering, which means pages can be pre-rendered at build time for better performance.
+
+9. **Dynamic Rendering/Yes**: The Node runtime also supports dynamic rendering, which means pages can be rendered on the server at runtime.
+
+10. **Data Revalidation w/ `fetch`/Yes**: In the Node runtime, you can use the `fetch` function to revalidate or fetch data at runtime, allowing for dynamic updates.
+
+In summary, the table highlights that the Node runtime is a versatile option with normal performance characteristics, access to all npm packages, and support for both static and dynamic rendering. It's a good choice for applications that require a balance between performance, scalability, and access to a wide range of third-party packages.
+
+The table provides the following information about the Edge runtime in Next.js:
+
+1. **Cold Boot/Lowest**: The Edge runtime has the lowest cold boot time compared to Node and Serverless runtimes. This means it can start up very quickly.
+
+2. **HTTP Streaming/Yes**: The Edge runtime supports HTTP streaming, allowing efficient real-time data transfer.
+
+3. **IO/`fetch`**: In the Edge runtime, you can only use the `fetch` function for I/O operations, as it doesn't have access to the file system or other I/O operations.
+
+4. **Scalability/Highest**: The Edge runtime has the highest scalability, meaning it can handle the largest number of concurrent requests efficiently.
+
+5. **Security/High**: The Edge runtime has a high level of security compared to other runtimes.
+
+6. **Latency/Lowest**: The Edge runtime has the lowest latency, which means the delay between a request and a response is minimal.
+
+7. **npm Packages/A smaller subset**: The Edge runtime can only use a smaller subset of npm packages, as not all packages are compatible with the Edge runtime environment.
+
+8. **Static Rendering/No**: The Edge runtime does not support static rendering, as pages are rendered at runtime.
+
+9. **Dynamic Rendering/Yes**: The Edge runtime supports dynamic rendering, where pages are rendered on the Edge network at runtime.
+
+10. **Data Revalidation w/ `fetch`/Yes**: In the Edge runtime, you can use the `fetch` function to revalidate or fetch data at runtime, allowing for dynamic updates.
+
+In summary, the table highlights that the Edge runtime is optimized for performance, scalability, security, and low latency. It's suitable for applications that prioritize lightning-fast responses and high concurrency, but may be limited in terms of the available npm packages and lack of static rendering support.
+
+
+62.so when should we choose node and when should we choose edge runtime ?
+
+The Edge Runtime is ideal if you need to deliver dynamic, personalized content at low latency with small, simple functions. The Edge Runtime's speed comes from its minimal use of resources, but that can be limiting in many scenarios.
+
+63. is edge runtime is part/subset of node runtime ? yes 
+
+64. what is serverless node js ?
+what are serveerless functions ?
+
+65.what will yu do if  if you need a scalable solution that can handle more complex computational loads than the Edge Runtime. With Serverless Functions on Vercel, for example, your overall code size is 50MB including imported packages, fonts, and files? - Serverless Node.js
+,The downside compared to routes using the Edge(https://vercel.com/docs/concepts/functions/edge-functions) is that it can take hundreds of milliseconds for Serverless Functions to boot up before they begin processing requests. Depending on the amount of traffic your site receives, this could be a frequent occurrence as the functions are not frequently "warm". 
+
+66.how will yu segment runtime for individual routes ? -> 
+export const runtime = 'edge' // 'nodejs' (default) | 'edge'
+You can also define runtime on a layout level, which will make all routes under the layout run on the edge runtime:
+export const runtime = 'edge' // 'nodejs' (default) | 'edge'
+If the segment runtime is not set, the default nodejs runtime will be used. You do not need to use the runtime option if you do not plan to change from the Node.js runtime.
+
+
+
+67.stylings next.js supports ? 
+Global CSS: Simple to use and familiar for those experienced with traditional CSS, but can lead to larger CSS bundles and difficulty managing styles as the application grows.
+CSS Modules: Create locally scoped CSS classes to avoid naming conflicts and improve maintainability.
+Tailwind CSS: A utility-first CSS framework that allows for rapid custom designs by composing utility classes.
+Sass: A popular CSS preprocessor that extends CSS with features like variables, nested rules, and mixins.
+CSS-in-JS: Embed CSS directly in your JavaScript components, enabling dynamic and scoped styling.
+
+68.why image optimization is important ? 
+images account for a huge portion of the typical website’s page weight and can have a sizable impact on your website's LCP performance.
+
+69. what fetures next js gives to optimize images ? size , visual stability , faster page load , asset flexibility . 
+
+70 .why we prefer opptimizations in app ? what next js brings to the table . 
+Next.js comes with a variety of built-in optimizations designed to improve your application's speed and Core Web Vitals
+
+71. waht is lazy loading ? 
+
+72. what are page transitions ? 
+how do next makes page transitions smoother ? 
+
+73. how will you take control of loading and execution of third-party scripts ? -> via scripts . 
+
+74. how metadata works ? 
+Metadata helps search engines understand your content better (which can result in better SEO), and allows you to customize how your content is presented on social media, helping you create a more engaging and consistent user experience across various platforms.
+
+
+
+76. where do the static assets reside in the app folder ? 
+
+77.Next.js provides a TypeScript-first development experience for building your React application.
+- true  or false ? true .
+
+78. Next.js allows you to customize your project to meet specific requirements. This includes integrations with TypeScript, ESlint, and more, as well as internal configuration options such as Absolute Imports and Environment Variables.
+
+
+79.what is authentication in next js ?  - Authentication verifies if the user is who they say they are. It requires the user to prove their identity with something they have, such as a username and password.
+
+
+80 . what is session management ? -Session Management tracks the user's state (e.g. logged in) across multiple requests.
+
+81. what is authorization ? - Authorization decides what parts of the application the user is allowed to access.
+
+82. mention Modern web applications commonly use several authentication strategies ? -
+OAuth/OpenID Connect (OIDC)
+Credentials-based login (Email + Password)
+Passwordless/Token-based authentication
+Passkeys/WebAuthn
+
+83.why Selecting an authentication strategy should align with your application's specific requirements, user interface considerations, and security objectives ? why cant we choose any of the above ? 
+
+84. what is protecting routes ? 
+Middleware in Next.js helps you control who can access different parts of your website/Protecting Routes with Middleware,This is important for keeping areas like the user dashboard protected while having other pages like marketing pages be public. It's recommended to apply Middleware across all routes and specify exclusions for public access.
+
+85.tell me step by step how will yu protect routes using middleware ? 
+
+86.what is Protecting Server Actions
+? It is important to treat Server Actions with the same security considerations as public-facing API endpoints. Verifying user authorization for each action is crucial. Implement checks within Server Actions to determine user permissions, such as restricting certain actions to admin users.
+
+
+87.discuss it step by step . 
+
+88.what is Authorization Using Server Components? Server Components in Next.js are designed for server-side execution and offer a secure environment for integrating complex logic like authorization. They enable direct access to back-end resources, optimizing performance for data-heavy tasks and enhancing security for sensitive operations.
+
+In Server Components, a common practice is to conditionally render UI elements based on the user's role. This approach enhances user experience and security by ensuring users only access content they are authorized to view.
+
+89.discuss some best practices ? 
+Secure Session Management: Prioritize the security of session data to prevent unauthorized access and data breaches. Use encryption and secure storage practices.
+Dynamic Role Management: Use a flexible system for user roles to easily adjust to changes in permissions and roles, avoiding hardcoded roles.
+Security-First Approach: In all aspects of authorization logic, prioritize security to safeguard user data and maintain the integrity of your application. This includes thorough testing and considering potential security vulnerabilities.
+
+
+90.how will yu eliminate  the need for repeated logins , preserved across different parts of the application and enhance enhancing both security and user convenience ? 
+- via Session Management and Cookie-Based Sessions
+
+91. how would yu enhance the  client-side efficiency. ? -> Cookie-Based Sessions
+Cookie-based sessions manage user data by storing encrypted session information directly in browser cookies. Upon user login, this encrypted data is stored in the cookie. Each subsequent server request includes this cookie, minimizing the need for repeated server queries and enhancing client-side efficiency.
+
+However, this method requires careful encryption to protect sensitive data, as cookies are susceptible to client-side security risks. Encrypting session data in cookies is key to safeguarding user information from unauthorized access. It ensures that even if a cookie is stolen, the data inside remains unreadable.
+
+Additionally, while individual cookies are limited in size (typically around 4KB), techniques like cookie-chunking can overcome this limitation by dividing large session data into multiple cookies.
+
+92. what is database sessions ? 
+Database session management involves storing session data on the server, with the user's browser only receiving a session ID. This ID references the session data stored server-side, without containing the data itself. This method enhances security, as it keeps sensitive session data away from the client-side environment, reducing the risk of exposure to client-side attacks. Database sessions are also more scalable, accommodating larger data storage needs.
+
+However, this approach has its tradeoffs. It can increase performance overhead due to the need for database lookups at each user interaction. Strategies like session data caching can help mitigate this. Additionally, reliance on the database means that session management is as reliable as the database's performance and availability.
+
+93. how would you  choose which kind of session management is good for yur application ? cookie-based or database sessions ? 
+Cookie-based sessions are simpler and suit smaller applications with lower server load but may offer less security. Database sessions, while more complex, provide better security and scalability, ideal for larger, data-sensitive applications.
+
+With authentication solutions such as NextAuth.js, session management becomes more efficient, using either cookies or database storage. This automation simplifies the development process, but it's important to understand the session management method used by your chosen solution. Ensure it aligns with your application's security and performance requirements.
+
+Regardless of your choice, prioritize security in your session management strategy. For cookie-based sessions, using secure and HTTP-only cookies is crucial to protect session data. For database sessions, regular backups and secure handling of session data are essential. Implementing session expiry and cleanup mechanisms is vital in both approaches to prevent unauthorized access and maintain application performance and reliability.
+
+
+
+95 . what is next js production checklist / what are some optimizations and patterns you should consider implementing for the best user experience, performance, and security. ? 
+Server Components: Next.js uses Server Components by default. Server Components run on the server, and don't require JavaScript to render on the client. As such, they have no impact on the size of your client-side JavaScript bundles. You can then use Client Components as needed for interactivity.
+Code-splitting: Server Components enable automatic code-splitting by route segments. You may also consider lazy loading Client Components and third-party libraries, where appropriate.
+Prefetching: When a link to a new route enters the user's viewport, Next.js prefetches the route in background. This makes navigation to new routes almost instant. You can opt out of prefetching, where appropriate.
+Static Rendering: Next.js statically renders Server and Client Components on the server at build time and caches the rendered result to improve your application's performance. You can opt into Dynamic Rendering for specific routes, where appropriate.
+Caching: Next.js caches data requests, the rendered result of Server and Client Components, static assets, and more, to reduce the number of network requests to your server, database, and backend services. You may opt out of caching, where appropriate.
+
+96. what are things we should look for while development ? 
+Routing and rendering
+Layouts: Use layouts to share UI across pages and enable partial rendering on navigation.
+<Link> component: Use the <Link> component for client-side navigation and prefetching.
+Error Handling: Gracefully handle catch-all errors and 404 errors in production by creating custom error pages.
+Composition Patterns: Follow the recommended composition patterns for Server and Client Components, and check the placement of your "use client" boundaries to avoid unnecessarily increasing your client-side JavaScript bundle.
+Dynamic Functions: Be aware that dynamic functions like cookies() and the searchParams prop will opt the entire route into Dynamic Rendering (or your whole application if used in the Root Layout). Ensure dynamic function usage is intentional and wrap them in <Suspense> boundaries where appropriate.
+Good to know: Partial Prerendering (Experimental) will allow parts of a route to be dynamic without opting the whole route into dynamic rendering.
+
+97. what to check for Data fetching and caching? 
+Server Components: Leverage the benefits of fetching data on the server using Server Components.
+Route Handlers: Use Route Handlers to access your backend resources from Client Components. But do not call Route Handlers from Server Components to avoid an additional server request.
+Streaming: Use Loading UI and React Suspense to progressively send UI from the server to the client, and prevent the whole route from blocking while data is being fetched.
+Parallel Data Fetching: Reduce network waterfalls by fetching data in parallel, where appropriate. Also, consider preloading data where appropriate.
+Data Caching: Verify whether your data requests are being cached or not, and opt into caching, where appropriate. Ensure requests that don't use fetch are cached.
+Static Images: Use the public directory to automatically cache your application's static assets, e.g. images.
+
+98 . what to look for UI and accessibility? 
+Forms and Validation: Use Server Actions to handle form submissions, server-side validation, and handle errors.
+Font Module: Optimize fonts by using the Font Module, which automatically hosts your font files with other static assets, removes external network requests, and reduces layout shift.
+<Image> Component: Optimize images by using the Image Component, which automatically optimizes images, prevents layout shift, and serves them in modern formats like WebP or AVIF.
+<Script> Component: Optimize third-party scripts by using the Script Component, which automatically defers scripts and prevents them from blocking the main thread.
+ESLint: Use the built-in eslint-plugin-jsx-a11y plugin to catch accessibility issues early.
+
+99. what to look for Security? 
+Tainting: Prevent sensitive data from being exposed to the client by tainting data objects and/or specific values.
+Server Actions: Ensure users are authorized to call Server Actions. Review the the recommended security practices.
+Environment Variables: Ensure your .env.* files are added to .gitignore and only public variables are prefixed with NEXT_PUBLIC_.
+Content Security Policy: Consider adding a Content Security Policy to protect your application against various security threats such as cross-site scripting, clickjacking, and other code injection attacks.
+
+100. what to look for Metadata and SEO
+? Metadata API: Use the Metadata API to improve your application's Search Engine Optimization (SEO) by adding page titles, descriptions, and more.
+Open Graph (OG) images: Create OG images to prepare your application for social sharing.
+Sitemaps and Robots: Help Search Engines crawl and index your pages by generating sitemaps and robots files.
+
+101. what to look for web vitals ? 
+Lighthouse: Run lighthouse in incognito to gain a better understanding of how your users will experience your site, and to identify areas for improvement. This is a simulated test and should be paired with looking at field data (such as Core Web Vitals).
+useReportWebVitals hook: Use this hook to send Core Web Vitals data to analytics tools.
+
+102. Analyzing bundles
+Use the @next/bundle-analyzer plugin to analyze the size of your JavaScript bundles and identify large modules and dependencies that might be impacting your application's performance.
+
+Additionally, the following tools can you understand the impact of adding new dependencies to your application:
+
+Import Cost
+Package Phobia
+Bundle Phobia
+bundlejs
+
+103.what to look for after ddeployment ? 
+For Vercel deployments, we recommend the following:
+
+Analytics: A built-in analytics dashboard to help you understand your application's traffic, including the number of unique visitors, page views, and more.
+Speed Insights: Real-world performance insights based on visitor data, offering a practical view of how your website is performing in the field.
+Logging: Runtime and Activity logs to help you debug issues and monitor your application in production. Alternatively, see the integrations page for a list of third-party tools and services.
+
+
+102. what is spa/single page application ?
+
+103. what is swr in next js ? 
+
+104. discuss some of the important file conventions of next ? 
+default.js
+error.js
+instrumentation.js
+layout.js
+loading.js
+middleware.js
+not-found.js
+page.js
+route.js
+Route Segment Config
+template.js
+Metadata Files
+
+
+105. what is default.js is used to do ? 
+The default.js file is used to render a fallback within Parallel Routes when Next.js cannot recover a slot's active state after a full-page load.
+During soft navigation, Next.js keeps track of the active state (subpage) for each slot. However, for hard navigations (full-page load), Next.js cannot recover the active state. In this case, a default.js file can be rendered for subpages that don't match the current URL.
+
+106.what is error.js used to do ? An error file defines an error UI boundary for a route segment.
+It is useful for catching unexpected errors that occur in Server Components and Client Components and displaying a fallback UI.
+
+
+107.what does instrumentation.js do ? 
+The instrumentation.js|ts file is used to integrate monitoring and logging tools into your application. This allows you to track the performance and behavior of your application, and to debug issues in production.
+To use it, place the file in the root of your application or inside a src folder if using one.
+
+108.what does layout.js used to do ? 
+A layout is UI that is shared between routes.A root layout is the top-most layout in the root app directory. It is used to define the <html> and <body> tags and other globally shared UI.
+
+109.what is loading.js is used to do ? A loading file can create instant loading states built on Suspense.
+By default, this file is a Server Component - but can also be used as a Client Component through the "use client" directive.
+
+110.what is middleware.js ? 
+The middleware.js|ts file is used to write Middleware and run code on the server before a request is completed. Then, based on the incoming request, you can modify the response by rewriting, redirecting, modifying the request or response headers, or responding directly.
+Middleware executes before routes are rendered. It's particularly useful for implementing custom server-side logic like authentication, logging, or handling redirects.
+Use the file middleware.ts (or .js) in the root of your project to define Middleware. For example, at the same level as app or pages, or inside src if applicable.
+
+111.what is not-found.js is used to do ? 
+The not-found file is used to render UI when the notFound function is thrown within a route segment. Along with serving a custom UI, Next.js will return a 200 HTTP status code for streamed responses, and 404 for non-streamed responses.
+
+112.what is page.js is used to do ? 
+A page is UI that is unique to a route.
+
+
+
+113.what does route.js is used to do ? 
+Route Handlers allow you to create custom request handlers for a given route using the Web Request and Response APIs.A route file allows you to create custom request handlers for a given route. The following HTTP methods are supported: GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS. Route Handlers are only available inside the app directory. You do not need to use API Routes (pages) and Route Handlers (app) together, as Route Handlers should be able to handle all use cases.
+
+114.what is Route Segment Config ? 
+The Route Segment options allows you to configure the behavior of a Page, Layout, or Route Handler by directly exporting the following variables:
+
+115.what is template.js is used for ? 
+A template file is similar to a layout in that it wraps each child layout or page. Unlike layouts that persist across routes and maintain state, templates create a new instance for each of their children on navigation.
+
+
+116.tell me some functions provided by next js ?
+cookies-API Reference for the cookies function.
+draftMode-API Reference for the draftMode function.
+fetch-API reference for the extended fetch function.
+generateImageMetadata-Learn how to generate multiple images in a single Metadata API special file.
+generateMetadata-Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.
+generateSitemaps-Learn how to use the generateSiteMaps function to create multiple sitemaps for your application.
+generateStaticParams-API reference for the generateStaticParams function.
+generateViewport-API Reference for the generateViewport function.
+headers-API reference for the headers function.
+ImageResponse-API Reference for the ImageResponse constructor.
+NextRequest-API Reference for NextRequest.
+NextResponse-API Reference for NextResponse.
+notFound-API Reference for the notFound function.
+permanentRedirect-API Reference for the permanentRedirect function.
+redirect-API Reference for the redirect function.
+revalidatePath-API Reference for the revalidatePath function.
+revalidateTag-API Reference for the revalidateTag function.
+unstable_cache-API Reference for the unstable_cache function.
+unstable_noStore-API Reference for the unstable_noStore function.
+useParams-API Reference for the useParams hook.
+usePathname-API Reference for the usePathname hook.
+useReportWebVitals-API Reference for the useReportWebVitals function.
+useRouter-API reference for the useRouter hook.
+useSearchParams-API Reference for the useSearchParams hook.
+useSelectedLayoutSegment-API Reference for the useSelectedLayoutSegment hook.
+useSelectedLayoutSegments-API Reference for the useSelectedLayoutSegments hook.
+userAgent-The userAgent helper extends the Web Request API with additional properties and methods to interact with the user agent object from the request.
+
+117. what is cookies used for ? 
+The cookies function allows you to read the HTTP incoming request cookies from a Server Component or write outgoing request cookies in a Server Action or Route Handler.
+
+Good to know: cookies() is a Dynamic Function whose returned values cannot be known ahead of time. Using it in a layout or page will opt a route into dynamic rendering at request time.
+
+118. what is draftMode is used to do ?
+The draftMode function allows you to detect Draft Mode inside a Server Component.
+
+
+119.what is fetch is used for ? 
+Next.js extends the native Web fetch() API to allow each request on the server to set its own persistent caching semantics.
+In the browser, the cache option indicates how a fetch request will interact with the browser's HTTP cache. With this extension, cache indicates how a server-side fetch request will interact with the framework's persistent HTTP cache.
+You can call fetch with async and await directly within Server Components. 
+
+120. what is generateImageMetadata is used for ? 
+You can use generateImageMetadata to generate different versions of one image or return multiple images for one route segment. This is useful for when you want to avoid hard-coding metadata values, such as for icons.
+
+122. what  is generateMetadata is used for ? 
+To define static metadata, export a Metadata object from a layout.js or page.js file.Dynamic metadata depends on dynamic information, such as the current route parameters, external data, or metadata in parent segments, can be set by exporting a generateMetadata function that returns a Metadata object.The metadata object and generateMetadata function exports are only supported in Server Components.
+You cannot export both the metadata object and generateMetadata function from the same route segment.
+
+123.what is generateSitemaps is used for ? 
+You can use the generateSitemaps function to generate multiple sitemaps for your application.
+
+124.what is generateStaticParams is used for ? 
+The generateStaticParams function can be used in combination with dynamic route segments to statically generate routes at build time instead of on-demand at request time.You can use the dynamicParams segment config option to control what happens when a dynamic segment is visited that was not generated with generateStaticParams.
+During next dev, generateStaticParams will be called when you navigate to a route.
+During next build, generateStaticParams runs before the corresponding Layouts or Pages are generated.
+During revalidation (ISR), generateStaticParams will not be called again.
+generateStaticParams replaces the getStaticPaths function in the Pages Router.
+
+125.what is generateViewport is used for ? 
+You can customize the initial viewport of the page with the static viewport object or the dynamic generateViewport function.
+
+126. what is headers used for ?
+The headers function allows you to read the HTTP incoming request headers from a Server Component.
+
+127.what is ImageResponse is used for ? 
+The ImageResponse constructor allows you to generate dynamic images using JSX and CSS. This is useful for generating social media images such as Open Graph images, Twitter cards, and more.
+
+
+128.what is NextRequest is used for ? 
+NextRequest extends the Web Request API with additional convenience methods
+
+129.what is NextResponse is used for ? 
+NextResponse extends the Web Response API with additional convenience methods.
+
+130.what is notFound is used for ? 
+The notFound function allows you to render the not-found file within a route segment as well as inject a <meta name="robots" content="noindex" /> tag.
+
+131.what is permanentRedirect is ussed for ? 
+The permanentRedirect function allows you to redirect the user to another URL. permanentRedirect can be used in Server Components, Client Components, Route Handlers, and Server Actions.
+When used in a streaming context, this will insert a meta tag to emit the redirect on the client side. When used in a server action, it will serve a 303 HTTP redirect response to the caller. Otherwise, it will serve a 308 (Permanent) HTTP redirect response to the caller.
+If a resource doesn't exist, you can use the notFound function instead.: If you prefer to return a 307 (Temporary) HTTP redirect instead of 308 (Permanent), you can use the redirect function instead.
+
+132.what is redirect is used for ? 
+The redirect function allows you to redirect the user to another URL. redirect can be used in Server Components, Route Handlers, and Server Actions.
+When used in a streaming context, this will insert a meta tag to emit the redirect on the client side. When used in a server action, it will serve a 303 HTTP redirect response to the caller. Otherwise, it will serve a 307 HTTP redirect response to the caller.
+If a resource doesn't exist, you can use the notFound function instead.
+In Server Actions and Route Handlers, redirect should be called after the try/catch block.
+If you prefer to return a 308 (Permanent) HTTP redirect instead of 307 (Temporary), you can use the permanentRedirect function instead.
+
+133. what is revalidatePath is used for ? 
+revalidatePath allows you to purge cached data on-demand for a specific path.
+revalidatePath is available in both Node.js and Edge runtimes.
+revalidatePath only invalidates the cache when the included path is next visited. This means calling revalidatePath with a dynamic route segment will not immediately trigger many revalidations at once. The invalidation only happens when the path is next visited.
+Currently, revalidatePath invalidates all the routes in the client-side Router Cache. This behavior is temporary and will be updated in the future to apply only to the specific path.
+Using revalidatePath invalidates only the specific path in the server-side Route Cache.
+
+134.what is revalidateTag is used for ? 
+revalidateTag allows you to purge cached data on-demand for a specific cache tag.
+revalidateTag is available in both Node.js and Edge runtimes.
+revalidateTag only invalidates the cache when the path is next visited. This means calling revalidateTag with a dynamic route segment will not immediately trigger many revalidations at once. The invalidation only happens when the path is next visited.
+
+135.what is unstable_noStore is used for ? 
+unstable_noStore can be used to declaratively opt out of static rendering and indicate a particular component should not be cached.
+unstable_noStore is equivalent to cache: 'no-store' on a fetch
+unstable_noStore is preferred over export const dynamic = 'force-dynamic' as it is more granular and can be used on a per-component basis
+Using unstable_noStore inside unstable_cache will not opt out of static generation. Instead, it will defer to the cache configuration to determine whether to cache the result or not.
+
+136.what is useParams is used for ? 
+useParams is a Client Component hook that lets you read a route's dynamic params filled in by the current URL.
+
+
+137.what is usePathname is used for ? 
+usePathname is a Client Component hook that lets you read the current URL's pathname.
+
+138.what is useReportWebVitals is used for ? 
+The useReportWebVitals hook allows you to report Core Web Vitals, and can be used in combination with your analytics service.
+
+139. what is useRouter is used for ? 
+The useRouter hook allows you to programmatically change routes inside Client Components.
+Recommendation: Use the <Link> component for navigation unless you have a specific requirement for using useRouter.
+
+140. what is useSearchParams is used for ? 
+useSearchParams is a Client Component hook that lets you read the current URL's query string.
+useSearchParams returns a read-only version of the URLSearchParams interface.
+
+142.what is useSelectedLayoutSegment is used for ? 
+useSelectedLayoutSegment is a Client Component hook that lets you read the active route segment one level below the Layout it is called from.
+It is useful for navigation UI, such as tabs inside a parent layout that change style depending on the active child segment.
+
+143.what is useSelectedLayoutSegment is used for ? 
+useSelectedLayoutSegments is a Client Component hook that lets you read the active route segments below the Layout it is called from.
+It is useful for creating UI in parent Layouts that need knowledge of active child segments such as breadcrumbs.
+
+144.what is userAgent is used for ? 
+The userAgent helper extends the Web Request API with additional properties and methods to interact with the user agent object from the request.
+
+145.how will yu configure next js ? using next.config.js Options
+
+146.what is appDir is used to do ? 
+The App Router (app directory) enables support for layouts, Server Components, streaming, and colocated data fetching.
+Using the app directory will automatically enable React Strict Mode. Learn how to incrementally adopt app.
+
+147.what is next js cdn ? and what is it used to do ?
+
+148.what is basePath is used to do ? 
+To deploy a Next.js application under a sub-path of a domain you can use the basePath config option.
+basePath allows you to set a path prefix for the application. For example, to use /docs instead of '' (an empty string, the default), open next.config.js and add the basePath config:
+module.exports = {
+  basePath: '/docs',
+}
+
+149.what is compress is used to  do ?
+By default, Next.js uses gzip to compress rendered content and static files when using next start or a custom server. This is an optimization for applications that do not have compression configured. If compression is already configured in your application via a custom server, Next.js will not add compression.When hosting your application on Vercel, compression uses brotli first, then gzip.
+You can check if compression is enabled and which algorithm is used by looking at the Accept-Encoding (browser accepted options) and Content-Encoding (currently used) headers in the response.
+
+150.what is crossOrigin is used to do ?
+Use the crossOrigin option to add a crossOrigin attribute in all <script> tags generated by the next/script component , and define how cross-origin requests should be handled.
+module.exports = {
+  crossOrigin: 'anonymous',
+}
+
+151.what is distDir is used to  do ? 
+You can specify a name to use for a custom build directory to use instead of .next.
+Open next.config.js and add the distDir config:
+module.exports = {
+  distDir: 'build',
+}Now if you run next build Next.js will use build instead of the default .next folder.
+
+152.what is env is used to do ?
+environment variables specified in this way will always be included in the JavaScript bundle, prefixing the environment variable name with NEXT_PUBLIC_ only has an effect when specifying them through the environment or .env files.To add environment variables to the JavaScript bundle, open next.config.js and add the env config:
+module.exports = {
+  env: {
+    customKey: 'my-value',
+  },
+}
+Now you can access process.env.customKey in your code. For example:
+
+
+152. what is eslint is used to do ? 
+When ESLint is detected in your project, Next.js fails your production build (next build) when errors are present.
+
+If you'd like Next.js to produce production code even when your application has ESLint errors, you can disable the built-in linting step completely. This is not recommended unless you already have ESLint configured to run in a separate part of your workflow (for example, in CI or a pre-commit hook).
+Open next.config.js and enable the ignoreDuringBuilds option in the eslint config:
+module.exports = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+}
+
+153.what is httpAgentOptions is used for ? 
+In Node.js versions prior to 18, Next.js automatically polyfills fetch() with undici and enables HTTP Keep-Alive by default.
+To disable HTTP Keep-Alive for all fetch() calls on the server-side, open next.config.js and add the httpAgentOptions config:
+module.exports = {
+  httpAgentOptions: {
+    keepAlive: false,
+  },
+}
+
+154.what is images is used for ? 
+If you want to use a cloud provider to optimize images instead of using the Next.js built-in Image Optimization API, you can configure next.config.js with the following:
+module.exports = {
+  images: {
+    loader: 'custom',
+    loaderFile: './my/image/loader.js',
+  },
+}
+
+155.what is Cache Handler is used to do ? 
+In Next.js, the default cache handler for the Pages and App Router uses the filesystem cache. This requires no configuration, however, you can customize the cache handler by using the cacheHandler field in next.config.js.
+module.exports = {
+  cacheHandler: require.resolve('./cache-handler.js'),
+  cacheMaxMemorySize: 0, // disable default in-memory caching
+}
+
+
+156.what is logging is used to do ? 
+You can configure the logging level and whether the full URL is logged to the console when running Next.js in development mode.
+Currently, logging only applies to data fetching using the fetch API. It does not yet apply to other logs inside of Next.js.
+module.exports = {
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+}
+
+157.what is onDemandEntries is used for ? 
+Next.js exposes some options that give you some control over how the server wil dispose or keep in memory built pages in development.
+To change the defaults, open next.config.js and add the onDemandEntries config:
+module.exports = {
+  onDemandEntries: {
+    // period (in ms) where the server will keep pages in the buffer
+    maxInactiveAge: 25 * 1000,
+    // number of pages that should be kept simultaneously without being disposed
+    pagesBufferLength: 2,
+  },
+}
+
+158.what is optimizePackageImports is used for ? 
+Some packages can export hundreds or thousands of modules, which can cause performance issues in development and production.
+Adding a package to experimental.optimizePackageImports will only load the modules you are actually using, while still giving you the convenience of writing import statements with many named exports.
+
+
+159.what is output is used for ? 
+During a build, Next.js will automatically trace each page and its dependencies to determine all of the files that are needed for deploying a production version of your application.
+This feature helps reduce the size of deployments drastically. Previously, when deploying with Docker you would need to have all files from your package's dependencies installed to run next start. Starting with Next.js 12, you can leverage Output File Tracing in the .next/ directory to only include the necessary files.
+Furthermore, this removes the need for the deprecated serverless target which can cause various issues and also creates unnecessary duplication.
+
+160.what is pageExtensions is used for ? 
+By default, Next.js accepts files with the following extensions: .tsx, .ts, .jsx, .js. This can be modified to allow other extensions like markdown (.md, .mdx).
+const withMDX = require('@next/mdx')()
+ 
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  pageExtensions: ['ts', 'tsx', 'mdx'],
+  experimental: {
+    mdxRs: true,
+  },
+}
+ 
+module.exports = withMDX(nextConfig)
+
+161.what is reactStrictMode is used for ? 
+Since Next.js 13.4, Strict Mode is true by default with app router, so the above configuration is only necessary for pages. You can still disable Strict Mode by setting reactStrictMode: false.We strongly suggest you enable Strict Mode in your Next.js application to better prepare your application for the future of React.React's Strict Mode is a development mode only feature for highlighting potential problems in an application. It helps to identify unsafe lifecycles, legacy API usage, and a number of other features.
+
+162.what is  redirects is used for ? 
+Redirects allow you to redirect an incoming request path to a different destination path.
+To use redirects you can use the redirects key in next.config.js:
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: '/about',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
+}
+redirects is an async function that expects an array to be returned holding objects with source, destination, and permanent properties:
+source is the incoming request path pattern.
+destination is the path you want to route to.
+permanent true or false - if true will use the 308 status code which instructs clients/search engines to cache the redirect forever, if false will use the 307 status code which is temporary and is not cached.
+basePath: false or undefined - if false the basePath won't be included when matching, can be used for external redirects only.
+locale: false or undefined - whether the locale should not be included when matching.
+has is an array of has objects with the type, key and value properties.
+missing is an array of missing objects with the type, key and value properties.
+
+163.Why does Next.js use 307 and 308? 
+Traditionally a 302 was used for a temporary redirect, and a 301 for a permanent redirect, but many browsers changed the request method of the redirect to GET, regardless of the original method. For example, if the browser made a request to POST /v1/users which returned status code 302 with location /v2/users, the subsequent request might be GET /v2/users instead of the expected POST /v2/users. Next.js uses the 307 temporary redirect, and 308 permanent redirect status codes to explicitly preserve the request method used.
+
+164.what is Path Matching in next js ? 
+Path matches are allowed, for example /old-blog/:slug will match /old-blog/hello-world (no nested paths)
+source: '/old-blog/:slug',
+destination: '/news/:slug', // Matched parameters can be used in the destination
+permanent: true,
+
+Wildcard Path Matching
+To match a wildcard path you can use * after a parameter, for example /blog/:slug* will match /blog/a/b/c/d/hello-world:
+        source: '/blog/:slug*',
+        destination: '/news/:slug*', // Matched parameters can be used in the destination
+        permanent: true,
+
+
+165. what is Regex Path Matching in next js ? 
+To match a regex path you can wrap the regex in parentheses after a parameter, for example /post/:slug(\\d{1,}) will match /post/123 but not /post/abc:
+source: '/post/:slug(\\d{1,})',
+destination: '/news/:slug', // Matched parameters can be used in the destination
+permanent: false,
+The following characters (, ), {, }, :, *, +, ? are used for regex path matching, so when used in the source as non-special values they must be escaped by adding \\ before them:
+// this will match `/english(default)/something` being requested
+source: '/english\\(default\\)/:slug',
+destination: '/en-us/:slug',
+permanent: false,
+
+166. what is Header, Cookie, and Query Matching ? 
+To only match a redirect when header, cookie, or query values also match the has field or don't match the missing field can be used. Both the source and all has items must match and all missing items must not match for the redirect to be applied.
+
+has and missing items can have the following fields:
+type: String - must be either header, cookie, host, or query.
+key: String - the key from the selected type to match against.
+value: String or undefined - the value to check for, if undefined any value will match. A regex like string can be used to capture a specific part of the value, e.g. if the value first-(?<paramName>.*) is used for first-second then second will be usable in the destination with :paramName.
+module.exports = {
+  async redirects() {
+    return [
+      // if the header `x-redirect-me` is present,
+      // this redirect will be applied
+      {
+        source: '/:path((?!another-page$).*)',
+        has: [
+          {
+            type: 'header',
+            key: 'x-redirect-me',
+          },
+        ],
+        permanent: false,
+        destination: '/another-page',
+      },
+      // if the header `x-dont-redirect` is present,
+      // this redirect will NOT be applied
+      {
+        source: '/:path((?!another-page$).*)',
+        missing: [
+          {
+            type: 'header',
+            key: 'x-do-not-redirect',
+          },
+        ],
+        permanent: false,
+        destination: '/another-page',
+      },
+      // if the source, query, and cookie are matched,
+      // this redirect will be applied
+      {
+        source: '/specific/:path*',
+        has: [
+          {
+            type: 'query',
+            key: 'page',
+            // the page value will not be available in the
+            // destination since value is provided and doesn't
+            // use a named capture group e.g. (?<page>home)
+            value: 'home',
+          },
+          {
+            type: 'cookie',
+            key: 'authorized',
+            value: 'true',
+          },
+        ],
+        permanent: false,
+        destination: '/another/:path*',
+      },
+      // if the header `x-authorized` is present and
+      // contains a matching value, this redirect will be applied
+      {
+        source: '/',
+        has: [
+          {
+            type: 'header',
+            key: 'x-authorized',
+            value: '(?<authorized>yes|true)',
+          },
+        ],
+        permanent: false,
+        destination: '/home?authorized=:authorized',
+      },
+      // if the host is `example.com`,
+      // this redirect will be applied
+      {
+        source: '/:path((?!another-page$).*)',
+        has: [
+          {
+            type: 'host',
+            value: 'example.com',
+          },
+        ],
+        permanent: false,
+        destination: '/another-page',
+      },
+    ]
+  },
+}
+
+167. how to apply Redirects with basePath support? 
+When leveraging basePath support with redirects each source and destination is automatically prefixed with the basePath unless you add basePath: false to the redirect:
+module.exports = {
+  basePath: '/docs',
+ 
+  async redirects() {
+    return [
+      {
+        source: '/with-basePath', // automatically becomes /docs/with-basePath
+        destination: '/another', // automatically becomes /docs/another
+        permanent: false,
+      },
+      {
+        // does not add /docs since basePath: false is set
+        source: '/without-basePath',
+        destination: 'https://example.com',
+        basePath: false,
+        permanent: false,
+      },
+    ]
+  },
+}
+
+168. what is rewrites  used for ? 
+Rewrites allow you to map an incoming request path to a different destination path.
+Rewrites act as a URL proxy and mask the destination path, making it appear the user hasn't changed their location on the site. In contrast, redirects will reroute to a new page and show the URL changes.
+To use rewrites you can use the rewrites key in next.config.js:
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/about',
+        destination: '/',
+      },
+    ]
+  },
+}
+Rewrites are applied to client-side routing, a <Link href="/about"> will have the rewrite applied in the above example.
+see how it works and what does it returns see on site . 
+
+169.how to Rewrite parameters ? 
+When using parameters in a rewrite the parameters will be passed in the query by default when none of the parameters are used in the destination.
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/old-about/:path*',
+        destination: '/about', // The :path parameter isn't used here so will be automatically passed in the query
+      },
+    ]
+  },
+}
+If a parameter is used in the destination none of the parameters will be automatically passed in the query.
+        source: '/docs/:path*',
+        destination: '/:path*', // The :path parameter is used here so will not be automatically passed in the query
+You can still pass the parameters manually in the query if one is already used in the destination by specifying the query in the destination.
+        source: '/:first/:second',
+        destination: '/:first?second=:second',
+        // Since the :first parameter is used in the destination the :second parameter
+        // will not automatically be added in the query although we can manually add it
+        // as shown above
+
+
+170 . how will yu Path Matching ? 
+Path matches are allowed, for example /blog/:slug will match /blog/hello-world (no nested paths):
+        source: '/blog/:slug',
+        destination: '/news/:slug', // Matched parameters can be used in the destination
+
+171. how will yu Wildcard Path Matching ?
+To match a wildcard path you can use * after a parameter, for example /blog/:slug* will match /blog/a/b/c/d/hello-world:
+        source: '/blog/:slug*',
+        destination: '/news/:slug*', // Matched parameters can be used in the destination
+
+172.how wil yu implement Regex Path Matching ? 
+        source: '/old-blog/:post(\\d{1,})',
+        destination: '/blog/:post', // Matched parameters can be used in the destination
+The following characters (, ), {, }, [, ], |, \, ^, ., :, *, +, -, ?, $ are used for regex path matching, so when used in the source as non-special values they must be escaped by adding \\ before them:
+        // this will match `/english(default)/something` being requested
+        source: '/english\\(default\\)/:slug',
+        destination: '/en-us/:slug',
+Rewriting to an external URL
+Rewrites allow you to rewrite to an external url. This is especially useful for incrementally adopting Next.js. The following is an example rewrite for redirecting the /blog route of your main app to an external site.
+      {
+        source: '/blog',
+        destination: 'https://example.com/blog',
+      },
+      {
+        source: '/blog/:slug',
+        destination: 'https://example.com/blog/:slug', // Matched parameters can be used in the destination
+      },
+If you're using trailingSlash: true, you also need to insert a trailing slash in the source parameter. If the destination server is also expecting a trailing slash it should be included in the destination parameter as well.
+      {
+        source: '/blog/',
+        destination: 'https://example.com/blog/',
+      },
+      {
+        source: '/blog/:path*/',
+        destination: 'https://example.com/blog/:path*/',
+      },
+
+173. how will yu  fall back to proxying to an existing website after checking all Next.js routes. ? 
+ok in this , This way you don't have to change the rewrites configuration when migrating more pages to Next.js
+      fallback: [
+        {
+          source: '/:path*',
+          destination: `https://custom-routes-proxying-endpoint.vercel.app/:path*`,
+        },
+
+174.how will yu Rewrites with basePath support ?
+When leveraging basePath support with rewrites each source and destination is automatically prefixed with the basePath unless you add basePath: false to the rewrite:
+module.exports = {
+  basePath: '/docs',
+ 
+  async rewrites() {
+    return [
+      {
+        source: '/with-basePath', // automatically becomes /docs/with-basePath
+        destination: '/another', // automatically becomes /docs/another
+      },
+      {
+        // does not add /docs to /without-basePath since basePath: false is set
+        // Note: this can not be used for internal rewrites e.g. `destination: '/another'`
+        source: '/without-basePath',
+        destination: 'https://example.com',
+        basePath: false,
+      },
+    ]
+  },
+}
+
+175. what is serverActions is used to do  ? 
+Options for configuring Server Actions behavior in your Next.js application.
+
+
+
+176. what is  serverComponentsExternalPackages i used to do  ? 
+Dependencies used inside Server Components and Route Handlers will automatically be bundled by Next.js.
+If a dependency is using Node.js specific features, you can choose to opt-out specific dependencies from the Server Components bundling and use native Node.js require.
+const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ['@acme/ui'],
+  },
+} 
+module.exports = nextConfig
+
+177.what is trailingSlash is used to do ? 
+By default Next.js will redirect urls with trailing slashes to their counterpart without a trailing slash. For example /about/ will redirect to /about. You can configure this behavior to act the opposite way, where urls without trailing slashes are redirected to their counterparts with trailing slashes.Open next.config.js and add the trailingSlash config:
+module.exports = {
+  trailingSlash: true,
+}
+
+178. what is transpilePackages is used to do ? 
+Next.js can automatically transpile and bundle dependencies from local packages (like monorepos) or from external dependencies (node_modules). This replaces the next-transpile-modules package.
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  transpilePackages: ['@acme/ui', 'lodash-es'],
+} 
+module.exports = nextConfig
+
+179. what is the easieset way to get started with next js ? 
+create-next-app
+npx create-next-app@latest
+
+180. what is route announcements ? 
+When transitioning between pages rendered on the server (e.g. using the <a href> tag) screen readers and other assistive technology announce the page title when the page loads so that users understand that the page has changed.
+In addition to traditional page navigations, Next.js also supports client-side transitions for improved performance (using next/link). To ensure that client-side transitions are also announced to assistive technology, Next.js includes a route announcer by default.
+The Next.js route announcer looks for the page name to announce by first inspecting document.title, then the <h1> element, and finally the URL pathname. For the most accessible user experience, ensure that each page in your application has a unique and descriptive title.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

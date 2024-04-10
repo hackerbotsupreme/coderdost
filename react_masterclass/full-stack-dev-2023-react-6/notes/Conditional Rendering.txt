@@ -1,0 +1,248 @@
+Your components will often need to display different things depending on different conditions. In React, you can conditionally render JSX using JavaScript syntax like if statements, &&, and ? : operators.
+
+
+function Item({ name, isPacked }) {
+  return <li className="item">{name}</li>;
+}
+
+export default function PackingList() {
+  return (
+    <section>
+      <h1>Sally Ride's Packing List</h1>
+      <ul>
+        <Item 
+          isPacked={true} 
+          name="Space suit" 
+        />
+        <Item 
+          isPacked={true} 
+          name="Helmet with a golden leaf" 
+        />
+        <Item 
+          isPacked={false} 
+          name="Photo of Tam" 
+        />
+      </ul>
+    </section>
+  );
+}
+
+
+look at this , 
+Notice that some of the Item components have their isPacked prop set to true instead of false. You want to add a checkmark (✔) to packed items if isPacked={true}.
+
+You can write this as an if/else statement like so:
+
+function Item({ name, isPacked }) {
+  if (isPacked) {
+    return <li className="item">{name} ✔</li>;
+  }
+  return <li className="item">{name}</li>;
+}
+
+export default function PackingList() {
+  return (
+    <section>
+      <h1>Sally Ride's Packing List</h1>
+      <ul>
+        <Item 
+          isPacked={true} 
+          name="Space suit" 
+        />
+        <Item 
+          isPacked={true} 
+          name="Helmet with a golden leaf" 
+        />
+        <Item 
+          isPacked={false} 
+          name="Photo of Tam" 
+        />
+      </ul>
+    </section>
+  );
+}
+
+
+Notice how you’re creating branching logic with JavaScript’s if and return statements. In React, control flow (like conditions) is handled by JavaScript.
+
+Conditionally returning nothing with null 
+
+
+In some situations, you won’t want to render anything at all. For example, say you don’t want to show packed items at all. A component must return something. In this case, you can return null:
+so if isPacked is true then we want to do nothing 
+if (isPacked) {
+  return null;
+}
+return <li className="item">{name}</li>;
+
+
+Conditional (ternary) operator (? :)
+
+JavaScript has a compact syntax for writing a conditional expression — the conditional operator or “ternary operator”.
+
+Instead of this:
+
+if (isPacked) {
+  return <li className="item">{name} ✔</li>;
+}
+return <li className="item">{name}</li>;
+
+You can write this:
+
+return (
+  <li className="item">
+    {isPacked ? name + ' ✔' : name}
+  </li>
+);
+
+Now let’s say you want to wrap the completed item’s text into another HTML tag, like <del> to strike it out. You can add even more newlines and parentheses so that it’s easier to nest more JSX in each of the cases:
+
+function Item({ name, isPacked }) {
+  return (
+    <li className="item">
+      {isPacked ? (
+        <del>
+          {name + ' ✔'}
+        </del>
+      ) : (
+        name
+      )}
+    </li>
+  );
+}
+
+
+Logical AND operator (&&)
+Another common shortcut you’ll encounter is the JavaScript logical AND (&&) operator. Inside React components, it often comes up when you want to render some JSX when the condition is true, or render nothing otherwise. With &&, you could conditionally render the checkmark only if isPacked is true:
+
+return (
+  <li className="item">
+    {name} {isPacked && '✔'}
+  </li>
+);
+
+You can read this as “if isPacked, then (&&) render the checkmark, otherwise, render nothing”.
+
+
+A JavaScript && expression returns the value of its right side (in our case, the checkmark) if the left side (our condition) is true. But if the condition is false, the whole expression becomes false. React considers false as a “hole” in the JSX tree, just like null or undefined, and doesn’t render anything in its place.
+
+This is a common pitfall in JavaScript when using the `&&` operator in a React component for conditional rendering. 
+
+In JavaScript, the `&&` operator is used to test if both conditions are true. However, when used in React for conditional rendering, it can lead to unexpected results. 
+
+For example, if you write `messageCount && <p>New messages</p>`, you might expect that it will render the paragraph "New messages" when `messageCount` is not zero, and render nothing when `messageCount` is zero. 
+
+But here's the catch: JavaScript automatically converts the left side of the `&&` operator to a boolean. If `messageCount` is zero, it is considered as `false` in a boolean context. So, instead of rendering nothing, React will render the zero itself!
+
+To avoid this, you should make sure the left side of the `&&` operator is a boolean. You can do this by changing the condition to `messageCount > 0 && <p>New messages</p>`. This way, it will correctly render "New messages" when `messageCount` is greater than zero, and render nothing when `messageCount` is zero.
+
+
+Conditionally assigning JSX to a variable 
+
+When the shortcuts get in the way of writing plain code, try using an if statement and a variable. You can reassign variables defined with let, so start by providing the default content you want to display, the name:
+
+let itemContent = name;
+
+Use an if statement to reassign a JSX expression to itemContent if isPacked is true:
+
+if (isPacked) {
+  itemContent = name + " ✔"; // Conditionally assigning JSX to a variable 
+}
+
+Curly braces open the “window into JavaScript”. Embed the variable with curly braces in the returned JSX tree, nesting the previously calculated expression inside of JSX:
+
+<li className="item">
+  {itemContent}
+</li>
+
+in code , 
+function Item({ name, isPacked }) {
+  let itemContent = name;
+  if (isPacked) {
+    itemContent = name + " ✔";
+  }
+  return (
+    <li className="item">
+      {itemContent}
+    </li>
+  );
+}
+
+export default function PackingList() {
+  return (
+    <section>
+      <h1>Sally Ride's Packing List</h1>
+      <ul>
+        <Item 
+          isPacked={true} 
+          name="Space suit" 
+        />
+        <Item 
+          isPacked={true} 
+          name="Helmet with a golden leaf" 
+        />
+        <Item 
+          isPacked={false} 
+          name="Photo of Tam" 
+        />
+      </ul>
+    </section>
+  );
+}
+
+
+
+
+Like before, this works not only for text, but for arbitrary JSX too:
+
+
+function Item({ name, isPacked }) {
+  let itemContent = name;
+  if (isPacked) {
+    itemContent = (
+      <del>
+        {name + " ✔"}
+      </del>
+    );
+  }
+  return (
+    <li className="item">
+      {itemContent}
+    </li>
+  );
+}
+
+export default function PackingList() {
+  return (
+    <section>
+      <h1>Sally Ride's Packing List</h1>
+      <ul>
+        <Item 
+          isPacked={true} 
+          name="Space suit" 
+        />
+        <Item 
+          isPacked={true} 
+          name="Helmet with a golden leaf" 
+        />
+        <Item 
+          isPacked={false} 
+          name="Photo of Tam" 
+        />
+      </ul>
+    </section>
+  );
+}
+
+
+Recap
+
+    In React, you control branching logic with JavaScript.
+    You can return a JSX expression conditionally with an if statement.
+    You can conditionally save some JSX to a variable and then include it inside other JSX by using the curly braces.
+    In JSX, {cond ? <A /> : <B />} means “if cond, render <A />, otherwise <B />”.
+    In JSX, {cond && <A />} means “if cond, render <A />, otherwise nothing”.
+    The shortcuts are common, but you don’t have to use them if you prefer plain if.
+
+
+

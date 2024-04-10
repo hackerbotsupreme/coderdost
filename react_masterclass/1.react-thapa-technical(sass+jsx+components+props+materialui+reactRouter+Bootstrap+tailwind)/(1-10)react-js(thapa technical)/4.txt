@@ -1,0 +1,19 @@
+important folders  
+
+1.node_modules,package.json ,package-lock.json
+
+node_modules folder is the repositery of modules/library  which yu are using inside the project . what ever you are importing 
+in your project that module or library should present inside the node_module folder . when you do npm install 
+that time that module or that library install inside the node_module folder 
+one entry added in the package.json file .
+
+package.json  for metadata .all their versions ,the scripts like npm start , npm build , 
+
+.gitignore for git,github.
+
+
+2.index.js - we starts with this 
+3.index.html - dont touch this 
+3. app.js
+4.app.css
+5.robots.txt - for internet crawlers , seo 

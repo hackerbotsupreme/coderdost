@@ -1,0 +1,92 @@
+escape htches 
+rhis is a normal flow of react dont mistake it to be aa advanced thing . 
+
+we use escape  htches  when we need to work outside of react . 
+in react when we code like react  , then whatever we type react keep track of them . so 
+escape  htches means escapes/the react cannot track and then we can do our work . 
+
+useref hook / dom reference 
+
+
+lets say we want to see how many times we have clicked on the eventhandler . 
+what will be the first thing we will think of , its , 
+make a variable num , inside the handleClick write num++ and then write console.log(num)
+
+after this when we test it every time the value is 1 . which makes sense bcz every time it renders react starts from the scratch 
+if that value is not reserverd/retained . 
+
+so how will i solve it and we cannot use state bcz by default react runs twice if we make anither function 
+whole code will run again just to update  the counter , which sounds pretty unneccesary so , 
+the thing is to use useRef .
+
+ao its like ,
+When you want a component to “remember” some information, but you don’t want that information to trigger new renders,
+
+ you can use a ref.
+
+const ref = useRef(0);
+
+useRef returns an object like this:
+
+{ 
+  current: 0 // The value you passed to useRef
+}
+
+You can access the current value of that ref through the ref.current property. This value is intentionally mutable, meaning you can both read and write to it. It’s like a secret pocket of your component that React doesn’t track. (This is what makes it an “escape hatch” )
+
+The ref points to a number, but, like state, you could point to anything: a string, an object, or even a function. Unlike state, ref is a plain JavaScript object with the current property that you can read and modify.
+
+
+Differences between refs and state 
+
+When a piece of information is used for rendering, keep it in state. When a piece of information is only needed by event handlers and changing it doesn’t require a re-render, using a ref may be more efficient.
+
+
+refs	                            state
+useRef(initialValue) returns { current: initialValue }	                    useState(initialValue) returns the current value of a state variable and a state setter function ( [value, setValue])
+Doesn’t trigger re-render when you change it.	
+                                    Triggers re-render when you change it.
+Mutable—you can modify and update current’s value outside of the rendering process.	           “Immutable”—you must use the state setting function to modify state variables to queue a re-render.
+You shouldn’t read (or write) the current value during rendering.	                        You can read state at any time. However, each render has its own snapshot of state which does not change.
+
+
+Here is a counter button that’s implemented with state:
+
+Because the count value is displayed, it makes sense to use a state value for it. When the counter’s value is set with setCount(), React re-renders the component and the screen updates to reflect the new count.
+
+If you tried to implement this with a ref, React would never re-render the component, so you’d never see the count change! See how clicking this button does not update its text:
+
+This is why reading ref.current during render leads to unreliable code. If you need that, use state instead.
+
+
+When to use refs 
+Typically, you will use a ref when your component needs to “step outside” React and communicate with external APIs—often a browser API that won’t impact the appearance of the component. 
+
+
+Best practices for refs 
+Following these principles will make your components more predictable:
+
+Treat refs as an escape hatch. Refs are useful when you work with external systems or browser APIs. If much of your application logic and data flow relies on refs, you might want to rethink your approach.
+
+Don’t read or write ref.current during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when ref.current changes, even reading it while rendering makes your component’s behavior difficult to predict.
+
+
+Limitations of React state don’t apply to refs. For example, state acts like a snapshot for every render and doesn’t update synchronously. But when you mutate the current value of a ref, it changes immediately.This is because the ref itself is a regular JavaScript object, and so it behaves like one.You also don’t need to worry about avoiding mutation when you work with a ref. As long as the object you’re mutating isn’t used for rendering, React doesn’t care what you do with the ref or its contents
+
+
+You can point a ref to any value
+
+
+ However, the most common use case for a ref is to access a DOM element.For example, this is handy if you want to focus an input programmatically. When you pass a ref to a ref attribute in JSX, like <div ref={myRef}>, React will put the corresponding DOM element into myRef.current. Once the element is removed from the DOM, React will update myRef.current to be null. 
+
+
+Recap
+Refs are an escape hatch to hold onto values that aren’t used for rendering. You won’t need them often.
+A ref is a plain JavaScript object with a single property called current, which you can read or set.
+You can ask React to give you a ref by calling the useRef Hook.
+Like state, refs let you retain information between re-renders of a component.
+Unlike state, setting the ref’s current value does not trigger a re-render.
+Don’t read or write ref.current during rendering. This makes your component hard to predict.
+
+
+

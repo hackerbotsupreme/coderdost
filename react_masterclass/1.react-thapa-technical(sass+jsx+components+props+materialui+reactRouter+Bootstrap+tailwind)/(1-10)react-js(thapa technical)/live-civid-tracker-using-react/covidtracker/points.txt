@@ -1,0 +1,190 @@
+how did i make this ? 
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> node -v    
+v18.18.0
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> npm -v
+10.1.0
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> npm install -g create-react-app
+npm WARN deprecated tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap.
+
+changed 67 packages in 9s
+
+5 packages are looking for funding
+  run `npm fund` for details
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> ^C
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> create-react-app -v
+Please specify the project directory:
+  create-react-app <project-directory>
+
+For example:
+  create-react-app my-react-app
+
+Run create-react-app --help to see all options.
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> create-react-app --version
+5.0.1
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> mkdir react-thapaTechnical
+
+    Directory: C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          12-10-2023    18:58                react-thapaTechnical
+
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> cd react-thapaTechnical
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical> create-react-app app      
+
+Creating a new React app in C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical\app.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts with cra-template...
+
+
+added 1459 packages in 3m
+
+241 packages are looking for funding
+  run `npm fund` for details
+
+Initialized a git repository.
+
+Installing template dependencies using npm...
+
+added 69 packages, and changed 1 package in 24s
+
+245 packages are looking for funding
+  run `npm fund` for details
+Removing template package using npm...
+
+
+removed 1 package, and audited 1528 packages in 12s
+
+245 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (2 moderate, 6 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+Created git commit.
+
+Success! Created app at C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical\app
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd app
+  npm start
+
+Happy hacking!
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical> ^C
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical> ^C
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical> dir
+
+    Directory: C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          12-10-2023    19:03                app
+
+Compiled successfully!
+
+You can now view app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.0.102:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+^C^CTerminate batch job (Y/N)? y
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical\app> cd .. 
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\react-thapaTechnical> cd ..
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)> cd live-civid-tracker-using-react
+PS C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\live-civid-tracker-using-react> create-react-app covidtracker
+
+Creating a new React app in C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\live-civid-tracker-using-react\covidtracker.  
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts with cra-template...
+
+
+added 1459 packages in 4m
+
+241 packages are looking for funding
+  run `npm fund` for details
+
+Initialized a git repository.
+
+Installing template dependencies using npm...
+
+added 69 packages, and changed 1 package in 42s
+
+245 packages are looking for funding
+  run `npm fund` for details
+Removing template package using npm...
+
+
+removed 1 package, and audited 1528 packages in 15s
+
+245 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (2 moderate, 6 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+Created git commit.
+
+Success! Created covidtracker at C:\Users\rekha\OneDrive\Desktop\react-js(thapa technical)\live-civid-tracker-using-react\covidtracker
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd covidtracker
+  npm start
+
+Happy hacking!
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+then go to src then go to app.js
+index.js is also important 
+
+remove everything and type rafce(arrow function component )
+we will work with syntactic format 
+remove the div and lets build 
+type hello aloke inside h1
+then in terminal type npm start 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

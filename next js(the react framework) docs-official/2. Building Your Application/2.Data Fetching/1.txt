@@ -1,0 +1,14 @@
+App Router
+Building Your Application
+Data Fetching
+Data Fetching
+Fetching, Caching, and Revalidating
+Learn how to fetch, cache, and revalidate data in your Next.js application.
+Server Actions and Mutations
+Learn how to handle form submissions and data mutations with Next.js.
+Data Fetching Patterns and Best Practices
+Learn about common data fetching patterns in React and Next.js.
+Previous
+Internationalization
+Next
+Fetching, Caching, and Revalidating

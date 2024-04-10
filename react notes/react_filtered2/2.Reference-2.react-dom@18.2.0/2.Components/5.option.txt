@@ -1,0 +1,72 @@
+API REFERENCE
+COMPONENTS
+<option>
+The built-in browser <option> component lets you render an option inside a <select> box.
+
+<select>
+  <option value="someOption">Some option</option>
+  <option value="otherOption">Other option</option>
+</select>
+Reference
+<option>
+Usage
+Displaying a select box with options
+Reference 
+<option> 
+The built-in browser <option> component lets you render an option inside a <select> box.
+
+<select>
+  <option value="someOption">Some option</option>
+  <option value="otherOption">Other option</option>
+</select>
+See more examples below.
+
+Props 
+<option> supports all common element props.
+
+Additionally, <option> supports these props:
+
+disabled: A boolean. If true, the option will not be selectable and will appear dimmed.
+label: A string. Specifies the meaning of the option. If not specified, the text inside the option is used.
+value: The value to be used when submitting the parent <select> in a form if this option is selected.
+Caveats 
+React does not support the selected attribute on <option>. Instead, pass this option’s value to the parent <select defaultValue> for an uncontrolled select box, or <select value> for a controlled select.
+Usage 
+Displaying a select box with options 
+Render a <select> with a list of <option> components inside to display a select box. Give each <option> a value representing the data to be submitted with the form.
+
+Read more about displaying a <select> with a list of <option> components.
+
+
+App.js
+Download
+Reset
+
+Fork
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+export default function FruitPicker() {
+  return (
+    <label>
+      Pick a fruit:
+      <select name="selectedFruit">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+        <option value="orange">Orange</option>
+      </select>
+    </label>
+  );
+}
+
+

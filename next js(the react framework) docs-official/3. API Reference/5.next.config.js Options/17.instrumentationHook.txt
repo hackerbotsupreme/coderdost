@@ -1,0 +1,29 @@
+App Router
+...
+next.config.js Options
+instrumentationHook
+instrumentationHook
+The experimental instrumentationHook option allows you to set up instrumentation via the instrumentation file in your Next.js App.
+
+next.config.js
+
+module.exports = {
+  experimental: {
+    instrumentationHook: true,
+  },
+}
+Learn more about Instrumentation
+App Router
+...
+File Conventions
+instrumentation.js
+API reference for the instrumentation.js file.
+App Router
+...
+Optimizing
+Instrumentation
+Learn how to use instrumentation to run code at server startup in your Next.js app
+Previous
+cacheHandler
+Next
+logging

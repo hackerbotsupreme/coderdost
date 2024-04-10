@@ -1,0 +1,384 @@
+in react.dev -> 
+go to - describing the ui -> your first component 
+
+
+in this chapter we will study components deeply 
+full-stack-dev-2023-react-2
+now what are components? 
+components are a function which returns ui ,  
+Yes, in front-end development, particularly when using libraries like React, a component is essentially a function or a class that returns a piece of the User Interface (UI). These components are the building blocks of a React application and can be reused throughout the application.
+For example, a functional component in React is a JavaScript function that takes in properties, often referred to as ‘props’, and returns JSX, which describes what should be rendered to the screen.
+Similarly, class components, which are ES6 classes, implement a render method that returns a React element. The ‘props’ in class components are accessed via ‘this.props’.
+So, in essence, components are self-contained pieces of code that output HTML, manage their own state and lifecycle, and can be reused throughout an application."
+
+In general, functions return values. However, in the philosophy of React, a function returns a User Interface (UI). This approach simplifies the process for programmers, as they can easily visualize the UI and modify its functionality accordingly. It allows them to create a UI that aligns with their specific requirements.
+
+component names startwith capital letters , like App , Header , Footer etc . 
+its not by convention , its neccessery to work . 
+
+now , one thing to notice here is , when you call a component inside a component 
+the code inside the return statement stays there but the component vanishes/i mean that part doesnot holds any value to the browser  . 
+
+// export {Video,Thumb}
+// when we need to export more than one component we use object shorthand to do that 
+// and we can not sent more than one component by default 
+// and that is why we removed the default .
+
+// width/height
+"http://placeimg.com/160/90/1"
+remember we can change the dimension of the picture directly from its url also 
+like 
+"http://placeimg.com/130/170/1"
+/////////////////////////////////////
+
+Pitfall (straight from the site )
+React components are regular JavaScript functions, but their names must start with a capital letter or they won’t work!
+
+/////////////////////////////////////
+The component returns an <img /> tag with src and alt attributes. <img /> is written like HTML, but it is actually JavaScript under the hood! This syntax is called JSX, and it lets you embed markup inside JavaScript.
+/////////////////////////////////////
+Return statements can be written all on one line, as in this component:
+
+return <img src="https://i.imgur.com/MK3eW3As.jpg" alt="Katherine Johnson" />;
+But if your markup isn’t all on the same line as the return keyword, you must wrap it in a pair of parentheses:
+
+return (
+  <div>
+    <img src="https://i.imgur.com/MK3eW3As.jpg" alt="Katherine Johnson" />
+  </div>
+);
+Without parentheses, any code on the lines after return will be ignored!
+
+//////////////////////////////////////////////
+Nesting and organizing components 
+Components are regular JavaScript functions, so you can keep multiple components in the same file. This is convenient when components are relatively small or tightly related to each other. If this file gets crowded, you can always move Profile to a separate file. You will learn how to do this shortly on the page about imports.
+
+Because the Profile components are rendered inside Gallery—even several times!—we can say that Gallery is a parent component, rendering each Profile as a “child”. This is part of the magic of React: you can define a component once, and then use it in as many places and as many times as you like.
+
+Pitfall
+Components can render other components, but you must never nest their definitions:
+
+The snippet above is very slow and causes bugs. Instead, define every component at the top level:
+
+When a child component needs some data from a parent, pass it by props instead of nesting definitions.
+
+Most React apps use components all the way down. This means that you won’t only use components for reusable pieces like buttons, but also for larger pieces like sidebars, lists, and ultimately, complete pages! Components are a handy way to organize UI code and markup, even if some of them are only used once.
+
+React-based frameworks take this a step further. Instead of using an empty HTML file and letting React “take over” managing the page with JavaScript, they also generate the HTML automatically from your React components. This allows your app to show some content before the JavaScript code loads.
+
+//////////////////////////////////////////////
+Recap
+You’ve just gotten your first taste of React! Let’s recap some key points.
+
+React lets you create components, reusable UI elements for your app.
+
+In a React app, every piece of UI is a component.
+
+React components are regular JavaScript functions except:
+
+Their names always begin with a capital letter.
+They return JSX markup.
+
+//////////////////////////////////////////////
+Something’s wrong with how the Profile component is declared and used. Can you spot the mistake? (Try to remember how React distinguishes components from the regular HTML tags!)
+//////////////////////////////////////////////
+Importing and Exporting Components
+The magic of components lies in their reusability
+//////////////////////////////////////////////
+Importing and Exporting Components
+The magic of components lies in their reusability: you can create components that are composed of other components. But as you nest more and more components, it often makes sense to start splitting them into different files. This lets you keep your files easy to scan and reuse components in more places.
+its also avoids nesting and linear readable structure structure 
+//////////////////////////////////////////////
+When to use default and named imports and exports
+
+//////////////////////////////////////////////
+App.js is the root component file in every project and its also the first react file .
+//////////////////////////////////////////////
+If you use a framework with file-based routing, such as Next.js, your root component will be different for every page.
+
+Syntax  	Export statement	                    Import statement
+Default  	export default function Button() {}	    import Button from './Button.js';
+Named	    export function Button() {}	            import { Button } from './Button.js';
+
+//////////////////////////////////////////////
+When you write a default import, you can put any name you want after import. For example, you could write import Banana from './Button.js' instead and it would still provide you with the same default export. In contrast, with named imports, the name has to match on both sides. That’s why they are called named imports!
+//////////////////////////////////////////////
+ Components without names, like export default () => {}, are discouraged because they make debugging harder.
+
+//////////////////////////////////////////////////
+Writing Markup with JSX
+JSX is a syntax extension for JavaScript that lets you write HTML-like markup inside a JavaScript file.
+//////////////////////////////////////////////////
+
+JSX: Putting markup into JavaScript 
+The Web has been built on HTML, CSS, and JavaScript. For many years, web developers kept content in HTML, design in CSS, and logic in JavaScript—often in separate files! Content was marked up inside HTML while the page’s logic lived separately in JavaScript:
+
+But as the Web became more interactive, logic increasingly determined content. JavaScript was in charge of the HTML! This is why in React, rendering logic and markup live together in the same place—components.
+
+JSX and React are two separate things. They’re often used together, but you can use them independently of each other. JSX is a syntax extension, while React is a JavaScript library.
+
+//////////////////////////////////////////////////
+
+Keeping a button’s rendering logic and markup together ensures that they stay in sync with each other on every edit. Conversely, details that are unrelated, such as the button’s markup and a sidebar’s markup, are isolated from each other, making it safer to change either of them on their own.
+
+ 
+//////////////////////////////////////////////////
+
+The Rules of JSX 
+1. Return a single root element 
+To return multiple elements from a component, wrap them with a single parent tag.
+For example, you can use a <div>:
+If you don’t want to add an extra <div> to your markup, you can write <> and </> instead:
+This empty tag is called a Fragment. Fragments let you group things without leaving any trace in the browser HTML tree.
+
+Why do multiple JSX tags need to be wrapped? 
+JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. You can’t return two objects from a function without wrapping them into an array. This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment.
+
+
+
+2.2. Close all the tags 
+JSX requires tags to be explicitly closed: self-closing tags like <img> must become <img />, and wrapping tags like <li>oranges must be written as <li>oranges</li>.
+
+3. camelCase all most of the things! 
+JSX turns into JavaScript and attributes written in JSX become keys of JavaScript objects. In your own components, you will often want to read those attributes into variables. But JavaScript has limitations on variable names. For example, their names can’t contain dashes or be reserved words like class.
+
+This is why, in React, many HTML and SVG attributes are written in camelCase. For example, instead of stroke-width you use strokeWidth. Since class is a reserved word, in React you write className instead, named after the corresponding DOM property:
+
+For historical reasons, aria-* and data-* attributes are written as in HTML with dashes.
+
+Pro-tip: Use a JSX Converter 
+Converting all these attributes in existing markup can be tedious! We recommend using a converter to translate your existing HTML and SVG to JSX. Converters are very useful in practice, but it’s still worth understanding what is going on so that you can comfortably write JSX on your own.
+
+//////////////////////////////////////////////////////////////////////////////////
+
+Recap
+Now you know why JSX exists and how to use it in components:
+
+React components group rendering logic together with markup because they are related.
+JSX is similar to HTML, with a few differences. You can use a converter if you need to.
+Error messages will often point you in the right direction to fixing your markup.
+
+
+//////////////////////////////////////////////////////////////////////////////////
+
+In the context of JSX, "markup" refers to the HTML-like syntax that you can write within JavaScript code. This markup is neither a string nor HTML, but it's called JSX (JavaScript XML). It's a syntax extension to JavaScript and is used to describe what the UI (User Interface) should look like¹. 
+
+JSX may remind you of a template language, but it comes with the full power of JavaScript¹. It allows you to write HTML-like markup inside a JavaScript file². This markup can then be transformed into React components, making the code simpler for building user interfaces⁴.
+
+For example, consider this variable declaration in JSX:
+
+```jsx
+const element = <h1>Hello, world!</h1>;
+```
+
+Here, `<h1>Hello, world!</h1>` is the JSX markup. It looks like HTML, but it's actually JavaScript¹.
+
+
+////////////////////////////////////////////////
+
+JavaScript in JSX with Curly Braces
+JSX lets you write HTML-like markup inside a JavaScript file, keeping rendering logic and content in the same place. Sometimes you will want to add a little JavaScript logic or reference a dynamic property inside that markup. In this situation, you can use curly braces in your JSX to open a window to JavaScript.
+jsx looks like html but it is JavaScript under the hood , js object actually .
+jsx combines html and logic in one file . 
+
+////////////////////////////////////////////////
+the next thing to note here is as it is not a pure html so some html are not actually valid in jsx 
+like - class(jsx use className instead)
+In JSX, which is used in React, most HTML tags are valid. However, because JSX is closer to JavaScript, there are a few differences and some HTML attributes/tags are not valid or are used differently. Here are a few examples:
+
+- `<frame>` and `<frameset>`: These tags are not supported in JSX as they are obsolete in HTML5³.
+- `<basefont>`, `<big>`, `<center>`, `<font>`, `<strike>`, and `<tt>`: These tags are also not supported in JSX as they are obsolete in HTML5³.
+- `class`: In JSX, the HTML attribute `class` is written as `className`⁵.
+- `for`: In JSX, the HTML attribute `for` is written as `htmlFor`⁵.
+
+Always refer to the React documentation when adding HTML attributes to JSX elements to ensure the syntax is correct and the attribute behavior is as expected³.
+
+
+and with this here comes the next part , we need to write attributes incamelcase
+ example 
+className and onClick 
+
+we need to write attributes incamelcase example  - give me some html tags which we need to write in camelcase in jsx ?
+In React, many HTML attributes need to be written in camelCase. Here are a few examples:
+
+- `className`: Instead of the HTML attribute `class`, we use `className` in JSX².
+- `tabIndex`: The HTML attribute `tabindex` corresponds to `tabIndex` in JSX⁴.
+- `autoPlay`: Instead of `autoplay`, we use `autoPlay` in JSX¹.
+- `strokeWidth`: Instead of `stroke-width`, we use `strokeWidth` in JSX².
+
+Please note that the exception to this rule is `aria-*` and `data-*` attributes, which should be lowercased³⁴. For example, you can keep `aria-label` as `aria-label`³⁴.
+
+some more
+Sure, here are a few more examples of HTML attributes that need to be written in camelCase in JSX:
+
+- `htmlFor`: Instead of `for`, we use `htmlFor` in JSX¹.
+- `readOnly`: The HTML attribute `readonly` corresponds to `readOnly` in JSX¹.
+- `maxLength`: Instead of `maxlength`, we use `maxLength` in JSX¹.
+- `viewBox`: Instead of `viewbox`, we use `viewBox` in JSX for SVG attributes¹.
+
+Remember, the exception to this rule is `aria-*` and `data-*` attributes, which should be lowercased⁴. For example, you can keep `aria-label` as `aria-label`⁴.
+
+and lastly , using one tag or Fragment to wrap everything in jsx is called sigle root element in jsx .
+
+////////////////////////////////////////////////
+
+as we know jsx is not a pure html so some html tags are not vaild jsx like class
+so instead of class we write className and here comes the next point which is we write attributes in  camelcase here 
+like onClick , 
+one more is that we html whenever wwe arite inline css , we use style tag like style = "background-color:'red'"
+but in jsx we write style = {{background-color:'red'}}
+
+as we seen earlier that in jsx , we can code dynamically or  we don't have to hard code anything . 
+for which we use expression/declaring variable  . and inside the return statement we put them like 
+{variable} .
+also we can use them as attibute value like , 
+className={variable}
+and from here we can undderstand , why style was like style = {{background-color:'red'}}
+the outside {} is for variables as we see and the inside {} is making it a js object/key-value pair   .
+
+and the next is we need to close everything now why is that ? 
+in pure html if you dont close some thing html ignores that but in jsx we need to close tags for jsx .
+
+and lastly use converter to convert the html/svg/etc.. etc..  to jsx . 
+and remember you dont need to remember them like what to use for-for loop , for-of loop in jsx .
+just pick the html convert and copy 
+
+and yep , that was it for jsx .
+
+////////////////////////////////////////////////
+
+next , is we seen that the component is reusable . means when we copy and paste it same element 
+next is that is ok but what we saying is where is the dynamic change of element one from the another ? 
+
+like actually the function returning the ui and we copy them and make same elements from them 
+so if we change something in the function every element changes so how is there a dynamic nature ? 
+
+for this we use props(<Video title="react js tutorial">) in react just like attributes of html , we provide it to the element we need to make 
+different from other  ones then that prop goes straight to the function(function (props)=>{}) in form of object that returns that element , and 
+make that individual element different from each other . prop is an object . 
+proof - just console.log(props) it  in console  -> (function (props)=>{console.log(props) return(<></>)})
+and you will see {title:"react js tutorial"} getting printed two times in the object format ,
+
+In React, we use properties, or 'props', similar to how we use attributes in HTML. We assign these props to the elements that we want to differentiate from others. For example, `<Video title="react js tutorial">`. These props are then passed directly to the function (e.g., `function (props) {}`) in the form of an object, which returns the element. This process allows us to make individual elements distinct from each other. 
+In essence, a prop is an object. You can verify this by logging the props to the console within the function, like so: `function (props) {console.log(props); return(<></>);}`. If you do this with the `Video` component example above, you'll see `{title: "react js tutorial"}` printed in the console, confirming that props are indeed objects. This feature of React allows for dynamic and reusable components, enhancing the efficiency and readability of your code.
+
+and why two times ? 
+The reason you're seeing `{title: "react js tutorial"}` printed twice in the console is due to a feature of React called Strict Mode¹². 
+Strict Mode is a tool for highlighting potential problems in an application during development¹². It intentionally double-invokes certain lifecycle methods and functions to help identify side effects¹. This includes functions passed to `useState`, `useMemo`, or `useReducer`¹. 
+In development mode, if your component is wrapped in a `<React.StrictMode>` tag, console.log() will be called twice¹². This is done to ensure that the render methods of your components are pure and do not have unexpected side effects¹². 
+However, this double invocation only occurs in development mode and will not happen in production¹. If you want to avoid the double logging in development mode, you can remove the `<React.StrictMode>` wrapper from your component². But keep in mind that Strict Mode can be a helpful tool for catching potential issues in your code¹²..
+
+not its ok that we have props to make different elements from the same function , but the way it works we can easily see that for big 
+changes this approach is definaly not prefarable. why  ? 
+In React, using props to make different elements from the same function is a common practice. This approach is known as component reusability and is one of the key features of React. However, for larger changes, this approach might not be preferable due to the following reasons:
+Prop Drilling: If a prop needs to be passed through multiple levels of components, it can lead to a lot of boilerplate code and make the code harder to maintain. This is known as prop drilling.
+Component Complexity: If a component has too many props, it can become complex and hard to understand. This can make the code less readable and harder to maintain.
+Performance Issues: If a parent component passes a prop to a child component, the child component will re-render every time the prop changes. This can lead to performance issues if not managed properly.
+
+
+example -> 
+ the Profile component is receiving a large number of props. If we need to add more fields to the user profile, we would have to add more props to the Profile component, making it more complex and harder to maintain. This is why for larger changes, using a different approach like context or state management libraries (like Redux or MobX) might be more preferable. These tools allow you to manage and access state from anywhere in your application, avoiding prop drilling and reducing component complexity.
+
+props are not preferable nowadays ,so instead of props , we gives a destructured version of props 
+ we do like 
+
+function Video({title,bgColour}){
+  let bg  = "dark"
+  // console.log(props)
+  return <div className={bg} style={{backgroundColour:"red"/bgColour}}>{title}</div>
+}
+and , <Video bgColour="red"  title="react tutorial"></Video>
+and , <Video bgColour="blue"  title="next tutorial"></Video>
+and the best part here is , this variable called title also gets defined here when we write {title}
+
+so this way we maintains the dynamic content nature of react .
+and props are read-only .means we written the code , the code gets rendered and gets displayed and now if we want to change the colour 
+on user interactions like click etc.. then that is not posiible / changinging properties dynamically is not possible .
+
+  The statement you provided is partially correct.
+  In React, props are indeed read-only, which means that a component cannot change its props. 
+  This concept is part of React's one-way data flow (also called "one-way binding"). 
+  However, the idea that changing properties dynamically is not possible is not entirely accurate.
+
+  While it's true that a component cannot change its own props, it can certainly change its state. 
+  State is a component's private data that can change over time and trigger re-renders. 
+  For instance, if you want to change the color of a component upon user interaction like a click, 
+  you would use state, not props.
+
+  Here's a revised and completed version of your statement:
+
+  "In React, props are read-only. This means that once a component receives props, it cannot modify them.
+  The component gets rendered and displayed based on these props. However, if we want to change something in 
+  response to user interactions, like changing the color on a click event, we cannot do this through props. 
+  Instead, we use the component's state. The state of a component is a set of data that can change over time 
+  and can be updated dynamically. When the state changes, the component re-renders, reflecting the new state.
+    Therefore, while props are static and unchangeable by the component, the state is dynamic and allows for interactive user interfaces."
+
+
+and that's all about props .
+and the lesson we get from  here is , for interactive element(read-write) use states and hooks and 
+static(read-only) we will use props  
+  Your statement is mostly correct, but it could be clarified a bit for better understanding. Here's a revised version:
+
+  "For elements in a React application that need to be interactive and capable of changing over time (read-write), we use state and hooks.
+  State allows us to create components that can produce different outputs over time in response to user actions, network responses,
+    and other factors. Hooks, like `useState` and `useEffect`, allow us to add state and side effects to functional components, 
+    which were previously only available in class components. 
+  On the other hand, for data that is passed from a parent component to a child component and is not intended to be 
+  changed by the child component (read-only), we use props. Props allow us to pass values from a parent component down
+  to its child components, helping us structure our application into reusable, modular components. However, it's important 
+  to remember that props are read-only and should not be changed within the component that receives them."
+
+also when we are developing applictions with react , we can use prebuilt templates for that ? 
+from where can i find them ?
+    Yes, you can definitely use prebuilt templates when developing applications with React. These templates can save you a lot of time and provide you with professionally designed UI components. Here are some resources where you can find free React templates:
+
+    1. [35+ Free React templates and themes - DEV Community](^1^): This article provides a collection of over 35 free React templates and themes. The templates can be used to build a variety of applications, including admin dashboards, websites, landing pages, online portfolios, blogs, and design systems.
+
+    2. [15 Free React Templates for Your Next Project - DEV Community](^2^): This post lists 15 free React templates that you can use for your next project. The templates include admin dashboards, UI kits, landing pages, and more.
+
+    3. [Pre-Built Website Templates for React apps - DhiWise](^3^): DhiWise offers a collection of 15 best React templates for React web app development. The pre-built templates are easy to customize with the DhiWise platform.
+
+    Remember to always check the license and terms of use before using a template in your project. Happy coding! 😊.
+    Source: Conversation with Bing, 4/12/2023
+    (1) 35+ Free React templates and themes - DEV Community. https://dev.to/davidepacilio/35-free-react-templates-and-themes-32ci.
+    (2) 15 Free React Templates for Your Next Project - DEV Community. https://dev.to/exwhyzed/15-free-reactjs-templates-for-your-next-project-313m.
+    (3) Pre-Built Website Templates for React apps - DhiWise. https://www.dhiwise.com/post/prebuit-website-templates-for-react-apps.
+    (4) en.wikipedia.org. https://en.wikipedia.org/wiki/React_(software).
+
+we can give default values to props just like js
+like , 
+  function App() {
+    let obj = {
+      title: 'React JS tutorial',
+      views: '999K',
+      time: '1 year ago',
+      channel: 'Coder Dost',
+    };
+    return (
+      <div className="App">
+        <div>Videos</div>
+        <Video {...obj}></Video> // using the props default value 
+        <Video title="Node JS tutorial" views="100K" time="1 month ago"></Video>
+        <Video    // overwriting the props default value 
+          title="Mongo DB tutorial"
+          views="1M"
+          time="1 month ago"
+          channel="Coder Dost"
+        ></Video>
+      </div>
+    );
+  }
+
+revision - 
+1. we have to use App function as a component/ as  a  tag in jsx . 
+2. the concept of fragment is you have to have a parent container tag on the top otherwise we have to use <></> - fragments 
+   or otherwise that will be considered as an invalid jsx . 
+3. in jsx  , tags must be closed .
+4. attributes are wriite in jsx like backgroundColour , onClick , className and for objects we need to use 
+    double curly braces (objects inside an expression )
+5. props are used in two format , directly and destructured way 
+6. we can give default values to props just like js . 
+    when nothing use default props value and if value is  there overwrite the default .
+
+ go to  coderdost/fullstackdev repo  - in the react branch for assignments 

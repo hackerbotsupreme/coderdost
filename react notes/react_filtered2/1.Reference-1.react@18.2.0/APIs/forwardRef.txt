@@ -1,0 +1,131 @@
+forwardRef lets your component expose a DOM node to parent component with a ref.
+const SomeComponent = forwardRef(render)
+
+Reference 
+forwardRef(render) 
+Call forwardRef() to let your component receive a ref and forward it to a child component:
+
+import { forwardRef } from 'react';
+
+const MyInput = forwardRef(function MyInput(props, ref) {
+  // ...
+});
+
+Parameters 
+render: The render function for your component. React calls this function with the props and ref that your component received from its parent. The JSX you return will be the output of your component.
+Returns 
+forwardRef returns a React component that you can render in JSX. Unlike React components defined as plain functions, a component returned by forwardRef is also able to receive a ref prop.
+
+Caveats 
+In Strict Mode, React will call your render function twice in order to help you find accidental impurities. This is development-only behavior and does not affect production. If your render function is pure (as it should be), this should not affect the logic of your component. The result from one of the calls will be ignored.
+render function 
+forwardRef accepts a render function as an argument. React calls this function with props and ref
+
+...
+...
+
+Parameters 
+props: The props passed by the parent component.
+
+ref:  The ref attribute passed by the parent component. The ref can be an object or a function. If the parent component has not passed a ref, it will be null. You should either pass the ref you receive to another component, or pass it to useImperativeHandle.
+
+Returns 
+forwardRef returns a React component that you can render in JSX. Unlike React components defined as plain functions, the component returned by forwardRef is able to take a ref prop.
+
+Usage 
+Exposing a DOM node to the parent component 
+By default, each component’s DOM nodes are private. However, sometimes it’s useful to expose a DOM node to the parent—for example, to allow focusing it. To opt in, wrap your component definition into forwardRef()
+
+....
+....
+
+You will receive a ref as the second argument after props. Pass it to the DOM node that you want to expose.
+
+....
+....
+
+This lets the parent Form component access the <input> DOM node exposed by MyInput.
+
+...
+..
+
+This Form component passes a ref to MyInput. The MyInput component forwards that ref to the <input> browser tag. As a result, the Form component can access that <input> DOM node and call focus() on it.
+
+Keep in mind that exposing a ref to the DOM node inside your component makes it harder to change your component’s internals later. You will typically expose DOM nodes from reusable low-level components like buttons or text inputs, but you won’t do it for application-level components like an avatar or a comment.
+
+Example 1 of 2:
+Focusing a text input 
+Clicking the button will focus the input. The Form component defines a ref and passes it to the MyInput component. The MyInput component forwards that ref to the browser <input>. This lets the Form component focus the <input>.
+
+
+Example 2 of 2:
+Playing and pausing a video 
+Clicking the button will call play() and pause() on a <video> DOM node. The App component defines a ref and passes it to the MyVideoPlayer component. The MyVideoPlayer component forwards that ref to the browser <video> node. This lets the App component play and pause the <video>.
+
+....
+....
+....
+
+Forwarding a ref through multiple components 
+Instead of forwarding a ref to a DOM node, you can forward it to your own component like MyInput.
+
+......
+....
+
+If that MyInput component forwards a ref to its <input>, a ref to FormField will give you that <input>
+
+....
+....
+
+The Form component defines a ref and passes it to FormField. The FormField component forwards that ref to MyInput, which forwards it to a browser <input> DOM node. This is how Form accesses that DOM node.
+
+.....
+....
+...
+
+Exposing an imperative handle instead of a DOM node 
+Instead of exposing an entire DOM node, you can expose a custom object, called an imperative handle, with a more constrained set of methods. To do this, you’d need to define a separate ref to hold the DOM node.
+
+....
+...
+
+Pass the ref you received to useImperativeHandle and specify the value you want to expose to the ref.
+
+....
+....
+
+If some component gets a ref to MyInput, it will only receive your { focus, scrollIntoView } object instead of the DOM node. This lets you limit the information you expose about your DOM node to the minimum.
+
+...
+...
+
+Pitfall
+Do not overuse refs. You should only use refs for imperative behaviors that you can’t express as props: for example, scrolling to a node, focusing a node, triggering an animation, selecting text, and so on.
+
+If you can express something as a prop, you should not use a ref. For example, instead of exposing an imperative handle like { open, close } from a Modal component, it is better to take isOpen as a prop like <Modal isOpen={isOpen} />. Effects can help you expose imperative behaviors via props.
+
+Troubleshooting 
+My component is wrapped in forwardRef, but the ref to it is always null 
+This usually means that you forgot to actually use the ref that you received.
+
+For example, this component doesn’t do anything with its ref.
+
+...
+...
+
+To fix it, pass the ref down to a DOM node or another component that can accept a ref.
+
+...
+...
+
+The ref to MyInput could also be null if some of the logic is conditional.
+
+....
+....
+
+If showInput is false, then the ref won’t be forwarded to any node, and a ref to MyInput will remain empty. This is particularly easy to miss if the condition is hidden inside another component, like Panel in this example:
+
+.....
+....
+...
+
